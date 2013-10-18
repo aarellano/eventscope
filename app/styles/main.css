@@ -46,3 +46,12 @@ footer {
     width: 50%; /* 6 columns */
   }
 }
+
+#events {
+  height: 205px;
+  overflow:scroll;
+}
+
+.event-item {
+  height: 35px;
+}

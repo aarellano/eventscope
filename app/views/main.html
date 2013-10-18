@@ -51,22 +51,25 @@
     </div>
 
     <div class="col-xs-3 sidebar-offcanvas" role="navigation">
-      <div class="panel panel-default">
-        <ul class="nav">
-          <li class="well">Sidebar</li>
-          <li class="active"><a href="#">Link</a></li>
-          <li><a href="#">Link</a></li>
-          <li><a href="#">Link</a></li>
-          <li class="well">Sidebar</li>
-          <li><a href="#">Link</a></li>
-          <li><a href="#">Link</a></li>
-          <li><a href="#">Link</a></li>
-          <li class="well">Sidebar</li>
-          <li><a href="#">Link</a></li>
-          <li><a href="#">Link</a></li>
-        </ul>
-      </div><!--/.well -->
-    </div><!--/span-->
+      <strong class="list-group-item">Events</strong>
+      <input type="text" class="form-control" placeholder="Filter out" ng-model="query">
+      <div class="list-group" id="events">
+        <a href="#" class="list-group-item event-item" ng-repeat="category in categories | filter:query">
+          {{category.name}}
+        </a>
+      </div><!--/.events -->
+
+      <strong class="list-group-item">Similarity Factors</strong>
+
+      <div class="list-group">
+          <li class="list-group-item"><small>Timing</small> <input type="text" value="" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="128" id="timing" data-slider-tooltip="hide" data-slider-id="timing" data-slider-handle="round" ></li>
+          <li class="list-group-item"><small>Attributes</small> <input class="span2" type="text" value="" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="128" id="attributes" data-slider-tooltip="hide" data-slider-handle="round" ></li>
+          <li class="list-group-item"><small>Ocurrences</small> <input class="span2" type="text" value="" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="128" id="ocurrences" data-slider-tooltip="hide" data-slider-handle="triangle" ></li>
+
+      </div>
+
+    </div><!-- /.sidebar -->
+
   </div><!--/row-->
 
   <hr>
@@ -76,3 +79,9 @@
   </footer>
 
 </div><!--/.container-->
+
+<script>
+$("#timing").slider()
+$("#attributes").slider()
+$("#ocurrences").slider()
+</script>
