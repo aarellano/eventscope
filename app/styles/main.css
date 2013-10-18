@@ -55,3 +55,16 @@ footer {
 .event-item {
   height: 35px;
 }
+
+/*
+ * Histograms
+ * --------------------------------------------------
+ */
+.bar rect {
+  fill: steelblue;
+  shape-rendering: crispEdges;
+}
+
+.bar text {
+  fill: #fff;
+}
