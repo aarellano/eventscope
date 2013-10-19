@@ -5,6 +5,8 @@ MultiFinder
 
 MultiFinder is a tool to explore point event temporal patterns. It is based on the idea behind [Eventflow][1], but we propose a solution where we **split the datasets** into two groups based on some binary attribute and attempt to identify association rules that are either the same or different for each class. It is expected that relations that occur in both sets, after the separation, are uninteresting. Relations that occur in only one group are expected to be more interesting because they can be used to distinguish between groups.
 
+There is an incremental [live demo][18] of the app.
+
 ## Software components
 
 This is a web application created with [AngularJS][2], and the visualizations are based on [D3.js][3]. The layout and styles use [Bootstrap][14].
@@ -72,3 +74,4 @@ Grunt automatically makes use of Livereload, so any change that you make to a sc
 [15]: http://getbootstrap.com/css/#grid
 [16]: http://getbootstrap.com/components/
 [17]: http://alignedleft.com/tutorials/d3/
+[18]: http://multifinder.herokuapp.com
