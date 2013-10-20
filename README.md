@@ -48,7 +48,7 @@ Grunt will precompile what is needed, and start a local server on port :9000 It 
 
 Grunt automatically makes use of Livereload, so any change that you make to a script or markup file will be instantly visible in your browser.
 
-## Things that we need to know
+## Where to start
 
 * We need to manage the basic concepts behind AngularJS. It's super well documented, and you can follow their [quick tutorial][13] to understand the basics.
 * The Bootstrap [Grid System][15]. Also, getting familiar with its [Components][16] is very useful.
