@@ -51,13 +51,17 @@
     </div>
 
     <div class="col-xs-3 sidebar-offcanvas" role="navigation">
+	  <strong class="list-group-item">Data Source</strong>
+	  <select ng-model="selectedDataset" ng-options="d.name for d in datasets"></select><br>
+	  <!--/.dataname -->
+	  
       <strong class="list-group-item">Events</strong>
       <input type="text" class="form-control" placeholder="Filter out" ng-model="query">
       <div class="list-group" id="events">
         <a href="#" class="list-group-item event-item" ng-repeat="category in categories | filter:query">
           {{category.name}}
         </a>
-      </div><!--/.events -->
+      </div><!--/.events --> 
 
       <strong class="list-group-item">Similarity Factors</strong>
 
@@ -81,6 +85,10 @@
 </div><!--/.container-->
 
 <script>
+
+console.log('redo');
+
+for(var key in data){ /** Not useful */ }
 
 $("#timing").slider()
 $("#attributes").slider()

@@ -1,4 +1,4 @@
-app.controller 'MainCtrl', ['$scope', ($scope) ->
+app.controller 'MainCtrl', ['$scope', '$http', ($scope, $http) ->
   $scope.categories = [
     {'name': 'Opponent Offense'},
     {'name': 'CHICAGO Offense'},
@@ -13,10 +13,30 @@ app.controller 'MainCtrl', ['$scope', ($scope) ->
     {'name': 'Turnover'},
     {'name': 'Foul'},
     {'name': 'Block'},
-    {'name': 'Made Free Throw'},
     {'name': 'Missed Free Throw'},
+    {'name': 'Made Free Throw'},
     {'name': 'End of Period'},
     {'name': 'Jump Ball'},
     {'name': 'Dead Ball'}
   ]
+  
+  ### Dataset Variables ###
+  $scope.datasets = [
+  	{'name': 'example'},
+    {'name': 'Basketball'},
+    {'name': 'Medical'}
+  ]
+  $scope.selectedDataset = $scope.datasets[0];
+  $scope.data = false;
+
+  ### Do/handle HTTP Get request ###
+  cb = (data) -> console.log(data.glossary.title); $scope.data = data;
+  fetchJSON = (fileName) -> $http.get('datasets/'+fileName+'.json').success( cb );
+  
+  ### React to selectDataset selection changes ###
+  $scope.$watch('selectedDataset', (newValue, oldValue, $scope) -> console.log(oldValue.name + '->' +newValue.name); fetchJSON(newValue.name); return newValue; )
+  
 ]
+
+
+
