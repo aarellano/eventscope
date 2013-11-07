@@ -59,7 +59,7 @@
       <input type="text" class="form-control" placeholder="Filter out" ng-model="query">
       <div class="list-group" id="events">
         <a href="#" class="list-group-item event-item" ng-repeat="category in categories | filter:query">
-          {{category.name}}
+          {{category}}
         </a>
       </div><!--/.events --> 
 
@@ -85,10 +85,6 @@
 </div><!--/.container-->
 
 <script>
-
-console.log('redo');
-
-for(var key in data){ /** Not useful */ }
 
 $("#timing").slider()
 $("#attributes").slider()

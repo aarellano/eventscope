@@ -1,40 +1,30 @@
 app.controller 'MainCtrl', ['$scope', '$http', ($scope, $http) ->
-  $scope.categories = [
-    {'name': 'Opponent Offense'},
-    {'name': 'CHICAGO Offense'},
-    {'name': 'Defensive Rebound'},
-    {'name': 'Offensive Rebound'},
-    {'name': 'Made Shot - 2'},
-    {'name': 'Made Shot - 3'},
-    {'name': 'Missed Shot - 2'},
-    {'name': 'Missed Shot - 3'},
-    {'name': 'Steal'},
-    {'name': 'Timeout'},
-    {'name': 'Turnover'},
-    {'name': 'Foul'},
-    {'name': 'Block'},
-    {'name': 'Missed Free Throw'},
-    {'name': 'Made Free Throw'},
-    {'name': 'End of Period'},
-    {'name': 'Jump Ball'},
-    {'name': 'Dead Ball'}
-  ]
-  
   ### Dataset Variables ###
   $scope.datasets = [
   	{'name': 'example'},
     {'name': 'Basketball'},
     {'name': 'Medical'}
   ]
+  $scope.categories = []
   $scope.selectedDataset = $scope.datasets[0];
   $scope.data = false;
 
   ### Do/handle HTTP Get request ###
-  cb = (data) -> console.log(data.glossary.title); $scope.data = data;
+  cb = (data) -> $scope.data = data;
   fetchJSON = (fileName) -> $http.get('datasets/'+fileName+'.json').success( cb );
   
   ### React to selectDataset selection changes ###
-  $scope.$watch('selectedDataset', (newValue, oldValue, $scope) -> console.log(oldValue.name + '->' +newValue.name); fetchJSON(newValue.name); return newValue; )
+  $scope.$watch('selectedDataset', (newValue, oldValue, $scope) -> fetchJSON(newValue.name); return newValue; )
+  
+  ### Edit scope.categories ###
+  updateCategories = (json) -> 
+    $scope.categories = []
+    for p in json.events
+      $scope.categories.push(p.event) if $scope.categories.indexOf(p.event) == -1
+	
+
+  ### Update categories for each dataset ###
+  $scope.$watch('data', (newValue, oldValue, $scope) -> updateCategories(newValue) );
   
 ]
 
