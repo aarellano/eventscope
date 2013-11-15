@@ -1,4 +1,4 @@
-window.app = angular.module('multifinderApp', ['multifinderApp.directives'])
+window.app = angular.module('multifinderApp', ['multifinderApp.directives', '$strap.directives'])
   .config ($routeProvider) ->
     $routeProvider
       .when '/',
