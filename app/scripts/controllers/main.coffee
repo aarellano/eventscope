@@ -1,3 +1,16 @@
+preprocess = ($scope, json) ->
+    refEvts = {}
+    $scope.categories = []
+    if json.events
+      for p in json.events
+        $scope.categories.push(p.event) if p.event not in $scope.categories
+        if p.ts
+          p.ts = moment(p.ts)
+          if p.te
+            p.te = moment(p.te)
+      $scope.categories.sort()
+      console.log("done with category updates")
+
 app.controller 'MainCtrl', ['$scope', '$http', ($scope, $http) ->
   ### Dataset Variables ###
   $scope.datasets = [
@@ -22,26 +35,9 @@ app.controller 'MainCtrl', ['$scope', '$http', ($scope, $http) ->
   ### Do/handle HTTP Get request ###
   cb = (data) -> $scope.data = data;
   fetchJSON = (fileName) -> $http.get('datasets/'+fileName+'.json').success( cb );  
-  
-  ### Edit scope.categories ###
-  preprocess = (json) ->
-    refEvts = {}
-    $scope.categories = []
-    if json.events
-      for p in json.events
-        $scope.categories.push(p.event) if p.event not in $scope.categories
-        if p.ts
-          p.ts = moment(p.ts)
-          if p.te
-            p.te = moment(p.te)
-      $scope.categories.sort()
-      #$scope.$apply()
-      console.log("done with category updates")
-      
-	
 
   ### Update categories for each dataset ###
-  $scope.$watch('data', (newValue, oldValue, $scope) -> preprocess(newValue) );
+  $scope.$watch('data', (newValue, oldValue, $scope) -> preprocess($scope,newValue) );
   
   
   
