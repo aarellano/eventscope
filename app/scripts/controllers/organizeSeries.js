@@ -47,11 +47,12 @@ function distribution(data, refA, refB, categories, interval){
 			var A_array = new Array(); //records all events of refA
 			var B_array = new Array(); //records all events of refB
 
-			var beforeA = new Array(); //distributions of events happening before refA
-			var afterA = new Array(); //distributions of events happening after refA
+			//var beforeA = new Array(); //distributions of events happening before refA
+			var beforeA = Object();
+			var afterA = Object(); //distributions of events happening after refA
 
-			var beforeB = new Array(); //distributions of events happening before refB
-			var afterB = new Array(); //distributions of events happening after refB
+			var beforeB = Object(); //distributions of events happening before refB
+			var afterB = Object(); //distributions of events happening after refB
 
 			for (var j = 0; j < data.length; j++){
 				var game = data[j]; // events in one game
@@ -60,23 +61,39 @@ function distribution(data, refA, refB, categories, interval){
 						C_array.push_back(game[e]);
 						for (var a = 0; a < A_array.length; a++){
 							var idx = dis(game[e].ts, A_array[a].te, interval); 
-							afterA[idx]++;
+							if(afterA[idx]){
+								afterA[idx] = 1;
+							}eles{
+								afterA[idx]++;	
+							}							
 						}
 						for (var b = 0; a < B_array.length; b++){
 							var idx = dis(game[e].ts, B_array[a].te, interval); 
-							afterB[idx]++;
+							if(afterB[idx]){
+								afterB[idx] = 1;
+							}eles{
+								afterB[idx]++;
+							}							
 						}
 					}else if (game[e].event == refA){
 						A_array.push_back(game[e]); 
 						for (var c = 0; a < C_array.length; c++){
-							var idx = dis(game[e].ts, C_array[c].te, interval);
-							beforeA[idx]++;
+							var idx = dis(game[e].ts, C_array[c].te, interval);							
+							if(afterB[idx]){
+								beforeA[idx] = 1;
+							}eles{
+								beforeA[idx]++;
+							}
 						}
 					}else if (game[e].event == refB){
 						B_array.push_back(game[e]); 
 						for (var c = 0; a < C_array.length; c++){
-							var idx = dis(game[e].ts, B_array[c].te, interval);
-							beforeB[idx]++;
+							var idx = dis(game[e].ts, B_array[c].te, interval);							
+							if(afterB[idx]){
+								beforeB[idx] = 1;
+							}eles{
+								beforeB[idx]++;
+							}
 						}
 					}
 				}
