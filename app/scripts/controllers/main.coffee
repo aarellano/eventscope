@@ -1,17 +1,4 @@
-preprocess = ($scope, json) ->
-    refEvts = {}
-    $scope.categories = []
-    if json.events
-      for p in json.events
-        $scope.categories.push(p.event) if p.event not in $scope.categories
-        if p.ts
-          p.ts = moment(p.ts)
-          if p.te
-            p.te = moment(p.te)
-      $scope.categories.sort()
-      console.log("done with category updates")
-
-app.controller 'MainCtrl', ['$scope', '$http', ($scope, $http) ->
+app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', ($scope, $http, preprocess) ->
   ### Dataset Variables ###
   $scope.datasets = [
   	{'name': 'example'},
@@ -20,9 +7,8 @@ app.controller 'MainCtrl', ['$scope', '$http', ($scope, $http) ->
   ]
   refEvts = {}
   
-  
   $scope.categories = []
-  $scope.selectedDataset = $scope.datasets[0]
+  #$scope.selectedDataset = $scope.datasets[0]
   $scope.data = []
   $scope.records = []
   $scope.splitAttribute = false
@@ -30,14 +16,18 @@ app.controller 'MainCtrl', ['$scope', '$http', ($scope, $http) ->
 
   
   ### React to selectDataset selection changes ###
-  $scope.$watch('selectedDataset', (newValue, oldValue, $scope) -> fetchJSON(newValue.name); return newValue; )
+  $scope.$watch('selectedDataset', (newValue, oldValue, $scope) ->
+    fetchJSON(newValue.name); 
+    return newValue; )
   
   ### Do/handle HTTP Get request ###
   cb = (data) -> $scope.data = data;
   fetchJSON = (fileName) -> $http.get('datasets/'+fileName+'.json').success( cb );  
 
   ### Update categories for each dataset ###
-  $scope.$watch('data', (newValue, oldValue, $scope) -> preprocess($scope,newValue) );
+  $scope.$watch('data', (newValue, oldValue, $scope) ->
+    console.log("data trigger")
+    preprocess($scope.categories,newValue) );
   
   
   
@@ -91,6 +81,8 @@ app.controller 'MainCtrl', ['$scope', '$http', ($scope, $http) ->
       #add event to selection
       refEvts[category] = true
 ]
+
+
 
 
 
