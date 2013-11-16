@@ -36,7 +36,7 @@
         <div id="selects">
           <select class="span3" data-style="btn-info" bs-select><option>Event 1</option></select>
           <select class="span3" data-style="btn-success" bs-select><option>Event 2</option></select>
-          <select class="span3" ng-model="selectedDataset" ng-options="d.name for d in datasets" data-style="btn-primary" bs-select></select>
+          <select class="span3" ng-model="selectedDataset" ng-change="fetchJSON()" ng-options="d.name for d in datasets" data-style="btn-primary" bs-select></select>
         </div>
       </div>
 
