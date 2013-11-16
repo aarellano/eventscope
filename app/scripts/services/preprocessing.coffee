@@ -25,7 +25,7 @@ app.service 'preprocess', () ->
           if p.te
             p.te = moment(p.te)
          #aggregate records
-        if p.id in recordHash
+        if p.id.toString() in Object.keys(recordHash)
           record = recordHash[p.id]
           record.push(p)
         else
