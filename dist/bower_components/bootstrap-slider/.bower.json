@@ -29,6 +29,5 @@
   },
   "_source": "git://github.com/pammacdotnet/bootstrap-slider.git",
   "_target": "*",
-  "_originalSource": "bootstrap-slider",
-  "_direct": true
+  "_originalSource": "bootstrap-slider"
 }

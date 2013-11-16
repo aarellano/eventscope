@@ -1,0 +1,14 @@
+{
+  "name": "highcharts.com",
+  "homepage": "https://github.com/highslide-software/highcharts.com",
+  "version": "3.0.7",
+  "_release": "3.0.7",
+  "_resolution": {
+    "type": "version",
+    "tag": "v3.0.7",
+    "commit": "3fbcb31c4c49ce95a97c88466e99a23e1221e095"
+  },
+  "_source": "git://github.com/highslide-software/highcharts.com.git",
+  "_target": "~3.0.7",
+  "_originalSource": "highcharts.com"
+}
