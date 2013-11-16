@@ -3,7 +3,7 @@ app.service 'preprocess', () ->
     console.log "I'm in the firstpass"
     # -makes the first pass over the data
     # -converts time strings to moment objects (see moment.js documentation)
-    # -aggregates the unique event types into the 'categories' array
+    # -aggregates the unique event types into the 'event_types' array
     # -aggregates events into records
     # @param json: raw data - an array of objects of form
     #       {'event':'<event type here>'
@@ -15,10 +15,10 @@ app.service 'preprocess', () ->
     console.log("preprocess reached")
     recordHash = {}
     if json.events
-      categories = {}
+      event_types = {}
       for p in json.events
         #add new category if not present
-        categories[p.event] = true if p.event not in categories
+        event_types[p.event] = true if p.event not in event_types
         #convert time string to moment
         if p.ts
           p.ts = moment(p.ts)
@@ -43,5 +43,5 @@ app.service 'preprocess', () ->
             0
           )
         records.push(recordHash[recordId])
-      categories = Object.keys(categories)
-      categories.sort()
+      event_types = Object.keys(event_types)
+      event_types.sort()

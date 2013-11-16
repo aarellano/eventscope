@@ -11,7 +11,8 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', ($scope, $http, pre
   $scope.fetchJSON = () ->
     console.log $scope.selectedDataset.name
     $http.get('datasets/'+$scope.selectedDataset.name+'.json').success(
-      (data) -> $scope.categories = preprocess.firstPass(data, $scope.records)
+      (data) ->
+        $scope.event_types = preprocess.firstPass(data, $scope.records)
       )
 
   # Fetch the default dataset
