@@ -16,6 +16,6 @@ footer {
   right: 0;
 }
 
-div.no-padding > div[class*="col-"] {
- padding: 0;
+.topper {
+  margin-bottom: 0;
 }
