@@ -81,8 +81,3 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', ($scope, $http, pre
       #add event to selection
       refEvts[category] = true
 ]
-
-
-
-
-
