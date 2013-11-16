@@ -31,7 +31,7 @@ app.service 'preprocess', () ->
         else
           record = [p]
           recordHash[p.id] = record
-      for recordId in recordHash
+      for recordId in  Object.keys(recordHash)
         record = recordHash[recordId]
         #sort the records based on time
         record.sort((a,b)->
