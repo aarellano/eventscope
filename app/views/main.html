@@ -17,6 +17,11 @@
               <th>Event</th>
             </tr></thead>
           <tbody>
+            <tr ng-repeat="eventRow in eventRows">
+              <td><highchart config="eventRow.chartConfig" ></highchart></td>
+              <td></td>
+              <td>{{eventRow.eventName}}</td>
+            </tr>
           </tbody>
         </table>
       </div>

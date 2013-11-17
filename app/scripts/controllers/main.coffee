@@ -10,6 +10,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'ChartDataBuilder',
   $scope.selectedDataset = $scope.datasets[0]
 
   ###########################################################
+  $scope.eventRows = {}
 
   records = []
   time_limits =
@@ -28,7 +29,10 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'ChartDataBuilder',
         $scope.ref_events = [records[0][0], records[0][1]]
 
         # This call to build_histograms should be bound to selecting ref_events. This is just an example.
-        preprocess.build_histograms(records, $scope.event_types, $scope.ref_events, bin_size, $scope.num_bins)
+        histograms = preprocess.build_histograms(records, $scope.event_types, $scope.ref_events, bin_size, $scope.num_bins)
+
+        # Passing around variables to get return values is a very bad practice (but I'm too tired to fix it now)
+        ChartDataBuilder.chartsConfig(histograms, $scope.eventRows)
       )
 
   # Fetch the default dataset
