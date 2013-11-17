@@ -52,18 +52,18 @@ app.service 'preprocess', () ->
   this.build_histograms = (records, event_types, ref_events, bin_size, num_bins) ->
     # Initialize all the distribution values to zero. It could be done in the next loop, but it's very short
     hists = {}
-    for ref_event in ref_events
-      hists[ref_event.event] = {}
-      for event_type in event_types
-        hists[ref_event.event][event_type] = []
+    for event_type in event_types
+      hists[event_type] = {}
+      for ref_event in ref_events
+        hists[event_type][ref_event.event] = []
         for i in [0..(num_bins-1)]
-          hists[ref_event.event][event_type][i] = 0
+          hists[event_type][ref_event.event][i] = 0
 
     for record in records
       for entry in record
         for ref_event in ref_events
           if entry.event isnt ref_event.event
             bin_number = Math.round(ref_event.ts.diff(entry.ts) / bin_size) + (num_bins / 2)
-            hists[ref_event.event][entry.event][bin_number] += 1
+            hists[entry.event][ref_event.event][bin_number] += 1
 
     hists
