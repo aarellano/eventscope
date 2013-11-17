@@ -1,9 +1,9 @@
 app.service 'preprocess', () ->
-  this.firstPass = (json,records,time_limits) ->
+  this.firstPass = (json, records, timeLimits) ->
     console.log "I'm in the firstpass"
     # -makes the first pass over the data
     # -converts time strings to moment objects (see moment.js documentation)
-    # -aggregates the unique event types into the 'event_types' array
+    # -aggregates the unique event types into the 'eventTypes' array
     # -aggregates events into records
     # @param json: raw data - an array of objects of form
     #       {'event':'<event type here>'
@@ -12,19 +12,19 @@ app.service 'preprocess', () ->
     #         'id':'<id of the record where the event occured (game/patient/etc.)>'
     #       }
     # @param records: an empty array to be populated with records
-    # @time_limits: an object with two properties: first_time and last_time
+    # @timeLimits: an object with two properties: firstTime and lastTime
     console.log("preprocess reached")
     recordHash = {}
     if json.events
-      event_types = {}
+      eventTypes = {}
       for p in json.events
         #add new category if not present
-        event_types[p.event] = true if p.event not in event_types
+        eventTypes[p.event] = true if p.event not in eventTypes
         #convert time string to moment
         if p.ts
           p.ts = moment(p.ts)
-          if p.ts.isBefore(time_limits.first_time) then time_limits.first_time = p.ts
-          if p.ts.isAfter(time_limits.last_time) then time_limits.last_time = p.ts
+          if p.ts.isBefore(timeLimits.firstTime) then timeLimits.firstTime = p.ts
+          if p.ts.isAfter(timeLimits.lastTime) then timeLimits.lastTime = p.ts
           if p.te
             p.te = moment(p.te)
          #aggregate records
@@ -46,24 +46,24 @@ app.service 'preprocess', () ->
             0
           )
         records.push(recordHash[recordId])
-      event_types = Object.keys(event_types)
-      event_types.sort()
+      eventTypes = Object.keys(eventTypes)
+      eventTypes.sort()
 
-  this.build_histograms = (records, event_types, ref_events, bin_size, num_bins) ->
+  this.buildTimeSeries = (records, eventTypes, refEvents, binSize, numBins) ->
     # Initialize all the distribution values to zero. It could be done in the next loop, but it's very short
     hists = {}
-    for event_type in event_types
-      hists[event_type] = {}
-      for ref_event in ref_events
-        hists[event_type][ref_event.event] = []
-        for i in [0..(num_bins-1)]
-          hists[event_type][ref_event.event][i] = 0
+    for eventType in eventTypes
+      hists[eventType] = {}
+      for refEvent in refEvents
+        hists[eventType][refEvent.event] = []
+        for i in [0..(numBins-1)]
+          hists[eventType][refEvent.event][i] = 0
 
     for record in records
       for entry in record
-        for ref_event in ref_events
-          if entry.event isnt ref_event.event
-            bin_number = Math.round(ref_event.ts.diff(entry.ts) / bin_size) + (num_bins / 2)
-            hists[entry.event][ref_event.event][bin_number] += 1
+        for refEvent in refEvents
+          if entry.event isnt refEvent.event
+            bin_number = Math.round(refEvent.ts.diff(entry.ts) / binSize) + (numBins / 2)
+            hists[entry.event][refEvent.event][bin_number] += 1
 
     hists
