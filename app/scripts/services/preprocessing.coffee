@@ -65,3 +65,5 @@ app.service 'preprocess', () ->
           if entry.event isnt ref_event.event
             bin_number = Math.round(ref_event.ts.diff(entry.ts) / bin_size) + (num_bins / 2)
             hists[ref_event.event][entry.event][bin_number] += 1
+
+    hists
