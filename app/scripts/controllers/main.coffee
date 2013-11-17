@@ -1,4 +1,4 @@
-app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', ($scope, $http, preprocess) ->
+app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'ChartDataBuilder', ($scope, $http, preprocess, ChartDataBuilder) ->
 
   ## VARIABLES CONTROLLED BY THE USER IN THE CONTROL PANEL ##
   $scope.datasets = [
