@@ -6,11 +6,14 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'ChartDataBuilder',
     {'name': 'Basketball'}
   ]
 
-  $scope.num_bins = 20
+  $scope.numBins = 20
   $scope.selectedDataset = $scope.datasets[0]
+  $scope.refEventA =
+  $scope.refEventB =
 
   ###########################################################
   $scope.eventRows = {}
+  $scope.eventTypes = []
 
   records = []
   timeLimits =
@@ -20,17 +23,17 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'ChartDataBuilder',
   $scope.fetchJSON = () ->
     $http.get('datasets/'+$scope.selectedDataset.name+'.json').success(
       (data) ->
-        $scope.event_types = preprocess.firstPass(data, records, timeLimits)
+        $scope.eventTypes = preprocess.firstPass(data, records, timeLimits)
         $scope.updateHistograms()
       )
 
   $scope.updateHistograms = () ->
-    bin_size = Math.round((timeLimits.lastTime - timeLimits.firstTime) / $scope.num_bins) * 2
+    binSize = Math.round((timeLimits.lastTime - timeLimits.firstTime) / $scope.numBins) * 2
 
-    # These ref_events are hardcoded to be used as examples.
-    $scope.ref_events = [records[0][0], records[0][1]]
+    # These refEvents are hardcoded to be used as examples.
+    $scope.refEvents = [records[0][0], records[0][1]]
 
-    timeSeries = preprocess.buildTimeSeries(records, $scope.event_types, $scope.ref_events, bin_size, $scope.num_bins)
+    timeSeries = preprocess.buildTimeSeries(records, $scope.eventTypes, $scope.refEvents, binSize, $scope.numBins)
 
     # Passing around variables to get return values is a very bad practice (but I'm too tired to fix it now)
     ChartDataBuilder.chartsConfig(timeSeries, $scope.eventRows)

@@ -44,18 +44,22 @@ app.service 'preprocess', () ->
             0
           )
         records.push(recordHash[recordId])
-      eventTypes = Object.keys(eventTypes)
-      eventTypes.sort()
+
+      eventTypesArray = []
+      for key of eventTypes
+        eventTypesArray.push { name: key }
+
+      return eventTypesArray
 
   this.buildTimeSeries = (records, eventTypes, refEvents, binSize, numBins) ->
     # Initialize all the distribution values to zero. It could be done in the next loop, but it's very short
     hists = {}
     for eventType in eventTypes
-      hists[eventType] = {}
+      hists[eventType.name] = {}
       for refEvent in refEvents
-        hists[eventType][refEvent.event] = []
+        hists[eventType.name][refEvent.event] = []
         for i in [0..(numBins-1)]
-          hists[eventType][refEvent.event][i] = 0
+          hists[eventType.name][refEvent.event][i] = 0
 
     for record in records
       for entry in record
