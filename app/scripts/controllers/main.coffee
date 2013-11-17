@@ -24,8 +24,10 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', ($scope, $http, pre
 
         bin_size = Math.round((time_limits.last_time - time_limits.first_time) / $scope.num_bins)
 
+        # These ref_events are hardcoded to be used as examples.
         $scope.ref_events = [records[0][0], records[0][1]]
 
+        # This call to build_histograms should be bound to selecting ref_events. This is just an example.
         preprocess.build_histograms(records, $scope.event_types, $scope.ref_events, bin_size, $scope.num_bins)
       )
 
