@@ -6,13 +6,16 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', ($scope, $http, pre
   ]
 
   $scope.records = []
+  $scope.time_limits =
+    first_time: moment() # this doesn't work if we have events from the future
+    last_time: 0
 
   # Do/handle HTTP Get request
   $scope.fetchJSON = () ->
     console.log $scope.selectedDataset.name
     $http.get('datasets/'+$scope.selectedDataset.name+'.json').success(
       (data) ->
-        $scope.event_types = preprocess.firstPass(data, $scope.records)
+        $scope.event_types = preprocess.firstPass(data, $scope.records, $scope.time_limits)
       )
 
   # Fetch the default dataset

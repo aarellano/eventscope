@@ -1,5 +1,5 @@
 app.service 'preprocess', () ->
-  this.firstPass = (json,records) ->
+  this.firstPass = (json,records,time_limits) ->
     console.log "I'm in the firstpass"
     # -makes the first pass over the data
     # -converts time strings to moment objects (see moment.js documentation)
@@ -22,6 +22,8 @@ app.service 'preprocess', () ->
         #convert time string to moment
         if p.ts
           p.ts = moment(p.ts)
+          if p.ts.isBefore(time_limits.first_time) then time_limits.first_time = p.ts
+          if p.ts.isAfter(time_limits.last_time) then time_limits.last_time = p.ts
           if p.te
             p.te = moment(p.te)
          #aggregate records
