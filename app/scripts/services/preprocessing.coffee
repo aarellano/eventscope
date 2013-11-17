@@ -1,6 +1,5 @@
 app.service 'preprocess', () ->
   this.firstPass = (json, records, timeLimits) ->
-    console.log "I'm in the firstpass"
     # -makes the first pass over the data
     # -converts time strings to moment objects (see moment.js documentation)
     # -aggregates the unique event types into the 'eventTypes' array
@@ -13,7 +12,6 @@ app.service 'preprocess', () ->
     #       }
     # @param records: an empty array to be populated with records
     # @timeLimits: an object with two properties: firstTime and lastTime
-    console.log("preprocess reached")
     recordHash = {}
     if json.events
       eventTypes = {}

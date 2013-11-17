@@ -18,7 +18,6 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'ChartDataBuilder',
     lastTime: 0
 
   $scope.fetchJSON = () ->
-    console.log $scope.selectedDataset.name
     $http.get('datasets/'+$scope.selectedDataset.name+'.json').success(
       (data) ->
         $scope.event_types = preprocess.firstPass(data, records, timeLimits)
@@ -36,12 +35,6 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'ChartDataBuilder',
     # Passing around variables to get return values is a very bad practice (but I'm too tired to fix it now)
     ChartDataBuilder.chartsConfig(timeSeries, $scope.eventRows)
 
-
-
   # Fetch the default dataset
   $scope.fetchJSON()
-
-  # This is just an example to show something on the selected pattern area
-  $http.get("datasets/basicAreaChart.json").success (data) ->
-    $scope.basicAreaChart = data
 ]
