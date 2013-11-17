@@ -22,7 +22,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', ($scope, $http, pre
       (data) ->
         $scope.event_types = preprocess.firstPass(data, records, time_limits)
 
-        bin_size = Math.round((time_limits.last_time - time_limits.first_time) / $scope.num_bins)
+        bin_size = Math.round((time_limits.last_time - time_limits.first_time) / $scope.num_bins) * 2
 
         # These ref_events are hardcoded to be used as examples.
         $scope.ref_events = [records[0][0], records[0][1]]
