@@ -10,15 +10,15 @@
   <div class="row-fluid no-space">
     <div class="span6">
       <div class="row-fluid">
-        <table class="table">
+        <table class="table span12">
           <thead><tr>
-              <th>Histograms</th>
-              <th>SC</th>
-              <th>Event</th>
+              <th style="width: 80%">Histograms</th>
+              <th style="width: 5%">SC</th>
+              <th style="width: 15%">Event</th>
             </tr></thead>
           <tbody>
             <tr ng-repeat="eventRow in eventRows">
-              <td><highchart config="eventRow.chartConfig" ></highchart></td>
+              <td><highchart config="eventRow.chartConfig"></highchart></td>
               <td></td>
               <td>{{eventRow.eventName}}</td>
             </tr>
@@ -33,12 +33,12 @@
       </div>
       <div class="well topper">
         <div id="selects">
-          <select class="span3" data-style="btn-info" bs-select><option>Event 1</option></select>
-          <select class="span3" data-style="btn-success" bs-select><option>Event 2</option></select>
+          <select class="span3" ng-model="refEventA" data-style="btn-info" ng-options="e.name for e in eventTypes" bs-select></select>
+          <select class="span3" ng-model="refEventB" data-style="btn-success" ng-options="e.name for e in eventTypes" bs-select></select>
           <select class="span3" ng-model="selectedDataset" ng-change="fetchJSON()" ng-options="d.name for d in datasets" data-style="btn-primary" bs-select></select>
         </div>
         <div class="input-append">
-          <input class="span2" ng-model="num_bins" type="text">
+          <input class="span2" ng-model="numBins" type="text">
           <button class="btn" ng-click="updateHistograms()" type="button"># Bins</button>
         </div>
       </div>
