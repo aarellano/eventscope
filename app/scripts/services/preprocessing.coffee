@@ -12,6 +12,7 @@ app.service 'preprocess', () ->
     #         'id':'<id of the record where the event occured (game/patient/etc.)>'
     #       }
     # @param records: an empty array to be populated with records
+    # @time_limits: an object with two properties: first_time and last_time
     console.log("preprocess reached")
     recordHash = {}
     if json.events
@@ -47,3 +48,23 @@ app.service 'preprocess', () ->
         records.push(recordHash[recordId])
       event_types = Object.keys(event_types)
       event_types.sort()
+
+  this.build_histograms = (records, event_types, ref_events, bin_size, num_bins) ->
+    # Initialize all the distribution values to zero. It could be done in the next loop, but it's very short
+    hists = {}
+    for ref_event in ref_events
+      hists[ref_event.event] = {}
+      for event_type in event_types
+        hists[ref_event.event][event_type] = []
+        for i in [0..(num_bins-1)]
+          hists[ref_event.event][event_type][i] = 0
+
+    for record in records
+      for entry in record
+        for ref_event in ref_events
+          if entry.event isnt ref_event.event
+            bin_number = Math.round(ref_event.ts.diff(entry.ts) / bin_size) + (num_bins / 2)
+            hists[ref_event.event][entry.event][bin_number] += 1
+
+    window.hists = hists
+
