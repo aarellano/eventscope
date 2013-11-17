@@ -19,3 +19,7 @@ footer {
 .topper {
   margin-bottom: 0;
 }
+
+#right-side {
+  position: fixed;
+}
