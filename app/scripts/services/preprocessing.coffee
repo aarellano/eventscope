@@ -26,8 +26,6 @@ app.service 'preprocess', () ->
           if p.ts.isAfter(timeLimits.lastTime) then timeLimits.lastTime = p.ts
           if p.te
             p.te = moment(p.te)
-        else
-          console.log(p)
         #aggregate records
         if p.id.toString() in Object.keys(recordHash)
           record = recordHash[p.id]
@@ -50,30 +48,32 @@ app.service 'preprocess', () ->
 
       eventTypesArray = []
       for key of eventTypes
-        eventTypesArray.push { name: key }
+        eventTypesArray.push key
 
       return eventTypesArray
 
   this.buildTimeSeries = (records, eventTypes, refEvents, binSize, numBins) ->
+    numBins *=2
     # Initialize all the distribution values to zero. It could be done in the next loop, but it's very short
     hists = {}
     for eventType in eventTypes
       if(eventType not in refEvents)
         #create histogram pair for that non-reference event
-        hists[eventType.name] = {}
+        hists[eventType] = {}
         for refEvent in refEvents
           #create distribution for that event pair
-          hists[eventType.name][refEvent] = []
+          hists[eventType][refEvent] = []
           for i in [0..(numBins-1)]
             #zero out intial values
-            hists[eventType.name][refEvent][i] = 0
+            hists[eventType][refEvent][i] = 0
 
-    computeBinNumber = (refTime, nonrefTime) => Math.round(refTime.diff(nonrefTime) / binSize + (numBins/2))
-
+    computeBinNumber = (refTime, nonrefTime) => Math.round(refTime.diff(nonrefTime) / binSize) + (numBins/2)
 
     for record in records
       occursNonref = {}
-      occursRef = {refEvents[0]:[],refEvents[1]:[]}
+      occursRef = {}
+      occursRef[refEvents[0]] = []
+      occursRef[refEvents[1]] = []
       for entry in record
         if entry.event in refEvents
           #current event is a reference event, add it to its ref event array
@@ -92,10 +92,11 @@ app.service 'preprocess', () ->
           if entry.event not in occursNonref then occursNonref[entry.event] = []
           occursNonref[entry.event].push(entry.ts)
           for refEvent of occursRef
-            refOccurArr = occursRef[nonrefEvt]
+            refOccurArr = occursRef[refEvent]
             #bin this event for all ref occurences preceding this one
             for occurTime in refOccurArr
               #calulate this event's bin in reference to every preceding ref event
               binNum = computeBinNumber(occurTime,entry.ts)
-              hists[nonrefEvt][entry.event] +=1
+              hists[entry.event][refEvent] +=1
+    console.log(records)
     hists
