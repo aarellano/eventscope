@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<LifeFlowDataSetConfigFile>
+   <RawDataParameter>
+      <unitOfRecord value="record"/>
+      <unitOfRecordPlural value="records"/>
+      <categoryLookUp>
+         <Category>
+            <name value="UMD Offense"/>
+            <color alpha="255" b="80" g="7e" r="fa"/>
+            <shapeName value="Square"/>
+         </Category>
+         <Category>
+            <name value="UNC Offense"/>
+            <color alpha="255" b="fa" g="ad" r="9b"/>
+            <shapeName value="Square"/>
+         </Category>
+         <Category>
+            <name value="Foul"/>
+            <color alpha="255" b="ef" g="10" r="7d"/>
+            <shapeName value="Triangle"/>
+         </Category>
+         <Category>
+            <name value="Made Shot"/>
+            <color alpha="255" b="0" g="9c" r="0"/>
+            <shapeName value="Triangle"/>
+         </Category>
+         <Category>
+            <name value="Missed Shot"/>
+            <color alpha="255" b="3" g="3" r="8c"/>
+            <shapeName value="Triangle"/>
+         </Category>
+         <Category>
+            <name value="Rebound"/>
+            <color alpha="255" b="0" g="0" r="0"/>
+            <shapeName value="Triangle"/>
+         </Category>
+         <Category>
+            <name value="Made Free Throw"/>
+            <color alpha="255" b="5f" g="ff" r="67"/>
+            <shapeName value="Triangle"/>
+         </Category>
+         <Category>
+            <name value="Missed Free Throw"/>
+            <color alpha="255" b="44" g="55" r="f2"/>
+            <shapeName value="Triangle"/>
+         </Category>
+         <Category>
+            <name value="Timeout"/>
+            <color alpha="255" b="6a" g="6e" r="6d"/>
+            <shapeName value="Triangle"/>
+         </Category>
+         <Category>
+            <name value="Turnover"/>
+            <color alpha="255" b="3" g="ff" r="fb"/>
+            <shapeName value="Triangle"/>
+         </Category>
+         <Category>
+            <name value="Steal"/>
+            <color alpha="255" b="7" g="69" r="fa"/>
+            <shapeName value="Triangle"/>
+         </Category>
+         <Category>
+            <name value="Block"/>
+            <color alpha="255" b="8c" g="13" r="a"/>
+            <shapeName value="Triangle"/>
+         </Category>
+         <Category>
+            <name value="End of Half"/>
+            <color alpha="255" b="73" g="78" r="19"/>
+            <shapeName value="Triangle"/>
+         </Category>
+         <Category>
+            <name value="Jump Ball"/>
+            <color alpha="255" b="73" g="78" r="19"/>
+            <shapeName value="Triangle"/>
+         </Category>
+         <Category>
+            <name value="End of Game"/>
+            <color alpha="255" b="73" g="78" r="19"/>
+            <shapeName value="Triangle"/>
+         </Category>
+      </categoryLookUp>
+   </RawDataParameter>
+   <LifeLines2Parameter>
+      <showSelectedInstancesOnTop value="true"/>
+      <layoutParam>
+         <headerOffset value="30"/>
+         <gapBetweenGroup value="0"/>
+         <groupPaddingBottom value="0"/>
+         <groupPaddingTop value="0"/>
+         <minInstanceHeight value="20"/>
+         <instancePaddingBottom value="2"/>
+         <instancePaddingTop value="2"/>
+         <eventRowHeight value="11"/>
+         <gapBetweenEventRows value="10"/>
+      </layoutParam>
+      <painterParam>
+         <categoryLabelVisible value="true"/>
+      </painterParam>
+      <activeCategories>
+         <Category name="UMD Offense"/>
+         <Category name="UNC Offense"/>
+         <Category name="Foul"/>
+         <Category name="Made Shot"/>
+         <Category name="Missed Shot"/>
+         <Category name="Rebound"/>
+         <Category name="Made Free Throw"/>
+         <Category name="Missed Free Throw"/>
+         <Category name="Timeout"/>
+         <Category name="Turnover"/>
+         <Category name="Steal"/>
+         <Category name="Block"/>
+         <Category name="End of Half"/>
+         <Category name="Jump Ball"/>
+         <Category name="End of Game"/>
+      </activeCategories>
+   </LifeLines2Parameter>
+   <LifeFlowParameter>
+      <preprocessParam>
+         <activeCategories>
+            <Category name="UMD Offense"/>
+            <Category name="UNC Offense"/>
+            <Category name="Foul"/>
+            <Category name="Made Shot"/>
+            <Category name="Missed Shot"/>
+            <Category name="Rebound"/>
+            <Category name="Made Free Throw"/>
+            <Category name="Missed Free Throw"/>
+            <Category name="Timeout"/>
+            <Category name="Turnover"/>
+            <Category name="Steal"/>
+            <Category name="Block"/>
+            <Category name="End of Half"/>
+            <Category name="Jump Ball"/>
+            <Category name="End of Game"/>
+         </activeCategories>
+      </preprocessParam>
+      <treeBuilderParam>
+         <mergeRepeatEvents value="false"/>
+         <activeAttributes/>
+      </treeBuilderParam>
+      <plotterParam>
+         <mode value="ENCODE_BOTH_XY"/>
+         <representativeTime value="MEAN"/>
+         <overlapEdgeBehindParentNode value="true"/>
+         <alignmentLineWidth value="5.0"/>
+         <attributeNodeWidth value="30.0"/>
+         <eventNodeWidth value="7.0"/>
+         <endNodeWidth value="3.0"/>
+         <minimumEdgeWidth value="3.0"/>
+         <hGapBetweenEdgeAndParentNode value="0.0"/>
+         <hGapBetweenEdgeAndChildNode value="0.0"/>
+         <hGapBeforeEndNode value="0.0"/>
+         <vGapBetweenSequences value="1.0"/>
+         <hSafetyPixels value="10.0"/>
+      </plotterParam>
+      <pinpointerParam>
+         <leftPadding value="5.0"/>
+         <rightPadding value="5.0"/>
+         <topPadding value="5.0"/>
+         <bottomPadding value="5.0"/>
+      </pinpointerParam>
+      <painterParam>
+         <edgeColor alpha="255" b="eb" g="eb" r="eb"/>
+         <coverOffset value="10.0"/>
+         <distributionNodeWidth value="4.0"/>
+         <showDistribution value="true"/>
+         <fillEdgeWithPreviousEventColor value="false"/>
+         <groupDistributionByNextEvent value="false"/>
+         <sortDistributionBy value="TIME_TO_PREVIOUS_EVENT"/>
+      </painterParam>
+   </LifeFlowParameter>
+</LifeFlowDataSetConfigFile>
