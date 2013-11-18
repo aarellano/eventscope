@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<LifeFlowDataSetConfigurationFile>
+   <RawDataParameter>
+      <unitOfRecord value="patient"/>
+      <unitOfRecordPlural value="patients"/>
+      <categoryLookUp>
+         <Category>
+            <name value="Arrival"/>
+            <color alpha="255" b="ff" g="40" r="38"/>
+            <shapeName value="Triangle"/>
+         </Category>
+         <Category>
+            <name value="Emergency"/>
+            <color alpha="255" b="ff" g="38" r="ef"/>
+            <shapeName value="Triangle"/>
+         </Category>
+         <Category>
+            <name value="ICU"/>
+            <color alpha="255" b="0" g="5" r="a8"/>
+            <shapeName value="Triangle"/>
+         </Category>
+         <Category>
+            <name value="Floor"/>
+            <color alpha="255" b="f" g="70" r="0"/>
+            <shapeName value="Triangle"/>
+         </Category>
+         <Category>
+            <name value="Discharge-Alive"/>
+            <color alpha="255" b="e6" g="df" r="0"/>
+            <shapeName value="Triangle"/>
+         </Category>
+         <Category>
+            <name value="Die"/>
+            <color alpha="255" b="1f" g="0" r="e"/>
+            <shapeName value="Triangle"/>
+         </Category>
+      </categoryLookUp>
+   </RawDataParameter>
+   <LifeLines2Parameter>
+      <headerOffset value="30"/>
+      <instanceComparators/>
+      <layoutParam>
+         <categoryLabelVisible value="true"/>
+         <eventRowHeight value="11"/>
+         <gapBetweenEventRows value="10"/>
+         <gapBetweenGroup value="0"/>
+         <groupPaddingBottom value="0"/>
+         <groupPaddingTop value="0"/>
+         <instancePaddingBottom value="2"/>
+         <instancePaddingTop value="2"/>
+         <selectionBorderColor alpha="0" b="0" g="0" r="0"/>
+         <selectionColor alpha="150" b="5a" g="b8" r="cc"/>
+         <selectionDarkColor alpha="255" b="0" g="44" r="54"/>
+         <selectionLightColor alpha="155" b="37" g="c6" r="e5"/>
+      </layoutParam>
+      <showSelectedInstancesOnTop value="true"/>
+      <activeCategories>
+         <Category name="Arrival"/>
+         <Category name="Emergency"/>
+         <Category name="ICU"/>
+         <Category name="Floor"/>
+         <Category name="Discharge-Alive"/>
+         <Category name="Die"/>
+      </activeCategories>
+   </LifeLines2Parameter>
+   <LifeFlowParameter>
+      <preprocessParam>
+         <activeCategories>
+            <Category name="Arrival"/>
+            <Category name="Emergency"/>
+            <Category name="ICU"/>
+            <Category name="Floor"/>
+            <Category name="Discharge-Alive"/>
+            <Category name="Die"/>
+         </activeCategories>
+      </preprocessParam>
+      <treeBuilderParam>
+         <mergeRepeatEvents value="true"/>
+         <activeAttributes/>
+      </treeBuilderParam>
+      <plotterParam>
+         <mode value="ENCODE_BOTH_XY"/>
+         <representativeTime value="MEAN"/>
+         <childrenOrderBy value="NUMBER_OF_INSTANCES_DESC"/>
+         <overlapEdgeBehindParentNode value="true"/>
+         <alignmentLineWidth value="5.0"/>
+         <attributeNodeWidth value="30.0"/>
+         <eventNodeWidth value="7.0"/>
+         <endNodeWidth value="4.0"/>
+         <minimumEdgeWidth value="3.0"/>
+         <hGapBetweenEdgeAndParentNode value="0.0"/>
+         <hGapBetweenEdgeAndChildNode value="0.0"/>
+         <vGapBetweenSequences value="1.0"/>
+         <hSafetyPixels value="10.0"/>
+      </plotterParam>
+      <pinpointerParam>
+         <leftPadding value="5.0"/>
+         <rightPadding value="5.0"/>
+         <topPadding value="5.0"/>
+         <bottomPadding value="5.0"/>
+      </pinpointerParam>
+      <painterParam>
+         <headerBackgroundColor alpha="255" b="e5" g="e5" r="e5"/>
+         <backgroundColor alpha="255" b="fa" g="fa" r="fa"/>
+         <fadeLayerColor alpha="200" b="fa" g="fa" r="fa"/>
+         <attributeNodeColor alpha="255" b="cc" g="cc" r="cc"/>
+         <endNodeColor alpha="255" b="ee" g="ee" r="ee"/>
+         <edgeColor alpha="255" b="e0" g="e0" r="e0"/>
+         <selectionColor alpha="255" b="7e" g="bf" r="cd"/>
+         <coverLayerColor alpha="170" b="6c" g="6c" r="6c"/>
+         <distributionEdgeColor alpha="150" b="63" g="df" r="e0"/>
+         <distributionEdgeSelectionColor alpha="200" b="0" g="94" r="93"/>
+         <distributionSelectionHighlightColor alpha="128" b="b7" g="ed" r="f8"/>
+         <coverOffset value="10.0"/>
+         <distributionNodeWidth value="4.0"/>
+         <showDistribution value="true"/>
+         <fillEdgeWithPreviousEventColor value="false"/>
+         <groupDistributionByNextEvent value="false"/>
+         <sortDistributionBy value="TIME_TO_PREVIOUS_EVENT"/>
+      </painterParam>
+   </LifeFlowParameter>
+</LifeFlowDataSetConfigurationFile>
