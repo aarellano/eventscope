@@ -11,7 +11,7 @@ app.service 'preprocess', () ->
     #         'id':'<id of the record where the event occured (game/patient/etc.)>'
     #       }
     # @param records: an empty array to be populated with records
-    # @timeLimits: an object with two properties: firstTime and lastTime
+    # @param timeLimits: an object with two properties: firstTime and lastTime
     recordHash = {}
     if json.events
       eventTypes = {}
@@ -21,11 +21,14 @@ app.service 'preprocess', () ->
         #convert time string to moment
         if p.ts
           p.ts = moment(p.ts)
+          #upgrade the time limits if necessary
           if p.ts.isBefore(timeLimits.firstTime) then timeLimits.firstTime = p.ts
           if p.ts.isAfter(timeLimits.lastTime) then timeLimits.lastTime = p.ts
           if p.te
             p.te = moment(p.te)
-         #aggregate records
+        else
+          console.log(p)
+        #aggregate records
         if p.id.toString() in Object.keys(recordHash)
           record = recordHash[p.id]
           record.push(p)
@@ -55,17 +58,44 @@ app.service 'preprocess', () ->
     # Initialize all the distribution values to zero. It could be done in the next loop, but it's very short
     hists = {}
     for eventType in eventTypes
-      hists[eventType.name] = {}
-      for refEvent in refEvents
-        hists[eventType.name][refEvent.event] = []
-        for i in [0..(numBins-1)]
-          hists[eventType.name][refEvent.event][i] = 0
+      if(eventType not in refEvents)
+        #create histogram pair for that non-reference event
+        hists[eventType.name] = {}
+        for refEvent in refEvents
+          #create distribution for that event pair
+          hists[eventType.name][refEvent] = []
+          for i in [0..(numBins-1)]
+            #zero out intial values
+            hists[eventType.name][refEvent][i] = 0
+
+    computeBinNumber = (refTime, nonrefTime) => Math.round(refTime.diff(nonrefTime) / binSize + (numBins/2))
+
 
     for record in records
+      occursNonref = {}
+      occursRef = {refEvents[0]:[],refEvents[1]:[]}
       for entry in record
-        for refEvent in refEvents
-          if entry.event isnt refEvent.event
-            bin_number = Math.round(refEvent.ts.diff(entry.ts) / binSize) + (numBins / 2)
-            hists[entry.event][refEvent.event][bin_number] += 1
+        if entry.event in refEvents
+          #current event is a reference event, add it to its ref event array
+          occursRef[entry.event].push(entry.ts)
+          for nonrefEvt of occursNonref
+            nonrefOccurArr = occursNonref[nonrefEvt]
+            #bin all non-ref occurences preceding this one
+            for occurTime in nonrefOccurArr
+              #calulate every non-ref event's bin in reference to the current (reference) event
+              binNum = computeBinNumber(entry.ts,occurTime)
+              #increment the bin counter
+              hists[nonrefEvt][entry.event] +=1
 
+        else
+          #current event is a non-reference event, add it to its nonref event array
+          if entry.event not in occursNonref then occursNonref[entry.event] = []
+          occursNonref[entry.event].push(entry.ts)
+          for refEvent of occursRef
+            refOccurArr = occursRef[nonrefEvt]
+            #bin this event for all ref occurences preceding this one
+            for occurTime in refOccurArr
+              #calulate this event's bin in reference to every preceding ref event
+              binNum = computeBinNumber(occurTime,entry.ts)
+              hists[nonrefEvt][entry.event] +=1
     hists

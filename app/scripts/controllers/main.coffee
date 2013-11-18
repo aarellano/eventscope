@@ -6,6 +6,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'ChartDataBuilder',
     {'name': 'Basketball'}
   ]
 
+  #number of time bins before/after a reference event
   $scope.numBins = 20
   $scope.selectedDataset = $scope.datasets[0]
   $scope.refEventA =
@@ -24,6 +25,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'ChartDataBuilder',
     $http.get('datasets/'+$scope.selectedDataset.name+'.json').success(
       (data) ->
         $scope.eventTypes = preprocess.firstPass(data, records, timeLimits)
+        #TODO: this should occur only after the reference events are selected
         $scope.updateHistograms()
       )
 
@@ -31,7 +33,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'ChartDataBuilder',
     binSize = Math.round((timeLimits.lastTime - timeLimits.firstTime) / $scope.numBins) * 2
 
     # These refEvents are hardcoded to be used as examples.
-    $scope.refEvents = [records[0][0], records[0][1]]
+    $scope.refEvents = [records[0][0].event, records[0][1].event]
 
     timeSeries = preprocess.buildTimeSeries(records, $scope.eventTypes, $scope.refEvents, binSize, $scope.numBins)
 
