@@ -1,28 +1,38 @@
 app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'ChartDataBuilder', ($scope, $http, preprocess, ChartDataBuilder) ->
 
-  ## VARIABLES CONTROLLED BY THE USER IN THE CONTROL PANEL ##
-  $scope.datasets = [
-  	{'name': 'Example'},
+  ## VARIABLES THAT POPULATE USER'S CHOICES##
+ $scope.datasets = [
+    {'name': 'Example'},
     {'name': 'Basketball'},
     {'name': 'BasketballPartial'}
   ]
+  $scope.binSizeUnits = [
+    #name: <name of time unit>, factor: <factor to represent in milliseconds>
+    {'name': 'hours', 'factor': 3600000},
+    {'name': 'minutes', 'factor': 60000},
+    {'name': 'seconds', 'factor': 1000}
+  ]
+  $scope.refChoicesA = null
+  $scope.refChoicesB = null
+  ###########################################################
 
-  #number of time bins before/after a reference event
-  $scope.numBins = 20
+  ## VARIABLES CONTROLLED BY THE USER IN THE CONTROL PANEL ##
+  #size of time bins before/after a reference event
+  $scope.binSize = 30
+  $scope.binSizeUnit = $scope.binSizeUnits[1]
   $scope.refEventA = null
   $scope.refEventB = null
   $scope.selectedDataset = $scope.datasets[0]
+  $scope.selectedTimeUnit = 'minutes'
   ###########################################################
-  $scope.refChoicesA = null
-  $scope.refChoicesB = null
+
   $scope.eventRows = {}
+
   eventTypes = []
 
   exclType = (toExclude) =>
     types = []
-    for evtType in eventTypes
-      if toExclude != evtType
-        types.push(evtType)
+    types.push(evtType) for evtType in eventTypes when evtType != toExclude
     types
 
   records = []
@@ -44,10 +54,11 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'ChartDataBuilder',
 
   $scope.updateHistograms = () ->
     if $scope.refEventA and $scope.refEventB
-      binSize = (timeLimits.lastTime - timeLimits.firstTime) / $scope.numBins
+      binSizeMillis = $scope.binSize*$scope.binSizeUnit.factor
+      numBins = Math.round((timeLimits.lastTime - timeLimits.firstTime) / binSizeMillis)
       # These refEvents are hardcoded to be used as examples.
       refEvents = [$scope.refEventA, $scope.refEventB]
-      timeSeries = preprocess.buildTimeSeries(records, eventTypes, refEvents, binSize, $scope.numBins)
+      timeSeries = preprocess.buildTimeSeries(records, eventTypes, refEvents, binSizeMillis, numBins)
       # Passing around variables to get return values is a very bad practice (but I'm too tired to fix it now)
       ChartDataBuilder.chartsConfig(timeSeries, $scope.eventRows)
     $scope.refChoicesB = exclType($scope.refEventA)

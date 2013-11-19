@@ -98,7 +98,7 @@ app.service 'preprocess', () ->
 
       return eventTypesArray
 
-  this.buildTimeSeries = (records, eventTypes, refEvents, binSize, numBins) ->
+  this.buildTimeSeries = (records, eventTypes, refEvents, binSizeMilis, numBins) ->
     numBins *=2
     # Initialize all the distribution values to zero. It could be done in the next loop, but it's very short
     hists = {}
@@ -114,7 +114,7 @@ app.service 'preprocess', () ->
             hists[eventType][refEvent][i] = 0
 
     computeBinNumber = (refTime, nonrefTime) ->
-      Math.round(refTime.diff(nonrefTime) / binSize) + (numBins/2)
+      bin = Math.round(refTime.diff(nonrefTime) / binSizeMilis) + (numBins/2)
 
     for record in records
       occursNonref = {}
@@ -145,4 +145,14 @@ app.service 'preprocess', () ->
               binNum = computeBinNumber(occurTime,entry.ts)
               #console.log(occurTime.diff(entry.ts))
               hists[entry.event][refEvent][binNum]+=1
+    #make a quick pass eliminating the zeroes
+    for evtType of hists
+      for refEvtType of hists[evtType]
+        hist = hists[evtType][refEvtType]
+        ixFirst = 0
+        #find first non-zero element
+        ixFirst++ while ixFirst < hist.length and not hist[ixFirst]
+        ixLast = hist.length-1
+        ixLast-- while ixLast >= 0 and not hist[ixLast]
+        hists[evtType][refEvtType] = hist[ixFirst..ixLast]
     hists

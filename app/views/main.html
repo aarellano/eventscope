@@ -38,8 +38,14 @@
           <select class="span3" ng-model="selectedDataset" ng-change="fetchJSON()" ng-options="d.name for d in datasets" data-style="btn-primary" bs-select></select>
         </div>
         <div class="input-append">
-          <input class="span2" ng-model="numBins" type="text">
-          <button class="btn" ng-click="updateHistograms()" type="button"># Bins</button>
+          <!--TODO: Andres, bootstrap's input-group stuff doesn't work well with angular's input types.
+            We probably want the following 3 elements to appear in one line, like here: http://getbootstrap.com/components/#input-groups-basic.
+            I'd like to keep the number spinner, though.
+            Can you think of something to fix that?-->
+          <label >Time bin size:</label>
+          <input class="span3" ng-model="binSize" type="number">
+          <select class="span4" ng-model="binSizeUnit" data-style="btn-info" ng-options="u.name for u in binSizeUnits" bs-select></select>
+          <button class="btn" ng-click="updateHistograms()" type="button">Update</button>
         </div>
       </div>
 
