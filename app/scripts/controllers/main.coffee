@@ -26,13 +26,15 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'ChartDataBuilder',
     types
 
   records = []
-  timeLimits =
-    firstTime: moment() # this doesn't work if we have events from the future
-    lastTime: 0
+  timeLimits = {}
 
   $scope.fetchJSON = () ->
     $http.get('datasets/'+$scope.selectedDataset.name+'.json').success(
       (data) ->
+        #reset time limits
+        timeLimits =
+          firstTime: moment() # this doesn't work if we have events from the future
+          lastTime: 0
         eventTypes = preprocess.firstPass(data, records, timeLimits)
         $scope.refEventA = null
         $scope.refEventB = null
@@ -43,10 +45,8 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'ChartDataBuilder',
   $scope.updateHistograms = () ->
     if $scope.refEventA and $scope.refEventB
       binSize = (timeLimits.lastTime - timeLimits.firstTime) / $scope.numBins
-
       # These refEvents are hardcoded to be used as examples.
       refEvents = [$scope.refEventA, $scope.refEventB]
-
       timeSeries = preprocess.buildTimeSeries(records, eventTypes, refEvents, binSize, $scope.numBins)
       # Passing around variables to get return values is a very bad practice (but I'm too tired to fix it now)
       ChartDataBuilder.chartsConfig(timeSeries, $scope.eventRows)

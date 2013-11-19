@@ -14,18 +14,64 @@ app.service 'preprocess', () ->
     # @param timeLimits: an object with two properties: firstTime and lastTime
     recordHash = {}
     if json.events
+      #determine how to parse date - if only time is given, follow the time format
+      #assume all dates are formatted in the same way
+      firstTime = json.events[0].ts
+      if(firstTime and moment(firstTime).isValid())
+        parseDate = (dateStr) -> moment(dateStr)
+      else
+        #only time given (date + date & time combinations are pretty hard to mess up for moment.js)\
+        #assume maximums are 24 hours, 59 minutes, etc.
+        getColonFormat = (timeStr) ->
+          splitColon = timeStr.split(':')
+          if splitColon.length == 3
+            splitColon = timeStr.split(':')
+            formatString = "HH:mm:ss"
+          else if splitColon.length == 2
+            formatString = "mm:ss"
+          else if splitColon.length == 1
+            formatString = "s"
+          else
+            formatString = null
+          formatString
+
+        splitPeriod = firstTime.split('.')
+        if splitPeriod.length > 1
+          if splitPeriod.length == 4
+            formatString = "HH.mm.ss.nnn"
+          else if splitPeriod.length == 3
+            formatString = "HH.mm.ss"
+          else if splitPeriod.length == 2
+            #milliseconds at the end
+            formatString = getColonFormat(splitPeriod[0])
+            #add them on
+            if formatString then formatString += ".nnn"
+          else
+            formatString = null
+        else
+          #no milliseconds, just time
+          formatString = getColonFormat(firstTime)
+
+        if not formatString
+          console.log("Invalid Date Format: #{firstTime}")
+          return
+        parseDate = (dateStr) -> moment(dateStr, formatString)
+
       eventTypes = {}
       for p in json.events
         #add new category if not present
         eventTypes[p.event] = true if p.event not in eventTypes
         #convert time string to moment
         if p.ts
-          p.ts = moment(p.ts)
+          newTime = parseDate(p.ts)
+          if(not newTime.isValid())
+            console.log(p.ts)
+          p.ts = newTime
           #upgrade the time limits if necessary
           if p.ts.isBefore(timeLimits.firstTime) then timeLimits.firstTime = p.ts
           if p.ts.isAfter(timeLimits.lastTime) then timeLimits.lastTime = p.ts
           if p.te
-            p.te = moment(p.te)
+            p.te = parseDate(p.te)
         #aggregate records
         if p.id.toString() in Object.keys(recordHash)
           record = recordHash[p.id]
@@ -67,7 +113,9 @@ app.service 'preprocess', () ->
             #zero out intial values
             hists[eventType][refEvent][i] = 0
 
-    computeBinNumber = (refTime, nonrefTime) => Math.round(refTime.diff(nonrefTime) / binSize) + (numBins/2)
+    computeBinNumber = (refTime, nonrefTime) ->
+      Math.round(refTime.diff(nonrefTime) / binSize) + (numBins/2)
+
     for record in records
       occursNonref = {}
       occursRef = {}
