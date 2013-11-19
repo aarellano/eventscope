@@ -3,18 +3,27 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'ChartDataBuilder',
   ## VARIABLES CONTROLLED BY THE USER IN THE CONTROL PANEL ##
   $scope.datasets = [
   	{'name': 'Example'},
-    {'name': 'Basketball'}
+    {'name': 'Basketball'},
+    {'name': 'BasketballPartial'}
   ]
 
   #number of time bins before/after a reference event
   $scope.numBins = 20
-  $scope.selectedDataset = $scope.datasets[0]
   $scope.refEventA = null
   $scope.refEventB = null
-
+  $scope.selectedDataset = $scope.datasets[0]
   ###########################################################
+  $scope.refChoicesA = null
+  $scope.refChoicesB = null
   $scope.eventRows = {}
-  $scope.eventTypes = []
+  eventTypes = []
+
+  exclType = (toExclude) =>
+    types = []
+    for evtType in eventTypes
+      if toExclude != evtType
+        types.push(evtType)
+    types
 
   records = []
   timeLimits =
@@ -24,7 +33,11 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'ChartDataBuilder',
   $scope.fetchJSON = () ->
     $http.get('datasets/'+$scope.selectedDataset.name+'.json').success(
       (data) ->
-        $scope.eventTypes = preprocess.firstPass(data, records, timeLimits)
+        eventTypes = preprocess.firstPass(data, records, timeLimits)
+        $scope.refEventA = null
+        $scope.refEventB = null
+        $scope.refChoicesA = eventTypes
+        $scope.refChoicesB = eventTypes
       )
 
   $scope.updateHistograms = () ->
@@ -34,9 +47,11 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'ChartDataBuilder',
       # These refEvents are hardcoded to be used as examples.
       refEvents = [$scope.refEventA, $scope.refEventB]
 
-      timeSeries = preprocess.buildTimeSeries(records, $scope.eventTypes, refEvents, binSize, $scope.numBins)
+      timeSeries = preprocess.buildTimeSeries(records, eventTypes, refEvents, binSize, $scope.numBins)
       # Passing around variables to get return values is a very bad practice (but I'm too tired to fix it now)
       ChartDataBuilder.chartsConfig(timeSeries, $scope.eventRows)
+    $scope.refChoicesB = exclType($scope.refEventA)
+    $scope.refChoicesA = exclType($scope.refEventB)
 
   # Fetch the default dataset
   $scope.fetchJSON()

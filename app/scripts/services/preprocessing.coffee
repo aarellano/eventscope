@@ -68,7 +68,6 @@ app.service 'preprocess', () ->
             hists[eventType][refEvent][i] = 0
 
     computeBinNumber = (refTime, nonrefTime) => Math.round(refTime.diff(nonrefTime) / binSize) + (numBins/2)
-
     for record in records
       occursNonref = {}
       occursRef = {}
@@ -86,7 +85,6 @@ app.service 'preprocess', () ->
               binNum = computeBinNumber(entry.ts,occurTime)
               #increment the bin counter
               hists[nonrefEvt][entry.event][binNum] +=1
-
         else
           #current event is a non-reference event, add it to its nonref event array
           if entry.event not in occursNonref then occursNonref[entry.event] = []
@@ -97,6 +95,6 @@ app.service 'preprocess', () ->
             for occurTime in refOccurArr
               #calulate this event's bin in reference to every preceding ref event
               binNum = computeBinNumber(occurTime,entry.ts)
-              hists[entry.event][refEvent][binNum] +=1
-    console.log(hists)
+              #console.log(occurTime.diff(entry.ts))
+              hists[entry.event][refEvent][binNum]+=1
     hists
