@@ -12,7 +12,12 @@ app.service 'charts', () ->
         config = {
           options: {
             chart: {
-              type: 'areaspline'
+              type: 'areaspline',
+              margin: [0, 0, 0, 0],
+              spacingTop: 0,
+              spacingBottom: 0,
+              spacingLeft: 0,
+              spacingRight: 0
             },
             plotOptions: {
               series: {
@@ -40,7 +45,6 @@ app.service 'charts', () ->
           title: {
             text: ''
           },
-
           credits: {
             enabled: false
           },

@@ -1,9 +1,10 @@
 app.service 'preprocess', () ->
-  this.firstPass = (json, records, timeLimits) ->
+  this.firstPass = (json, records) ->
     # -makes the first pass over the data
     # -converts time strings to moment objects (see moment.js documentation)
     # -aggregates the unique event types into the 'eventTypes' array
-    # -aggregates events into records
+    # -aggregates events into records sorted by time
+    # -computes the maximum record time range in milliseconds
     # @param json: raw data - an array of objects of form
     #       {'event':'<event type here>'
     #         'ts':'<start of event>'
@@ -11,8 +12,9 @@ app.service 'preprocess', () ->
     #         'id':'<id of the record where the event occured (game/patient/etc.)>'
     #       }
     # @param records: an empty array to be populated with records
-    # @param timeLimits: an object with two properties: firstTime and lastTime
+    # @return: [an array of unique eventTypes (strings), maximum record time range]
     recordHash = {}
+    maxRecordMillis = 0
     if json.events
       #determine how to parse date - if only time is given, follow the time format
       #assume all dates are formatted in the same way
@@ -68,8 +70,6 @@ app.service 'preprocess', () ->
             console.log(p.ts)
           p.ts = newTime
           #upgrade the time limits if necessary
-          if p.ts.isBefore(timeLimits.firstTime) then timeLimits.firstTime = p.ts
-          if p.ts.isAfter(timeLimits.lastTime) then timeLimits.lastTime = p.ts
           if p.te
             p.te = parseDate(p.te)
         #aggregate records
@@ -83,16 +83,18 @@ app.service 'preprocess', () ->
         record = recordHash[recordId]
         #sort the records based on time
         record.sort((a,b)->
-          if(a.ts > b.ts) then 1 else if(b.ts > a.ts) then -1 else 0
-
-          )
+          if(a.ts > b.ts) then 1 else if(b.ts > a.ts) then -1 else 0)
+        #compute the max range
+        recordRangeMillis = record[record.length-1].ts.diff(record[0].ts)
+        #keep track of the max range
+        maxRecordMillis = recordRangeMillis if recordRangeMillis > maxRecordMillis
         records.push(recordHash[recordId])
 
       eventTypesArray = []
       for key of eventTypes
         eventTypesArray.push key
 
-      return eventTypesArray
+      [eventTypesArray, maxRecordMillis]
 
   this.buildTimeSeries = (records, eventTypes, refEvents, binSizeMilis, numBins) ->
     numBins *=2

@@ -35,16 +35,17 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', ($scope, 
     types
 
   records = []
-  timeLimits = {}
+  #max record range in millisecons
+  maxRecordMillis = 0
 
   $scope.fetchJSON = () ->
     $http.get('datasets/'+$scope.selectedDataset.name+'.json').success(
       (data) ->
         #reset time limits
-        timeLimits =
+        maxRecordMillis =
           firstTime: moment() # this doesn't work if we have events from the future
           lastTime: 0
-        eventTypes = preprocess.firstPass(data, records, timeLimits)
+        [eventTypes, maxRecordMillis] = preprocess.firstPass(data, records)
         $scope.refEventA = null
         $scope.refEventB = null
         $scope.refChoicesA = eventTypes
@@ -54,7 +55,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', ($scope, 
   $scope.updateHistograms = () ->
     if $scope.refEventA and $scope.refEventB
       binSizeMillis = $scope.binSize*$scope.binSizeUnit.factor
-      numBins = Math.round((timeLimits.lastTime - timeLimits.firstTime) / binSizeMillis)
+      numBins = Math.round(maxRecordMillis / binSizeMillis)
       # These refEvents are hardcoded to be used as examples.
       refEvents = [$scope.refEventA, $scope.refEventB]
       timeSeries = preprocess.buildTimeSeries(records, eventTypes, refEvents, binSizeMillis, numBins)
