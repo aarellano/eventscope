@@ -17,13 +17,30 @@ app.service 'charts', () ->
             plotOptions: {
               series: {
                   stacking: ''
-                }
               }
+            },
+            xAxis: {
+              labels:{
+                enabled: false
+              }
+            },
+            yAxis: {
+              title: {
+                text: ''
+              },
+              labels:{
+                enabled: false
+              }
+            }
+            legend:{
+              enabled:false
+            }
           },
           series: seriesArray,
           title: {
-            text: 'Hello'
+            text: ''
           },
+
           credits: {
             enabled: false
           },

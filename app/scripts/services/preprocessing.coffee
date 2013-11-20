@@ -83,12 +83,8 @@ app.service 'preprocess', () ->
         record = recordHash[recordId]
         #sort the records based on time
         record.sort((a,b)->
-          if(a.ts > b.ts)
-            1
-          else if(b.ts > a.ts)
-            -1
-          else
-            0
+          if(a.ts > b.ts) then 1 else if(b.ts > a.ts) then -1 else 0
+
           )
         records.push(recordHash[recordId])
 
@@ -111,10 +107,10 @@ app.service 'preprocess', () ->
           hists[eventType][refEvent] = []
           for i in [0..(numBins-1)]
             #zero out intial values
-            hists[eventType][refEvent][i] = 0
+            hists[eventType][refEvent][i] = {y:0,x:(i - numBins / 2)}
 
     computeBinNumber = (refTime, nonrefTime) ->
-      bin = Math.round(refTime.diff(nonrefTime) / binSizeMilis) + (numBins/2)
+      bin = Math.round(refTime.diff(nonrefTime) / binSizeMilis) + (numBins / 2)
 
     for record in records
       occursNonref = {}
@@ -132,7 +128,7 @@ app.service 'preprocess', () ->
               #calulate every non-ref event's bin in reference to the current (reference) event
               binNum = computeBinNumber(entry.ts,occurTime)
               #increment the bin counter
-              hists[nonrefEvt][entry.event][binNum] +=1
+              hists[nonrefEvt][entry.event][binNum].y +=1
         else
           #current event is a non-reference event, add it to its nonref event array
           if entry.event not in occursNonref then occursNonref[entry.event] = []
@@ -144,15 +140,15 @@ app.service 'preprocess', () ->
               #calulate this event's bin in reference to every preceding ref event
               binNum = computeBinNumber(occurTime,entry.ts)
               #console.log(occurTime.diff(entry.ts))
-              hists[entry.event][refEvent][binNum]+=1
+              hists[entry.event][refEvent][binNum].y+=1
     #make a quick pass eliminating the zeroes
     for evtType of hists
       for refEvtType of hists[evtType]
         hist = hists[evtType][refEvtType]
         ixFirst = 0
         #find first non-zero element
-        ixFirst++ while ixFirst < hist.length and not hist[ixFirst]
+        ixFirst++ while ixFirst < hist.length and not hist[ixFirst].y
         ixLast = hist.length-1
-        ixLast-- while ixLast >= 0 and not hist[ixLast]
+        ixLast-- while ixLast >= 0 and not hist[ixLast].y
         hists[evtType][refEvtType] = hist[ixFirst..ixLast]
     hists
