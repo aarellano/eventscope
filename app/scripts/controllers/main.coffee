@@ -1,15 +1,16 @@
-app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', ($scope, $http, preprocess, ChartDataBuilder) ->
+app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', ($scope, $http, preprocess, charts) ->
 
   ## VARIABLES THAT POPULATE USER'S CHOICES##
  $scope.datasets = [
     {'name': 'Example'},
     {'name': 'Basketball'}
   ]
+  #bin size units: keep this sorted by factor!
   $scope.binSizeUnits = [
     #name: <name of time unit>, factor: <factor to represent in milliseconds>
-    {'name': 'hours', 'factor': 3600000},
+    {'name': 'seconds', 'factor': 1000},
     {'name': 'minutes', 'factor': 60000},
-    {'name': 'seconds', 'factor': 1000}
+    {'name': 'hours', 'factor': 3600000},
   ]
   $scope.refChoicesA = null
   $scope.refChoicesB = null
@@ -22,7 +23,6 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', ($scope, 
   $scope.refEventA = null
   $scope.refEventB = null
   $scope.selectedDataset = $scope.datasets[0]
-  $scope.selectedTimeUnit = 'minutes'
   ###########################################################
 
   $scope.eventRows = {}
@@ -46,6 +46,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', ($scope, 
           firstTime: moment() # this doesn't work if we have events from the future
           lastTime: 0
         [eventTypes, maxRecordMillis] = preprocess.firstPass(data, records)
+        [$scope.binSize,$scope.binSizeUnit] = preprocess.suggestTimeBin(maxRecordMillis,$scope.binSizeUnits)
         $scope.refEventA = null
         $scope.refEventB = null
         $scope.refChoicesA = eventTypes
@@ -60,7 +61,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', ($scope, 
       refEvents = [$scope.refEventA, $scope.refEventB]
       timeSeries = preprocess.buildTimeSeries(records, eventTypes, refEvents, binSizeMillis, numBins)
       # Passing around variables to get return values is a very bad practice (but I'm too tired to fix it now)
-      ChartDataBuilder.chartsConfig(timeSeries, $scope.eventRows)
+      charts.draw(timeSeries, $scope.eventRows)
     $scope.refChoicesB = exclType($scope.refEventA)
     $scope.refChoicesA = exclType($scope.refEventB)
 

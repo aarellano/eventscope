@@ -10,7 +10,7 @@
   <div class="row-fluid no-space">
     <div class="span6">
       <div class="row-fluid">
-        <table class="table span12">
+        <table class="table table-condensed span12">
           <thead><tr>
               <th style="width: 80%">Histograms</th>
               <th style="width: 5%">SC</th>
@@ -44,7 +44,7 @@
             Can you think of something to fix that?-->
           <label >Time bin size:</label>
           <input class="span3" ng-model="binSize" type="number">
-          <select class="span4" ng-model="binSizeUnit" data-style="btn-info" ng-options="u.name for u in binSizeUnits" bs-select></select>
+          <select class="span5" ng-model="binSizeUnit" data-style="btn-info" ng-options="u.name for u in binSizeUnits" bs-select></select>
           <button class="btn" ng-click="updateHistograms()" type="button">Update</button>
         </div>
       </div>

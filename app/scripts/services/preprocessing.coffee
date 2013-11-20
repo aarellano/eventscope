@@ -96,7 +96,42 @@ app.service 'preprocess', () ->
 
       [eventTypesArray, maxRecordMillis]
 
+  this.suggestTimeBin = (maxRecordMillis, binTimeUnits) ->
+    #sugguest closest whole time unit to making 20 bins / record,
+    #or 20 on either side of the ref event (40 total)
+    binSizeMillis = maxRecordMillis / 20
+    curUnit = binTimeUnits[0]
+    if binSizeMillis < curUnit.factor
+      [1,curUnit]
+    else
+      for iUnit in [1...binTimeUnits.length]
+        nextUnit = binTimeUnits[iUnit]
+        #check if bin size exceeds the next unit's
+        #duration in milliseconds
+        if binSizeMillis < nextUnit.factor
+          #if no, return in current units
+          return [Math.round(binSizeMillis / curUnit.factor), curUnit]
+        curUnit = nextUnit#if yes, continue
+      #return in biggest units
+      [Math.round(binSizeMillis / curUnit.factor), curUnit]
+
   this.buildTimeSeries = (records, eventTypes, refEvents, binSizeMilis, numBins) ->
+    #Creates 2 frequency series for each non-reference event, one relative to each of the
+    #reference events.
+    #@param records: event records (arrays of events pertaining to the same sequence), where
+    #each event has the form:
+    #       {'event':'<event type here>'
+    #         'ts':'<start of event>'
+    #         'te':'<end of event>'
+    #         'id':'<id of the record where the event occured (game/patient/etc.)>'
+    #       }
+    #@param eventTypes: a set of unique event types, as an array of strings
+    #@param refEvents: an array of two reference event types (strings)
+    #@param binSizeMillis: time bin size in milliseconds
+    #@param numBins: maximum number of time bins in any record
+
+    #maximum bin count now doubles, because we could have both
+    #ref and non-ref at the end and the beginning of a dataset
     numBins *=2
     # Initialize all the distribution values to zero. It could be done in the next loop, but it's very short
     hists = {}
@@ -145,6 +180,7 @@ app.service 'preprocess', () ->
               hists[entry.event][refEvent][binNum].y+=1
     #make a quick pass eliminating the zeroes
     for evtType of hists
+      series = []
       for refEvtType of hists[evtType]
         hist = hists[evtType][refEvtType]
         ixFirst = 0
@@ -152,5 +188,7 @@ app.service 'preprocess', () ->
         ixFirst++ while ixFirst < hist.length and not hist[ixFirst].y
         ixLast = hist.length-1
         ixLast-- while ixLast >= 0 and not hist[ixLast].y
-        hists[evtType][refEvtType] = hist[ixFirst..ixLast]
+        newHist = hist[ixFirst..ixLast]
+        series.push({'name': refEvtType, 'data': newHist})# if newHist.length > 0
+      hists[evtType] = series
     hists
