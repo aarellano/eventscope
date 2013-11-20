@@ -1,10 +1,9 @@
-app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'ChartDataBuilder', ($scope, $http, preprocess, ChartDataBuilder) ->
+app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', ($scope, $http, preprocess, ChartDataBuilder) ->
 
   ## VARIABLES THAT POPULATE USER'S CHOICES##
  $scope.datasets = [
     {'name': 'Example'},
-    {'name': 'Basketball'},
-    {'name': 'BasketballPartial'}
+    {'name': 'Basketball'}
   ]
   $scope.binSizeUnits = [
     #name: <name of time unit>, factor: <factor to represent in milliseconds>

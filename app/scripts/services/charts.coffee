@@ -1,4 +1,4 @@
-app.service 'ChartDataBuilder', () ->
+app.service 'charts', () ->
   this.chartsConfig = (frequenciesSet, eventRows) ->
     for eventType of frequenciesSet
       seriesArray = []
