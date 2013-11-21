@@ -47,10 +47,13 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', ($scope, 
           lastTime: 0
         [eventTypes, maxRecordMillis] = preprocess.firstPass(data, records)
         [$scope.binSize,$scope.binSizeUnit] = preprocess.suggestTimeBin(maxRecordMillis,$scope.binSizeUnits)
-        $scope.refEventA = null
-        $scope.refEventB = null
         $scope.refChoicesA = eventTypes
         $scope.refChoicesB = eventTypes
+        # The following three lines are just to have default reference events selected.
+        # It makes developing easier, but we may want to remove them for the production version (in that case we need to make refEventA and B = null)
+        $scope.refEventA = eventTypes[0]
+        $scope.refEventB = eventTypes[1]
+        $scope.updateHistograms()
       )
 
   $scope.updateHistograms = () ->
