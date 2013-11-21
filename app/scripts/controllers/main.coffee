@@ -26,7 +26,9 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', ($scope, 
   ###########################################################
 
   $scope.eventRows = {}
+  $scope.mainChart = null
 
+  selectedChart = []
   eventTypes = []
 
   exclType = (toExclude) =>
@@ -53,6 +55,9 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', ($scope, 
         $scope.refChoicesB = eventTypes
       )
 
+  $scope.updateMainChart = (eventRow) ->
+    charts.configureMainChart(eventRow)
+
   $scope.updateHistograms = () ->
     if $scope.refEventA and $scope.refEventB
       binSizeMillis = $scope.binSize*$scope.binSizeUnit.factor
@@ -61,7 +66,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', ($scope, 
       refEvents = [$scope.refEventA, $scope.refEventB]
       timeSeries = preprocess.buildTimeSeries(records, eventTypes, refEvents, binSizeMillis, numBins)
       # Passing around variables to get return values is a very bad practice (but I'm too tired to fix it now)
-      charts.draw(timeSeries, $scope.eventRows)
+      charts.configureMinicharts(timeSeries, $scope.eventRows, charts.configureMainChart)
     $scope.refChoicesB = exclType($scope.refEventA)
     $scope.refChoicesA = exclType($scope.refEventB)
 

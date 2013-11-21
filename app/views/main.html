@@ -10,14 +10,16 @@
   <div class="row-fluid no-space">
     <div class="span6">
       <div class="row-fluid">
-        <table class="table table-condensed span12">
-          <thead><tr>
+        <table class="table table-condensed table-hover span12">
+          <thead>
+            <tr>
               <th style="width: 80%">Histograms</th>
               <th style="width: 5%">SC</th>
               <th style="width: 15%">Event</th>
-            </tr></thead>
+            </tr>
+          </thead>
           <tbody>
-            <tr ng-repeat="eventRow in eventRows">
+            <tr ng-repeat="eventRow in eventRows" ng-click="updateMainChart({'name':eventRow.eventName, 'series':eventRow.chartConfig.series})">
               <td><highchart config="eventRow.chartConfig"></highchart></td>
               <td></td>
               <td>{{eventRow.eventName}}</td>
@@ -55,9 +57,8 @@
             <span class="brand">Selected Event</span>
           </div>
           <div class="well">
-<chart value='basicAreaChart' type="area" height="400">
-         </chart>
-        </div>
+            <highchart config="mainChart"></highchart>
+          </div>
         </div>
       </div>
 

@@ -1,5 +1,5 @@
 app.service 'charts', () ->
-  this.draw = (seriesSet, eventRows) ->
+  this.configureMinicharts = (seriesSet, eventRows, selectCallback) ->
     seriesLoaded = 0
     eventTypes = Object.keys(seriesSet)
     #assumes every event type has two series
@@ -11,6 +11,7 @@ app.service 'charts', () ->
         if(seriesLoaded == seriesToLoad)
           $(window).delay(100).trigger('resize')
       config = {
+        #series-specific options
         options: {
           chart: {
             type: 'areaspline',
@@ -21,7 +22,10 @@ app.service 'charts', () ->
             spacingRight: 0,
             height:100,
             events:{
-              load: logLoad
+              load: logLoad,
+              click: (e)->
+                console.log(e.currentTarget)
+                selectCallback({'name':eventType, 'series': e.currentTarget.series})
             }
           },
           plotOptions: {
@@ -59,5 +63,7 @@ app.service 'charts', () ->
         chartConfig: config,
         eventName: eventType
       }
+  this.configureMainChart = (e) ->
+    console.log(e)
 
 
