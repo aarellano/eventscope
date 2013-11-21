@@ -26,14 +26,8 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', ($scope, 
   ###########################################################
 
   blankMainChartConfig = {
-    options:{
-
-    },
-    title:{
-      text:''
-    },
     subtitle:{
-      text:"Click on event row in left panel to view detailed chart"
+      text:"With the data loaded and reference events chosen, click on event row in left panel to view detailed chart"
     },
     useHighStocks:true
   }

@@ -63,6 +63,17 @@ app.service 'charts', () ->
         eventName: eventType
       }
   this.configureMainChart = (eventData,chart) ->
-    console.log(eventData)
+    chart.config = {
+      options:{
+        chart:{
+          type: 'areaspline'
+        }
+      },
+      title:{
+        text:eventData.name
+      },
+      series:eventData.series
+      useHighStocks:true
+    }
 
 
