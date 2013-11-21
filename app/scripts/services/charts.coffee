@@ -24,7 +24,6 @@ app.service 'charts', () ->
             events:{
               load: logLoad,
               click: (e)->
-                console.log(e.currentTarget)
                 selectCallback({'name':eventType, 'series': e.currentTarget.series})
             }
           },
@@ -63,7 +62,7 @@ app.service 'charts', () ->
         chartConfig: config,
         eventName: eventType
       }
-  this.configureMainChart = (e) ->
-    console.log(e)
+  this.configureMainChart = (eventData,chart) ->
+    console.log(eventData)
 
 

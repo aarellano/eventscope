@@ -25,8 +25,21 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', ($scope, 
   $scope.selectedDataset = $scope.datasets[0]
   ###########################################################
 
+  blankMainChartConfig = {
+    options:{
+
+    },
+    title:{
+      text:''
+    },
+    subtitle:{
+      text:"Click on event row in left panel to view detailed chart"
+    },
+    useHighStocks:true
+  }
+
   $scope.eventRows = {}
-  $scope.mainChart = null
+  $scope.mainChart = {'name':null, 'config':blankMainChartConfig}
 
   selectedChart = []
   eventTypes = []
@@ -55,8 +68,8 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', ($scope, 
         $scope.refChoicesB = eventTypes
       )
 
-  $scope.updateMainChart = (eventRow) ->
-    charts.configureMainChart(eventRow)
+  $scope.updateMainChart = (eventData) ->
+    charts.configureMainChart(eventData,$scope.mainChart)
 
   $scope.updateHistograms = () ->
     if $scope.refEventA and $scope.refEventB
@@ -66,7 +79,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', ($scope, 
       refEvents = [$scope.refEventA, $scope.refEventB]
       timeSeries = preprocess.buildTimeSeries(records, eventTypes, refEvents, binSizeMillis, numBins)
       # Passing around variables to get return values is a very bad practice (but I'm too tired to fix it now)
-      charts.configureMinicharts(timeSeries, $scope.eventRows, charts.configureMainChart)
+      charts.configureMinicharts(timeSeries, $scope.eventRows, $scope.updateMainChart)
     $scope.refChoicesB = exclType($scope.refEventA)
     $scope.refChoicesA = exclType($scope.refEventB)
 

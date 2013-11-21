@@ -30,6 +30,7 @@
     </div>
 
     <div class="span6" id="right-side">
+      <!--CONTROL PANEL AREA-->
       <div class="navbar navbar-inner topper">
         <span class="brand">Control Panel</span>
       </div>
@@ -50,18 +51,19 @@
           <button class="btn" ng-click="updateHistograms()" type="button">Update</button>
         </div>
       </div>
-
+      <!--END CONTROL PANEL AREA-->
+      <!--MAIN (bottom-right) CHART AREA-->
       <div class="row-fluid">
         <div class="span12">
           <div class="navbar navbar-inner topper">
             <span class="brand">Selected Event</span>
           </div>
           <div class="well">
-            <highchart config="mainChart"></highchart>
+            <highchart config="mainChart.config"></highchart>
           </div>
         </div>
       </div>
-
+      <!--END MAIN CHART AREA-->
     </div>
   </div>
 </div>
