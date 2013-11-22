@@ -67,12 +67,33 @@ app.service 'charts', () ->
           type: 'areaspline'
         },
         tooltip:{
-
+          formatter:()->
+              return "#{this.x}<br/>#{this.points[0].y}<br/>#{this.points[1].y}"
+          dateTimeLabelFormats:{
+             millisecond: '%H:%M:%S.%L',
+             second: '%H:%M:%S',
+             minute: '%H:%M',
+             hour: '%H:%M',
+             day: '%e/%m',
+             week: '%e/%m',
+             month: '%e/%m/%y',
+             year: '%m/%Y'
+          }
         },
         xAxis: {
           labels:{
-            formatter: ()->
-              this.value
+
+
+            dateTimeFormats:{
+              millisecond: '%H:%M:%S.%L',
+              second: '%H:%M:%S',
+              minute: '%H:%M',
+              hour: '%H:%M',
+              day: '%e/%m',
+              week: '%e/%m',
+              month: '%e/%m/%y',
+              year: '%m/%Y'
+            }
           },
           range: undefined
         },
@@ -89,8 +110,8 @@ app.service 'charts', () ->
       credits: {
         enabled: false
       },
-      
-      
+
+
       series:eventData.series,
       useHighStocks:true
     }

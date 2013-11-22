@@ -139,7 +139,7 @@ app.service 'preprocess', () ->
     #                  {
     #                    x:<time bin 1>,
     #                    y:<bin 1 count>
-    #                  }, 
+    #                  },
     #                  {
     #                    x:<time bin 2>,
     #                    y:<bin 2 count>
@@ -148,7 +148,7 @@ app.service 'preprocess', () ->
     #                 ]
     #      },
     #      {
-    #         'name':'<ref event 2>' 
+    #         'name':'<ref event 2>'
     #         'data':-||-
     #      }
     #    ]
@@ -171,7 +171,7 @@ app.service 'preprocess', () ->
           hists[eventType][refEvent] = []
           for i in [0..(numBins-1)]
             #zero out intial values
-            hists[eventType][refEvent][i] = {y:0,x:(i - numBins / 2)}
+            hists[eventType][refEvent][i] = {y:0,x:(i - numBins / 2)*binSizeMilis}
 
     computeBinNumber = (refTime, nonrefTime) ->
       bin = Math.round(refTime.diff(nonrefTime) / binSizeMilis) + (numBins / 2)
