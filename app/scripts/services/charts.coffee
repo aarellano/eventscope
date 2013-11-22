@@ -61,6 +61,7 @@ app.service 'charts', () ->
         eventName: eventType
       }
   this.configureMainChart = (eventData,chart) ->
+
     chart.config = {
       options:{
         chart:{
@@ -68,32 +69,40 @@ app.service 'charts', () ->
         },
         tooltip:{
           formatter:()->
-              return "#{this.x}<br/>#{this.points[0].y}<br/>#{this.points[1].y}"
-          dateTimeLabelFormats:{
-             millisecond: '%H:%M:%S.%L',
-             second: '%H:%M:%S',
-             minute: '%H:%M',
-             hour: '%H:%M',
-             day: '%e/%m',
-             week: '%e/%m',
-             month: '%e/%m/%y',
-             year: '%m/%Y'
-          }
+            if this.x < 0 then sign = '-' else sign = ''
+            absMs = Math.abs(this.x)
+
+            msInSeconds = 1000
+            msInMinutes = msInSeconds * 60
+            msInHours = msInMinutes * 60
+            msInDays = msInHours * 24
+
+            days = absMs / msInDays
+            remainder = absMs % msInDays
+            hours = remainder / msInHours
+            remainder %= msInHours
+            minutes = remainder / msInMinutes
+            remainder %= msInMinutes
+            seconds = remainder / msInSeconds
+            milliseconds = remainder % msInSeconds
+
+            relTimeStr = sign
+            if days > 1 then relTimeStr += "#{days} days " else if days == 1 then relTimeStr += "1 day "
+            if hours > 10 then relTimeStr += "#{hours}:" else if hours > 0 then relTimeStr += "0#{hours}:"
+            if minutes > 10 then relTimeStr += "#{minutes}:" else relTimeStr += "0#{minutes}:"
+            if seconds > 10 then relTimeStr += "#{seconds}." else relTimeStr += "0#{seconds}."
+            if milliseconds > 100
+              relTimeStr += milliseconds 
+            else if milliseconds > 10 
+              relTimeStr += "0#{milliseconds}"
+            else
+              relTimeStr += "00#{milliseconds}"
+
+            return "#{relTimeStr}<br/>#{this.points[0].series.name}:#{this.points[0].y}<br/>#{this.points[1].series.name}:#{this.points[1].y}"
+          
         },
         xAxis: {
           labels:{
-
-
-            dateTimeFormats:{
-              millisecond: '%H:%M:%S.%L',
-              second: '%H:%M:%S',
-              minute: '%H:%M',
-              hour: '%H:%M',
-              day: '%e/%m',
-              week: '%e/%m',
-              month: '%e/%m/%y',
-              year: '%m/%Y'
-            }
           },
           range: undefined
         },
