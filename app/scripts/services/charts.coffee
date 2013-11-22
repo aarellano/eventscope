@@ -1,5 +1,5 @@
 app.service 'charts', () ->
-  this.configureMinicharts = (seriesSet, eventRows, selectCallback) ->
+  this.configureMinicharts = (seriesSet, eventRows) ->
     seriesLoaded = 0
     eventTypes = Object.keys(seriesSet)
     #assumes every event type has two series
@@ -22,9 +22,7 @@ app.service 'charts', () ->
             spacingRight: 0,
             height:100,
             events:{
-              load: logLoad,
-              click: (e)->
-                selectCallback({'name':eventType, 'series': e.currentTarget.series})
+              load: logLoad
             }
           },
           plotOptions: {

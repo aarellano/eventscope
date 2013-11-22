@@ -76,7 +76,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', ($scope, 
       refEvents = [$scope.refEventA, $scope.refEventB]
       timeSeries = preprocess.buildTimeSeries(records, eventTypes, refEvents, binSizeMillis, numBins)
       # Passing around variables to get return values is a very bad practice (but I'm too tired to fix it now)
-      charts.configureMinicharts(timeSeries, $scope.eventRows, $scope.updateMainChart)
+      charts.configureMinicharts(timeSeries, $scope.eventRows)
     $scope.refChoicesB = exclType($scope.refEventA)
     $scope.refChoicesA = exclType($scope.refEventB)
 

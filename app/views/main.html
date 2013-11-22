@@ -20,7 +20,7 @@
           </thead>
           <tbody>
             <tr ng-repeat="eventRow in eventRows" ng-click="updateMainChart({'name':eventRow.eventName, 'series':eventRow.chartConfig.series})">
-              <td><highchart config="eventRow.chartConfig"></highchart></td>
+              <td><highchart class="mini-chart" config="eventRow.chartConfig"></highchart></td>
               <td></td>
               <td>{{eventRow.eventName}}</td>
             </tr>
