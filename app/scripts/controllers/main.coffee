@@ -1,4 +1,4 @@
-app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', ($scope, $http, preprocess, charts) ->
+app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScore',($scope, $http, preprocess, charts, pairScore) ->
 
   ## VARIABLES THAT POPULATE USER'S CHOICES##
  $scope.datasets = [
@@ -78,6 +78,18 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', ($scope, 
       # These refEvents are hardcoded to be used as examples.
       refEvents = [$scope.refEventA, $scope.refEventB]
       timeSeries = preprocess.buildTimeSeries(records, eventTypes, refEvents, binSizeMillis, numBins)
+	  
+	  # Score/sort time series 
+      sortable = []
+      for item in Object.keys(timeSeries)
+         a = timeSeries[item][0].data
+         b = timeSeries[item][1].data
+         timeSeries[item].interestingnessScore = pairScore.CoOccurence2(b)
+         sortable.push(item)
+      sortable.sort( (a,b) -> return Math.abs(timeSeries[a].interestingnessScore - timeSeries[b].interestingnessScore) )
+      for item in sortable
+        console.log(item, timeSeries[item].interestingnessScore)
+	  
       # Passing around variables to get return values is a very bad practice (but I'm too tired to fix it now)
       #clear out the mini-chart area
       $scope.eventRows = {}
