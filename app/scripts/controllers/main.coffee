@@ -55,7 +55,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', ($scope, 
       (data) ->
         #reset time limits
         maxRecordMillis =
-          firstTime: moment() # this doesn't work if we have events from the future
+          firstTime: moment(95617602000000)#year 5000
           lastTime: 0
         [eventTypes, maxRecordMillis] = preprocess.firstPass(data, records)
         [$scope.binSize,$scope.binSizeUnit] = preprocess.suggestTimeBin(maxRecordMillis,$scope.binSizeUnits)
