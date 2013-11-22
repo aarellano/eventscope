@@ -38,6 +38,23 @@ app.service 'pairScore', () ->
       difference = difference + Math.pow(mean - timeSeries[i], 2)
     return Math.sqrt(difference/timeSeries.length)
 	
+  this.CoOccurence2 = (timeSeries) ->
+    before = 0
+    after  = 0
+    result = 0.0
+    for i in [0..timeSeries.length-1]
+        if timeSeries[i].x > 0
+          after = after + timeSeries[i].y
+        else if timeSeries[i].x < 0
+          before = before + timeSeries[i].y
+    if( after > before )
+        result = ((2.0 * this.max(before, after))/(before + after)) - 1
+    else if ( before > after )
+        result = -1.0*(((2.0 * this.max(before, after))/(before + after)) - 1)
+    else
+        result = 0
+    return result
+	
   this.CoOccurence = (timeSeries, ref) ->
     before = 0
     after  = 0
