@@ -65,12 +65,33 @@ app.service 'charts', () ->
       options:{
         chart:{
           type: 'areaspline'
-        }
+        },
+        tooltip:{
+
+        },
+        xAxis: {
+          labels:{
+            formatter: ()->
+              this.value
+          },
+          range: undefined
+        },
       },
       title:{
         text:eventData.name
       },
-      series:eventData.series
+      rangeSelector : {
+        selected : 1
+      },
+      navigator:{
+        enabled:true
+      },
+      credits: {
+        enabled: false
+      },
+      
+      
+      series:eventData.series,
       useHighStocks:true
     }
 

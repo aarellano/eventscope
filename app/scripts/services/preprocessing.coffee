@@ -97,6 +97,7 @@ app.service 'preprocess', () ->
       [eventTypesArray, maxRecordMillis]
 
   this.suggestTimeBin = (maxRecordMillis, binTimeUnits) ->
+    #@param
     #sugguest closest whole time unit to making 20 bins / record,
     #or 20 on either side of the ref event (40 total)
     binSizeMillis = maxRecordMillis / 20
@@ -129,6 +130,32 @@ app.service 'preprocess', () ->
     #@param refEvents: an array of two reference event types (strings)
     #@param binSizeMillis: time bin size in milliseconds
     #@param numBins: maximum number of time bins in any record
+    #@return series hash of the form:
+    # {
+    #   '<non-ref event 1>': [
+    #      {
+    #         'name':'<ref event 1>',
+    #         'data':[
+    #                  {
+    #                    x:<time bin 1>,
+    #                    y:<bin 1 count>
+    #                  }, 
+    #                  {
+    #                    x:<time bin 2>,
+    #                    y:<bin 2 count>
+    #                  },
+    #                  ...
+    #                 ]
+    #      },
+    #      {
+    #         'name':'<ref event 2>' 
+    #         'data':-||-
+    #      }
+    #    ]
+    #   '<non-ref event 2>': [-||-]
+    #   '<non-ref event 3>': [-||-]
+    #   ...
+    # }
 
     #maximum bin count now doubles, because we could have both
     #ref and non-ref at the end and the beginning of a dataset

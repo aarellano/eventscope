@@ -29,6 +29,9 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', ($scope, 
     subtitle:{
       text:"With the data loaded and reference events chosen, click on event row in left panel to view detailed chart"
     },
+    credits: {
+      enabled: false
+    },
     useHighStocks:true
   }
 
