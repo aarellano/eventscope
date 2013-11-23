@@ -78,7 +78,8 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
       # These refEvents are hardcoded to be used as examples.
       refEvents = [$scope.refEventA, $scope.refEventB]
       timeSeries = preprocess.buildTimeSeries(records, eventTypes, refEvents, binSizeMillis, numBins)
-	  
+
+      # Drug1 in green, emergecy room in light blue, dark blue is exam
       # Sortable is a list of string event names, sorted by their interesting-ness score
       for item in Object.keys(timeSeries)
          a = timeSeries[item][0].data
@@ -87,17 +88,20 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
 		 # Not sure how to aggregate the two scores 
          # Not sure how to combine the scores
          # Not sure how to highlight wat is important in the graphs
-         timeSeries[item].coOccurence   = pairScore.max(pairScore.CoOccurence2(a), pairScore.CoOccurence2(b))
+         timeSeries[item].coOccurence    = pairScore.max(pairScore.CoOccurence2(a), pairScore.CoOccurence2(b))
          #timeSeries[item].standardDev   = pairScore.max(pairScore.standardDeviation2(a), pairScore.standardDeviation2(a))
          #timeSeries[item].peakOccurence = pairScore.max(pairScore.peakOccurence2(a, 100, 3, 0.25), pairScore.peakOccurence2(a, 100, 3, 0.25))
          #timeSeries[item].frequency     = pairScore.max(pairScore.fft2(a), pairScore.fft2(b))
 		 
          timeSeries[item].interestingnessScore = timeSeries[item].coOccurence
          timeSeries[item].distinctivenessScore = distScore.score(a, b)
-	  
+
+
+      $scope.eventRows = []
       l = [] 
       charts.configureMinicharts(timeSeries, l)
-      l.sort( (a,b) -> return -1.0 * Math.abs(a.nonRoundedScore - b.nonRoundedScore) )
+      l.sort( (a,b) -> 
+        return (Math.abs(b.nonRoundedScore) - Math.abs(a.nonRoundedScore)))
       $scope.eventRows = l
 
     $scope.refChoicesB = exclType($scope.refEventA)
