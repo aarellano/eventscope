@@ -56,10 +56,10 @@ app.service 'charts', () ->
         },
         loading: false
       }
-      eventRows[eventType] = {
-        chartConfig: config,
-        eventName: eventType
-      }
+      roundedScore = Math.round(seriesArray.interestingnessScore * 100) / 100.0
+      obj = { chartConfig: config, eventName: eventType, score: roundedScore, nonRoundedScore: seriesArray.interestingnessScore}
+      eventRows.push( obj )
+	  
   this.configureMainChart = (eventData,chart) ->
 
     chart.config = {

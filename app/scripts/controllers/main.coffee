@@ -35,7 +35,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
     useHighStocks:true
   }
 
-  $scope.eventRows = {}
+  $scope.eventRows = []
   $scope.mainChart = {'name':null, 'config':blankMainChartConfig}
 
   selectedChart = []
@@ -79,21 +79,15 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
       refEvents = [$scope.refEventA, $scope.refEventB]
       timeSeries = preprocess.buildTimeSeries(records, eventTypes, refEvents, binSizeMillis, numBins)
 	  
-	  # Score/sort time series 
-      sortable = []
+      # Sortable is a list of string event names, sorted by their interesting-ness score
       for item in Object.keys(timeSeries)
          a = timeSeries[item][0].data
          b = timeSeries[item][1].data
          timeSeries[item].interestingnessScore = pairScore.CoOccurence2(b)
-         sortable.push(item)
-      sortable.sort( (a,b) -> return Math.abs(timeSeries[a].interestingnessScore - timeSeries[b].interestingnessScore) )
-      for item in sortable
-        console.log(item, timeSeries[item].interestingnessScore)
 	  
-      # Passing around variables to get return values is a very bad practice (but I'm too tired to fix it now)
-      #clear out the mini-chart area
-      $scope.eventRows = {}
       charts.configureMinicharts(timeSeries, $scope.eventRows)
+      timeSeries.sort( (a,b) -> return Math.abs(a.nonRoundedScore - b.nonRoundedScore) )
+	  
     $scope.refChoicesB = exclType($scope.refEventA)
     $scope.refChoicesA = exclType($scope.refEventB)
 
