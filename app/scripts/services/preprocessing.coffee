@@ -159,7 +159,10 @@ app.service 'preprocess', () ->
 
     #maximum bin count now doubles, because we could have both
     #ref and non-ref at the end and the beginning of a dataset
+    
     numBins *=2
+    halfNumBins = numBins / 2
+    halfBinSize = binSizeMilis / 2
     # Initialize all the distribution values to zero. It could be done in the next loop, but it's very short
     hists = {}
     for eventType in eventTypes
@@ -171,10 +174,10 @@ app.service 'preprocess', () ->
           hists[eventType][refEvent] = []
           for i in [0..(numBins-1)]
             #zero out intial values
-            hists[eventType][refEvent][i] = {y:0,x:(i - numBins / 2)*binSizeMilis}
+            hists[eventType][refEvent][i] = {y:0,x:(i - halfNumBins)*binSizeMilis + halfBinSize}
 
     computeBinNumber = (refTime, nonrefTime) ->
-      bin = Math.round(refTime.diff(nonrefTime) / binSizeMilis) + (numBins / 2)
+      bin = Math.round(refTime.diff(nonrefTime) / binSizeMilis) + (halfNumBins)
 
     for record in records
       occursNonref = {}

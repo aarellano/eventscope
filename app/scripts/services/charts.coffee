@@ -80,13 +80,13 @@ app.service 'charts', () ->
       msInHours = msInMinutes * 60
       msInDays = msInHours * 24
 
-      days = absMs / msInDays
+      days = Math.round(absMs / msInDays)
       remainder = absMs % msInDays
-      hours = remainder / msInHours
+      hours = Math.round(remainder / msInHours)
       remainder %= msInHours
-      minutes = remainder / msInMinutes
+      minutes = Math.round(remainder / msInMinutes)
       remainder %= msInMinutes
-      seconds = remainder / msInSeconds
+      seconds = Math.round(remainder / msInSeconds)
       milliseconds = remainder % msInSeconds
 
       relTimeStr = sign
