@@ -57,7 +57,8 @@ app.service 'charts', () ->
         loading: false
       }
       roundedScore = Math.round(seriesArray.interestingnessScore * 100) / 100.0
-      obj = { chartConfig: config, eventName: eventType, score: roundedScore, nonRoundedScore: seriesArray.interestingnessScore}
+      roundedDist  = Math.round(seriesArray.distinctivenessScore * 100) / 100.0
+      obj = { chartConfig: config, eventName: eventType, score: roundedScore, distScore: roundedDist, nonRoundedScore: seriesArray.interestingnessScore}
       eventRows.push( obj )
 	  
   this.configureMainChart = (eventData,chart) ->

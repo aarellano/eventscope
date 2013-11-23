@@ -83,13 +83,23 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
       for item in Object.keys(timeSeries)
          a = timeSeries[item][0].data
          b = timeSeries[item][1].data
+
+		 # Not sure how to aggregate the two scores 
+         # Not sure how to combine the scores
+         # Not sure how to highlight wat is important in the graphs
+         timeSeries[item].coOccurence   = pairScore.max(pairScore.CoOccurence2(a), pairScore.CoOccurence2(b))
+         #timeSeries[item].standardDev   = pairScore.max(pairScore.standardDeviation2(a), pairScore.standardDeviation2(a))
+         #timeSeries[item].peakOccurence = pairScore.max(pairScore.peakOccurence2(a, 100, 3, 0.25), pairScore.peakOccurence2(a, 100, 3, 0.25))
+         #timeSeries[item].frequency     = pairScore.max(pairScore.fft2(a), pairScore.fft2(b))
 		 
-         timeSeries[item].interestingnessScore = pairScore.CoOccurence2(a.concat(b))
-         # timeSeries[item].distinctivenessScore = distScore.score(a, b)
+         timeSeries[item].interestingnessScore = timeSeries[item].coOccurence
+         timeSeries[item].distinctivenessScore = distScore.score(a, b)
 	  
-      charts.configureMinicharts(timeSeries, $scope.eventRows)
-      $scope.eventRows.sort( (a,b) -> return Math.abs(a.nonRoundedScore - b.nonRoundedScore) )
-	  
+      l = [] 
+      charts.configureMinicharts(timeSeries, l)
+      l.sort( (a,b) -> return -1.0 * Math.abs(a.nonRoundedScore - b.nonRoundedScore) )
+      $scope.eventRows = l
+
     $scope.refChoicesB = exclType($scope.refEventA)
     $scope.refChoicesA = exclType($scope.refEventB)
 
