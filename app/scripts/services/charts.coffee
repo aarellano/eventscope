@@ -98,7 +98,13 @@ app.service 'charts', () ->
             else
               relTimeStr += "00#{milliseconds}"
 
-            return "#{relTimeStr}<br/>#{this.points[0].series.name}:#{this.points[0].y}<br/>#{this.points[1].series.name}:#{this.points[1].y}"
+            tip = relTimeStr
+            if(this.points[0])
+              tip +="<br/>#{this.points[0].series.name}:#{this.points[0].y}"
+            if(this.points[1])
+              tip +="<br/>#{this.points[1].series.name}:#{this.points[1].y}"
+
+            return tip
           
         },
         xAxis: {
