@@ -1,4 +1,4 @@
-app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScore',($scope, $http, preprocess, charts, pairScore) ->
+app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScore', 'distScore',($scope, $http, preprocess, charts, pairScore, distScore) ->
 
   ## VARIABLES THAT POPULATE USER'S CHOICES##
  $scope.datasets = [
@@ -83,10 +83,12 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
       for item in Object.keys(timeSeries)
          a = timeSeries[item][0].data
          b = timeSeries[item][1].data
-         timeSeries[item].interestingnessScore = pairScore.CoOccurence2(b)
+		 
+         timeSeries[item].interestingnessScore = pairScore.CoOccurence2(a.concat(b))
+         # timeSeries[item].distinctivenessScore = distScore.score(a, b)
 	  
       charts.configureMinicharts(timeSeries, $scope.eventRows)
-      timeSeries.sort( (a,b) -> return Math.abs(a.nonRoundedScore - b.nonRoundedScore) )
+      $scope.eventRows.sort( (a,b) -> return Math.abs(a.nonRoundedScore - b.nonRoundedScore) )
 	  
     $scope.refChoicesB = exclType($scope.refEventA)
     $scope.refChoicesA = exclType($scope.refEventB)
