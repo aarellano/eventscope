@@ -61,6 +61,31 @@ app.service 'charts', () ->
       eventRows.push( obj )
 	  
   this.configureMainChart = (eventData,chart) ->
+    formatRelativeTime = (mills) ->
+      if mills < 0 then sign = S('-') else sign = S('')
+      absMs = Math.abs(mills)
+
+      msInSeconds = 1000
+      msInMinutes = msInSeconds * 60
+      msInHours = msInMinutes * 60
+      msInDays = msInHours * 24
+
+      days = absMs / msInDays
+      remainder = absMs % msInDays
+      hours = remainder / msInHours
+      remainder %= msInHours
+      minutes = remainder / msInMinutes
+      remainder %= msInMinutes
+      seconds = remainder / msInSeconds
+      milliseconds = remainder % msInSeconds
+
+      relTimeStr = sign
+      if days > 1 then relTimeStr += "#{days} days " else if days == 1 then relTimeStr += "1 day "
+      relTimeStr += S("#{hours}:").padLeft(3,'0')
+      relTimeStr += S("#{minutes}:").padLeft(3,'0')
+      relTimeStr += S("#{seconds}.").padLeft(3,'0')
+      relTimeStr += S(milliseconds).padLeft(3,'0')
+      relTimeStr
 
     chart.config = {
       options:{
@@ -69,46 +94,17 @@ app.service 'charts', () ->
         },
         tooltip:{
           formatter:()->
-            if this.x < 0 then sign = '-' else sign = ''
-            absMs = Math.abs(this.x)
-
-            msInSeconds = 1000
-            msInMinutes = msInSeconds * 60
-            msInHours = msInMinutes * 60
-            msInDays = msInHours * 24
-
-            days = absMs / msInDays
-            remainder = absMs % msInDays
-            hours = remainder / msInHours
-            remainder %= msInHours
-            minutes = remainder / msInMinutes
-            remainder %= msInMinutes
-            seconds = remainder / msInSeconds
-            milliseconds = remainder % msInSeconds
-
-            relTimeStr = sign
-            if days > 1 then relTimeStr += "#{days} days " else if days == 1 then relTimeStr += "1 day "
-            if hours > 10 then relTimeStr += "#{hours}:" else if hours > 0 then relTimeStr += "0#{hours}:"
-            if minutes > 10 then relTimeStr += "#{minutes}:" else relTimeStr += "0#{minutes}:"
-            if seconds > 10 then relTimeStr += "#{seconds}." else relTimeStr += "0#{seconds}."
-            if milliseconds > 100
-              relTimeStr += milliseconds 
-            else if milliseconds > 10 
-              relTimeStr += "0#{milliseconds}"
-            else
-              relTimeStr += "00#{milliseconds}"
-
-            tip = relTimeStr
+            tip = formatRelativeTime(this.x)
             if(this.points[0])
               tip +="<br/>#{this.points[0].series.name}:#{this.points[0].y}"
             if(this.points[1])
               tip +="<br/>#{this.points[1].series.name}:#{this.points[1].y}"
-
             return tip
           
         },
         xAxis: {
           labels:{
+            formatter:()->formatRelativeTime(this.value)
           },
           range: undefined
         },
