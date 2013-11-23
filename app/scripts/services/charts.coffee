@@ -13,7 +13,6 @@ app.service 'charts', () ->
     seriesToLoad = eventTypes.length*2
     for eventType in eventTypes
       seriesArray = seriesSet[eventType]
-      
       config = {
         #series-specific options
         options: {
