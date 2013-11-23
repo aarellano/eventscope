@@ -1,15 +1,19 @@
 app.service 'charts', () ->
   this.configureMinicharts = (seriesSet, eventRows) ->
     seriesLoaded = 0
+
+    logLoad = (e) ->
+      seriesLoaded++
+      if(seriesLoaded == seriesToLoad)
+        $(window).delay(100).trigger('resize')
+
+    
     eventTypes = Object.keys(seriesSet)
     #assumes every event type has two series
     seriesToLoad = eventTypes.length*2
     for eventType in eventTypes
       seriesArray = seriesSet[eventType]
-      logLoad = (e) ->
-        seriesLoaded++
-        if(seriesLoaded == seriesToLoad)
-          $(window).delay(100).trigger('resize')
+      pbRange = findPlotbandRange(seriesArray)
       config = {
         #series-specific options
         options: {
@@ -31,6 +35,12 @@ app.service 'charts', () ->
             }
           },
           xAxis: {
+            plotLines: [{
+              value:0,
+              color: 'red',
+              width: 3,
+              zIndex: 3
+            }],
             labels:{
               enabled: false
             }
@@ -104,6 +114,12 @@ app.service 'charts', () ->
           
         },
         xAxis: {
+          plotLines: [{
+            value:0,
+            color: 'red',
+            width: 3,
+            zIndex: 3
+          }],
           labels:{
             formatter:()->formatRelativeTime(this.value)
           },
