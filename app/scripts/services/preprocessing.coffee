@@ -195,6 +195,8 @@ app.service 'preprocess', () ->
               #calulate every non-ref event's bin in reference to the current (reference) event
               binNum = computeBinNumber(entry.ts,occurTime)
               #increment the bin counter
+              if binNum >= (hists[nonrefEvt][entry.event].length-1)
+                binNum = hists[nonrefEvt][entry.event].length-1 # TODO HACK 
               hists[nonrefEvt][entry.event][binNum].y +=1
         else
           #current event is a non-reference event, add it to its nonref event array
