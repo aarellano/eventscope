@@ -14,7 +14,7 @@
           <thead>
             <tr>
               <th style="width: 80%">Histograms</th>
-              <th style="width: 5%">SC</th>
+              <!-- <th style="width: 5%">SC</th> -->
               <th style="width: 5%">DF</th>
               <th style="width: 10%">Event</th>
             </tr>
@@ -23,8 +23,8 @@
 
           <tr ng-repeat="eventRow in eventRows" ng-click="updateMainChart({'name':eventRow.eventName, 'series':eventRow.chartConfig.series})">
 			<td><highchart class="mini-chart" config="eventRow.chartConfig"></highchart></td>
-              <td>{{eventRow.score}}</td>
-              <td>{{eventRow.distScore}} </td>
+              <!-- <td>{{eventRow.roundedDistScore}}</td> -->
+              <td>{{eventRow.roundedIntrScore}} </td>
               <td>{{eventRow.eventName}}</td>
             </tr> 
           </tbody>

@@ -3,7 +3,9 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
   ## VARIABLES THAT POPULATE USER'S CHOICES##
  $scope.datasets = [
     {'name': 'Example'},
-    {'name': 'Basketball'}
+    {'name': 'Basketball'},
+    {'name': 'Bulls-2012-Season-D2O'},
+    {'name': 'Bulls-2012-Season-O2O'}
   ]
   #bin size units: keep this sorted by factor!
   $scope.binSizeUnits = [
@@ -71,6 +73,23 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
   $scope.updateMainChart = (eventData) ->
     charts.configureMainChart(eventData,$scope.mainChart)
 
+  $scope.round = (number) -> 
+      Math.round(number * 100) / 100.0
+	  
+  $scope.sortEventRows = () ->
+    for row in $scope.eventRows
+        # Andres or Greg : tie these variables to the check boxes in the interface
+        coef0 = 1.0; coef1 = 1.0; coef2 = 1.0; coef3 = 1.0
+        #console.log(row.coOccurence, row.peakOccurence, row.standardDev, row.frequency)
+        row.roundedIntrScore =  coef0*Math.abs(row.coOccurence[0] - row.coOccurence[1])
+        row.roundedIntrScore += coef1*Math.abs(row.peakOccurence[0] - row.peakOccurence[1])
+        row.roundedIntrScore += coef2*Math.abs(row.standardDev[0] - row.standardDev[1])
+        row.roundedIntrScore += coef3*Math.abs(row.frequency[0] - row.frequency[1])
+		
+		# Scale it, to 0 to 1
+        row.roundedIntrScore = $scope.round(row.roundedIntrScore / (coef0 + coef1 + coef2 + coef3)) 
+    $scope.eventRows.sort( (a,b) -> return (Math.abs(b.roundedIntrScore) - Math.abs(a.roundedIntrScore)))
+      
   $scope.updateHistograms = () ->
     if $scope.refEventA and $scope.refEventB
       binSizeMillis = $scope.binSize*$scope.binSizeUnit.factor
@@ -81,28 +100,32 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
 
       # Drug1 in green, emergecy room in light blue, dark blue is exam
       # Sortable is a list of string event names, sorted by their interesting-ness score
+	  
       for item in Object.keys(timeSeries)
-         a = timeSeries[item][0].data
-         b = timeSeries[item][1].data
-
-		 # Not sure how to aggregate the two scores 
-         # Not sure how to combine the scores
-         # Not sure how to highlight wat is important in the graphs
-         timeSeries[item].coOccurence    = pairScore.max(pairScore.CoOccurence2(a), pairScore.CoOccurence2(b))
-         #timeSeries[item].standardDev   = pairScore.max(pairScore.standardDeviation2(a), pairScore.standardDeviation2(a))
-         #timeSeries[item].peakOccurence = pairScore.max(pairScore.peakOccurence2(a, 100, 3, 0.25), pairScore.peakOccurence2(a, 100, 3, 0.25))
-         #timeSeries[item].frequency     = pairScore.max(pairScore.fft2(a), pairScore.fft2(b))
+        #if ( true ) # TODO TIE TO INTERFACE
+        #  pairScore.scaleForNumberOfEvents(timeSeries[item][0].data)
+        #  pairScore.scaleForNumberOfEvents(timeSeries[item][0].data)
+        a = timeSeries[item][0].data
+        b = timeSeries[item][1].data
 		 
-         timeSeries[item].interestingnessScore = timeSeries[item].coOccurence
-         timeSeries[item].distinctivenessScore = distScore.score(a, b)
+        timeSeries[item].coOccurence   = [pairScore.CoOccurence2(a), pairScore.CoOccurence2(b)]
+        timeSeries[item].standardDev   = [pairScore.standardDeviation2(a), pairScore.standardDeviation2(b)]
+        timeSeries[item].peakOccurence = [pairScore.peakOccurence2(a, 100, 3, 0.25), pairScore.peakOccurence2(b, 100, 3, 0.25)]
+        timeSeries[item].frequency     = [pairScore.fft2(a), pairScore.fft2(b)]
+         
 
-
+      # For debugging purposes
+      #for item in Object.keys(timeSeries)
+      #  console.log(timeSeries[item].coOccurence[0], timeSeries[item].coOccurence[1])
+      #  console.log(timeSeries[item].peakOccurence[0], timeSeries[item].peakOccurence[1])
+      #  console.log(timeSeries[item].standardDev[0], timeSeries[item].standardDev[1])
+      #  console.log(timeSeries[item].frequency[0], timeSeries[item].frequency[1])
+      #  console.log("BREAK\n")
+		
+      pairScore.normalize(timeSeries) # Normalize all values between 0 and 1
       $scope.eventRows = []
-      l = [] 
-      charts.configureMinicharts(timeSeries, l)
-      l.sort( (a,b) -> 
-        return (Math.abs(b.nonRoundedScore) - Math.abs(a.nonRoundedScore)))
-      $scope.eventRows = l
+      charts.configureMinicharts(timeSeries, $scope.eventRows)
+      $scope.sortEventRows()
 
     $scope.refChoicesB = exclType($scope.refEventA)
     $scope.refChoicesA = exclType($scope.refEventB)
