@@ -56,9 +56,9 @@ app.service 'charts', () ->
         },
         loading: false
       }
-      roundedScore = Math.round(seriesArray.interestingnessScore * 100) / 100.0
-      roundedDist  = Math.round(seriesArray.distinctivenessScore * 100) / 100.0
-      obj = { chartConfig: config, eventName: eventType, score: roundedScore, distScore: roundedDist, nonRoundedScore: seriesArray.interestingnessScore}
+
+      obj = { chartConfig: config, eventName: eventType, coOccurence: seriesArray.coOccurence, peakOccurence: seriesArray.peakOccurence, standardDev: seriesArray.standardDev, frequency: seriesArray.frequency, roundedIntrScore: 0.0, roundedDistScore: 0.0 }
+		 
       eventRows.push( obj )
 	  
   this.configureMainChart = (eventData,chart) ->
