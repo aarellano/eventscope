@@ -1,15 +1,35 @@
 app.service 'charts', () ->
   this.configureMinicharts = (seriesSet, eventRows) ->
-    seriesLoaded = 0
     eventTypes = Object.keys(seriesSet)
-    #assumes every event type has two series
+    seriesLoaded = 0
     seriesToLoad = eventTypes.length*2
+    logLoad = (e) ->
+      seriesLoaded++
+      if(seriesLoaded == seriesToLoad)
+        $(window).delay(100).trigger('resize')
+    
+
+    #assumes every event type has two series
+    
     for eventType in eventTypes
       seriesArray = seriesSet[eventType]
-      logLoad = (e) ->
-        seriesLoaded++
-        if(seriesLoaded == seriesToLoad)
-          $(window).delay(100).trigger('resize')
+
+      min = 0
+      max = 0
+      
+      data1 = seriesArray[0].data
+      data2 = seriesArray[1].data
+      if data2.length == 0 and data2.lenth > 0
+        min = data1[0].x
+        max = data1[data1.length-1].x
+      else if data1.length == 0 and data2.length > 0
+        min = data2[0].x
+        max = data2[data2.length-1].x
+      else if data1.length > 0 and data2.length > 0
+        min = Math.min(data2[0].x,data1[0].x)
+        max = Math.max(data2[data2.length-1].x,data1[data1.length-1].x)
+      halfRange = Math.max(-min,max)
+
       config = {
         #series-specific options
         options: {
@@ -23,7 +43,8 @@ app.service 'charts', () ->
             height:100,
             events:{
               load: logLoad
-            }
+            },
+            zoomType:"x"
           },
           plotOptions: {
             series: {
@@ -31,9 +52,18 @@ app.service 'charts', () ->
             }
           },
           xAxis: {
+            plotLines: [{
+              value:0,
+              color: 'red',
+              width: 3,
+              zIndex: 3
+            }],
             labels:{
               enabled: false
-            }
+            },
+            min : -halfRange,
+            max : halfRange,
+            minRange : 60000
           },
           yAxis: {
             title: {
@@ -104,6 +134,12 @@ app.service 'charts', () ->
           
         },
         xAxis: {
+          plotLines: [{
+            value:0,
+            color: 'red',
+            width: 3,
+            zIndex: 3
+          }],
           labels:{
             formatter:()->formatRelativeTime(this.value)
           },

@@ -37,9 +37,14 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
     useHighStocks:true
   }
 
+  
+  $scope.metSelection = {'or': false, 'pr':false, 'pe':false, 'fr':false};
+  $scope.metrics = [ { name:'Occurrence Ratio', id:'or' }, { name:'Peak Ratio', id:'pr' }, { name:'Periodicity', id:'pe' }, {name:'Frequency', id:'fr' } ]
+	
   $scope.eventRows = []
   $scope.mainChart = {'name':null, 'config':blankMainChartConfig}
 
+ 
   selectedChart = []
   eventTypes = []
 
@@ -78,13 +83,16 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
 	  
   $scope.sortEventRows = () ->
     for row in $scope.eventRows
-        # Andres or Greg : tie these variables to the check boxes in the interface
         coef0 = 1.0; coef1 = 1.0; coef2 = 1.0; coef3 = 1.0
-        #console.log(row.coOccurence, row.peakOccurence, row.standardDev, row.frequency)
-        row.roundedIntrScore =  coef0*Math.abs(row.coOccurence[0] - row.coOccurence[1])
-        row.roundedIntrScore += coef1*Math.abs(row.peakOccurence[0] - row.peakOccurence[1])
-        row.roundedIntrScore += coef2*Math.abs(row.standardDev[0] - row.standardDev[1])
-        row.roundedIntrScore += coef3*Math.abs(row.frequency[0] - row.frequency[1])
+        row.roundedIntrScore = 0.0
+        if $scope.metSelection['or']
+          row.roundedIntrScore =  coef0*Math.abs(row.coOccurence[0] - row.coOccurence[1])
+        if $scope.metSelection['pr']
+          row.roundedIntrScore += coef1*Math.abs(row.peakOccurence[0] - row.peakOccurence[1])
+        if $scope.metSelection['pe']
+          row.roundedIntrScore += coef2*Math.abs(row.standardDev[0] - row.standardDev[1])
+        if $scope.metSelection['fr']
+          row.roundedIntrScore += coef3*Math.abs(row.frequency[0] - row.frequency[1])
 		
 		# Scale it, to 0 to 1
         row.roundedIntrScore = $scope.round(row.roundedIntrScore / (coef0 + coef1 + coef2 + coef3)) 

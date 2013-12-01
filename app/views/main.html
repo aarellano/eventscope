@@ -53,6 +53,9 @@
           <select class="span5" ng-model="binSizeUnit" data-style="btn-info" ng-options="u.name for u in binSizeUnits" bs-select></select>
           <button class="btn" ng-click="updateHistograms()" type="button">Update</button>
         </div>
+        <div ng-repeat="met in metrics">
+          <input type="checkbox" ng-model="metSelection[met.id]" name="group" id="{{met.id}}" ng-change='sortEventRows()'/> {{met.name}} 
+        </div>
       </div>
       <!--END CONTROL PANEL AREA-->
       <!--MAIN (bottom-right) CHART AREA-->
