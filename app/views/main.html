@@ -39,9 +39,9 @@
       </div>
       <div class="well topper">
         <div id="selects">
-          <select class="span3" ng-model="refEventA" ng-change="updateHistograms()" data-style="btn-info" ng-options="e for e in refChoicesA" bs-select></select>
-          <select class="span3" ng-model="refEventB" ng-change="updateHistograms()" data-style="btn-success" ng-options="e for e in refChoicesB" bs-select></select>
-          <select class="span3" ng-model="selectedDataset" ng-change="fetchJSON()" ng-options="d.name for d in datasets" data-style="btn-primary" bs-select></select>
+          <select class="span3" ng-model="refEventA" ng-change="updateHistograms()" data-style="btn-warning" ng-options="e for e in refChoicesA" bs-select></select>
+          <select class="span3" ng-model="refEventB" ng-change="updateHistograms()" data-style="btn-primary" ng-options="e for e in refChoicesB" bs-select></select>
+          <select class="span3" ng-model="selectedDataset" ng-change="fetchJSON()" ng-options="d.name for d in datasets" data-style="btn" bs-select></select>
         </div>
         <div class="input-append">
           <!--TODO: Andres, bootstrap's input-group stuff doesn't work well with angular's input types.
