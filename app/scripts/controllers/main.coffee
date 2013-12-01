@@ -145,7 +145,8 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
 
   $scope.updateVisibility = (index) ->
     for row in $scope.eventRows
-      row.chartConfig.series[index].visible = $scope.seriesVisibility[index]
+      row.chartConfig.series[index].visible = !$scope.seriesVisibility[index]
+
 
   $scope.capitalize = (string) ->
     (string.split(' ').map (word) -> word[0].toUpperCase() + word[1..-1].toLowerCase()).join ' '

@@ -14,12 +14,11 @@
           <thead>
             <tr>
               <th style="width: 80%">
-                <div>
-                  <span class="label label-warning">{{refEventA}}</span><input type="checkbox" ng-model="seriesVisibility[0]" ng-change='updateVisibility(0)'/>
-                  <span class="label label-info">{{refEventB}}</span><input type="checkbox" ng-model="seriesVisibility[1]" ng-change='updateVisibility(1)'/>
+                <div class="btn-group" bs-buttons-checkbox>
+                  <button type="button" class="btn btn-warning" ng-model="seriesVisibility[0]" ng-click="updateVisibility(0)">{{refEventA}}</button>
+                  <button type="button" class="btn btn-primary" ng-model="seriesVisibility[1]" ng-click="updateVisibility(1)">{{refEventB}}</button>
                 </div>
               </th>
-              <!-- <th style="width: 5%">SC</th> -->
               <th style="width: 5%">Score</th>
               <th style="width: 10%">Event</th>
             </tr>
@@ -28,7 +27,6 @@
 
           <tr ng-repeat="eventRow in eventRows" ng-click="updateMainChart({'name':eventRow.eventName, 'series':eventRow.chartConfig.series})">
 			<td><highchart class="mini-chart" config="eventRow.chartConfig"></highchart></td>
-              <!-- <td>{{eventRow.roundedDistScore}}</td> -->
               <td>{{eventRow.roundedIntrScore}} </td>
               <td>{{capitalize(eventRow.eventName)}}</td>
             </tr>
