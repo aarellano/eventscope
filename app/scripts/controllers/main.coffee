@@ -5,7 +5,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
     {'name': 'Example'},
     {'name': 'Basketball'},
     {'name': 'Bulls-2012-Season-D2O'},
-    {'name': 'Bulls-2012-Season-O2O'}
+    {'name': 'Bulls-2012-Season-O2D'}
   ]
   #bin size units: keep this sorted by factor!
   $scope.binSizeUnits = [
