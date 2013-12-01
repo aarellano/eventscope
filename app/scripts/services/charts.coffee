@@ -7,16 +7,16 @@ app.service 'charts', () ->
       seriesLoaded++
       if(seriesLoaded == seriesToLoad)
         $(window).delay(100).trigger('resize')
-    
+
 
     #assumes every event type has two series
-    
+
     for eventType in eventTypes
       seriesArray = seriesSet[eventType]
 
       min = 0
       max = 0
-      
+
       data1 = seriesArray[0].data
       data2 = seriesArray[1].data
       if data2.length == 0 and data2.lenth > 0
@@ -87,10 +87,11 @@ app.service 'charts', () ->
         loading: false
       }
 
-      obj = { chartConfig: config, eventName: eventType, coOccurence: seriesArray.coOccurence, peakOccurence: seriesArray.peakOccurence, standardDev: seriesArray.standardDev, frequency: seriesArray.frequency, roundedIntrScore: 0.0, roundedDistScore: 0.0 }
-		 
+      obj = { chartConfig: config, eventName: eventType, coOccurence: seriesArray.coOccurence, peakOccurence: seriesArray.peakOccurence,
+      standardDev: seriesArray.standardDev, frequency: seriesArray.frequency, roundedIntrScore: 0.0, roundedDistScore: 0.0 }
+
       eventRows.push( obj )
-	  
+
   this.configureMainChart = (eventData,chart) ->
     formatRelativeTime = (mills) ->
       if mills < 0 then sign = S('-') else sign = S('')
@@ -131,7 +132,7 @@ app.service 'charts', () ->
             if(this.points[1])
               tip +="<br/>#{this.points[1].series.name}:#{this.points[1].y}"
             return tip
-          
+
         },
         xAxis: {
           plotLines: [{
