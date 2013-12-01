@@ -27,3 +27,7 @@ footer {
 .mini-chart {
   pointer-events:none;
 }
+
+.table td {
+  vertical-align: middle;
+}
