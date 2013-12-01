@@ -66,6 +66,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
           lastTime: 0
         [eventTypes, maxRecordMillis] = preprocess.firstPass(data, records)
         [$scope.binSize,$scope.binSizeUnit] = preprocess.suggestTimeBin(maxRecordMillis,$scope.binSizeUnits)
+        eventTypes.sort()
         $scope.refChoicesA = eventTypes
         $scope.refChoicesB = eventTypes
         # The following three lines are just to have default reference events selected.
