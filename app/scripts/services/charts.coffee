@@ -30,6 +30,8 @@ app.service 'charts', () ->
         max = Math.max(data2[data2.length-1].x,data1[data1.length-1].x)
       halfRange = Math.max(-min,max)
 
+      seriesArray[0]['visible'] = false
+
       config = {
         #series-specific options
         options: {

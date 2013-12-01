@@ -8,16 +8,19 @@ import re
 from operator import itemgetter
 
 parser = argparse.ArgumentParser(description='Convert basketball dataset to json.')
-parser.add_argument('-if','--input_folder',default='Chicago_Bulls_New',
-                   help='where to get the input files from')
+parser.add_argument('-i','--input',default='Chicago_Bulls_New',
+                   help='where to get the input from (file or folder)')
 parser.add_argument('-o','--output',default='Basketball.json',
-                   help='where to get the input files from')
-def convert(input_folder, output):
-	file_list = [f for f in os.listdir(input_folder) if os.path.isfile(os.path.join(input_folder,f))]
+                   help='full path of json output file.')
+def convert(input, output):
+	if(os.path.isfile(input)):
+		file_list = [input]
+	else:
+		file_list = [os.path.join(input,f) for f in os.listdir(input) if os.path.isfile(os.path.join(input,f))]
 	events = []
 	shot_type_pattern = re.compile("(?<=Shot Type=\")\d")
-	for filename in file_list:
-		fhandle = open(os.path.join(input_folder,filename),'rb')
+	for filepath in file_list:
+		fhandle = open(filepath,'rb')
 		reader = csv.reader(fhandle,delimiter='\t',quoting=csv.QUOTE_NONE)
 		for row in reader:
 			rec_id = row[0]
