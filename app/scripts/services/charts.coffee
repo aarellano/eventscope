@@ -166,8 +166,9 @@ app.service 'charts', () ->
         xAxis: {
           plotLines: [{
             value:0,
-            color: 'red',
-            width: 3,
+            color: '#b94a48',
+            dashStyle: 'ShortDot',
+            width: 2,
             zIndex: 3
           }],
           labels:{
