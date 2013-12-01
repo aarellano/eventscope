@@ -1,4 +1,18 @@
 app.service 'pairScore', () ->
+  this.computePairScore = (timeSeries)->
+    for item in Object.keys(timeSeries)
+      #if ( true ) # TODO TIE TO INTERFACE
+      #  this.scaleForNumberOfEvents(timeSeries[item][0].data)
+      #  this.scaleForNumberOfEvents(timeSeries[item][1].data)
+      a = timeSeries[item][0].data
+      b = timeSeries[item][1].data
+
+      timeSeries[item].coOccurence   = [this.CoOccurence2(a), this.CoOccurence2(b)]
+      timeSeries[item].standardDev   = [this.standardDeviation2(a), this.standardDeviation2(b)]
+      timeSeries[item].peakOccurence = [this.peakOccurence2(a, 100, 3, 0.25), this.peakOccurence2(b, 100, 3, 0.25)]
+      timeSeries[item].frequency     = [this.fft2(a), this.fft2(b)]
+    this.normalize(timeSeries) # Normalize all values between 0 and 1
+
   this.max = (a, b) ->
     if a > b
       return a

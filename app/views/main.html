@@ -25,12 +25,10 @@
             </tr>
           </thead>
           <tbody>
-
-          <tr ng-repeat="eventRow in eventRows" ng-click="updateMainChart({'name':eventRow.eventName, 'series':eventRow.chartConfig.series})">
-			<td><highchart class="mini-chart" config="eventRow.chartConfig"></highchart></td>
-              <!-- <td>{{eventRow.roundedDistScore}}</td> -->
-              <td>{{eventRow.roundedIntrScore}} </td>
-              <td>{{capitalize(eventRow.eventName)}}</td>
+            <tr ng-repeat="eventRow in eventRows" ng-click="updateMainChart({'name':eventRow.eventName, 'series':eventRow.chartConfig.series})">
+    		      <td><highchart class="mini-chart" config="eventRow.chartConfig"></highchart></td>
+              <td>{{eventRow.roundedScore}} </td>
+              <td>{{eventRow.eventName}}</td>
             </tr>
           </tbody>
         </table>

@@ -34,6 +34,15 @@ def convert(input, output):
 			if(event_type == "No Points Scored" or event_type == "Points Scored"):
 				#skip these two types
 				continue
+			if("End of Period" in event_type):
+				event_type = "End of Period"
+
+			if("End of Game" in event_type):
+				event_type = "End of Game"
+
+			if("Timeout" in event_type):
+				event_type = "Timeout"
+
 			if("Made Shot" in event_type or "Missed Shot" in event_type):
 				#add what type of shot it is
 				shot_type = shot_type_pattern.findall(row[4])[0]

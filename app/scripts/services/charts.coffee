@@ -99,6 +99,32 @@ app.service 'charts', () ->
 
       eventRows.push( obj )
 
+  this.sortEventRows = (coefficients,eventRows,metrics)->
+    round = (number) ->
+      Math.round(number * 100) / 100.0
+    for row in eventRows
+      coef0 = 1.0; coef1 = 1.0; coef2 = 1.0; coef3 = 1.0
+      row.roundedScore = 0.0
+      divisor = 0.0
+      if metrics['or']
+        row.roundedScore =  coef0*Math.abs(row.coOccurence[0] - row.coOccurence[1])
+        divisor += coef0
+      if metrics['pr']
+        row.roundedScore += coef1*Math.abs(row.peakOccurence[0] - row.peakOccurence[1])
+        divisor += coef1
+      if metrics['pe']
+        row.roundedScore += coef2*Math.abs(row.standardDev[0] - row.standardDev[1])
+        divisor += coef2
+      if metrics['fr']
+        row.roundedScore += coef3*Math.abs(row.frequency[0] - row.frequency[1])
+        divisor += coef3
+
+      # Scale it, to 0 to 1
+      if divisor == 0.0 then divisor = 1.0
+      row.roundedScore = round(row.roundedScore / divisor)
+    eventRows.sort( (a,b) -> return (b.roundedScore - a.roundedScore))
+
+
   this.configureMainChart = (eventData,chart) ->
     formatRelativeTime = (mills) ->
       if mills < 0 then sign = S('-') else sign = S('')
