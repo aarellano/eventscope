@@ -13,7 +13,12 @@
         <table class="table table-condensed table-hover span12">
           <thead>
             <tr>
-              <th style="width: 80%">Histograms</th>
+              <th style="width: 80%">
+                <div>
+                  <span class="label label-warning">{{refEventA}}</span><input type="checkbox" ng-model="seriesVisibility[0]" ng-change='updateVisibility(0)'/>
+                  <span class="label label-info">{{refEventB}}</span><input type="checkbox" ng-model="seriesVisibility[1]" ng-change='updateVisibility(1)'/>
+                </div>
+              </th>
               <!-- <th style="width: 5%">SC</th> -->
               <th style="width: 5%">DF</th>
               <th style="width: 10%">Event</th>

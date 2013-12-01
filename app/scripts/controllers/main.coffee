@@ -26,6 +26,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
   $scope.refEventB = null
   $scope.selectedDataset = $scope.datasets[0]
   $scope.metSelection = {'or': true, 'pr':false, 'pe':false, 'fr':false};
+  $scope.seriesVisibility = [true, true]
   ###########################################################
 
   blankMainChartConfig = {
@@ -137,6 +138,10 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
 
     $scope.refChoicesB = exclType($scope.refEventA)
     $scope.refChoicesA = exclType($scope.refEventB)
+
+  $scope.updateVisibility = (index) ->
+    for row in $scope.eventRows
+      row.chartConfig.series[index].visible = $scope.seriesVisibility[index]
 
   # Fetch the default dataset
   $scope.fetchJSON()
