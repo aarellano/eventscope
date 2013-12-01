@@ -100,7 +100,7 @@ app.service 'preprocess', () ->
     #@param
     #sugguest closest whole time unit to making 20 bins / record,
     #or 20 on either side of the ref event (40 total)
-    binSizeMillis = maxRecordMillis / 20
+    binSizeMillis = maxRecordMillis / 40
     curUnit = binTimeUnits[0]
     if binSizeMillis < curUnit.factor
       [1,curUnit]

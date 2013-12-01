@@ -46,6 +46,10 @@ app.service 'charts', () ->
             },
             zoomType:"x"
           },
+          colors:[
+            '#FF9A00',
+            '#0064B2'
+          ],
           plotOptions: {
             series: {
                 stacking: ''
@@ -122,8 +126,13 @@ app.service 'charts', () ->
     chart.config = {
       options:{
         chart:{
-          type: 'areaspline'
+          type: 'areaspline',
+          zoomType:"x"
         },
+        colors:[
+          '#FF9A00',
+          '#0064B2'
+        ],
         tooltip:{
           formatter:()->
             tip = formatRelativeTime(this.x)
