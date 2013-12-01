@@ -141,6 +141,8 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
     $scope.refChoicesB = exclType($scope.refEventA)
     $scope.refChoicesA = exclType($scope.refEventB)
 
+    $scope.seriesVisibility = [true, true]
+
   $scope.updateVisibility = (index) ->
     for row in $scope.eventRows
       row.chartConfig.series[index].visible = $scope.seriesVisibility[index]
