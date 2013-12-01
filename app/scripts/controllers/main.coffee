@@ -25,6 +25,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
   $scope.refEventA = null
   $scope.refEventB = null
   $scope.selectedDataset = $scope.datasets[0]
+  $scope.metSelection = {'or': true, 'pr':false, 'pe':false, 'fr':false};
   ###########################################################
 
   blankMainChartConfig = {
@@ -37,8 +38,6 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
     useHighStocks:true
   }
 
-
-  $scope.metSelection = {'or': false, 'pr':false, 'pe':false, 'fr':false};
   $scope.metrics = [ { name:'Occurrence Ratio', id:'or' }, { name:'Peak Ratio', id:'pr' }, { name:'Periodicity', id:'pe' }, {name:'Frequency', id:'fr' } ]
 
   $scope.eventRows = []
