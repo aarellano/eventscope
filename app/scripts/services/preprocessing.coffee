@@ -221,6 +221,9 @@ app.service 'preprocess', () ->
         ixLast = hist.length-1
         ixLast-- while ixLast >= 0 and not hist[ixLast].y
         newHist = hist[ixFirst..ixLast]
-        series.push({'name': refEvtType, 'data': newHist})# if newHist.length > 0
-      hists[evtType] = series
+        series.push({'name': refEvtType, 'data': newHist}) if newHist.length > 0
+      if(series.length == 2)
+        hists[evtType] = series
+      else
+        delete hists[evtType]
     hists
