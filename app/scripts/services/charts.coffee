@@ -48,6 +48,10 @@ app.service 'charts', () ->
             },
             zoomType:"x"
           },
+          colors:[
+            '#FF9A00',
+            '#0064B2'
+          ],
           plotOptions: {
             series: {
                 stacking: ''
@@ -112,20 +116,29 @@ app.service 'charts', () ->
       remainder %= msInMinutes
       seconds = Math.round(remainder / msInSeconds)
       milliseconds = remainder % msInSeconds
-
-      relTimeStr = sign
-      if days > 1 then relTimeStr += "#{days} days " else if days == 1 then relTimeStr += "1 day "
-      relTimeStr += S("#{hours}:").padLeft(3,'0')
-      relTimeStr += S("#{minutes}:").padLeft(3,'0')
-      relTimeStr += S("#{seconds}.").padLeft(3,'0')
-      relTimeStr += S(milliseconds).padLeft(3,'0')
+      relTimeStr = S("#{seconds}.").padLeft(3,'0') + S(milliseconds).padLeft(3,'0')
+      if(minutes > 0)
+        relTimeStr = S("#{minutes}:").padLeft(3,'0') + relTimeStr
+        if(hours > 0)
+          relTimeStr = S("#{hours}:").padLeft(3,'0') + relTimeStr
+          if(days > 0)
+            if days > 1 
+              relTimeStr = "#{days} days "+relTimeStr 
+            else if days == 1 
+              relTimeStr = "1 day "+relTimeStr
+      relTimeStr = sign + relTimeStr
       relTimeStr
 
     chart.config = {
       options:{
         chart:{
-          type: 'areaspline'
+          type: 'areaspline',
+          zoomType:"x"
         },
+        colors:[
+          '#FF9A00',
+          '#0064B2'
+        ],
         tooltip:{
           formatter:()->
             tip = formatRelativeTime(this.x)
@@ -136,6 +149,19 @@ app.service 'charts', () ->
             return tip
 
         },
+
+        rangeSelector : {
+          inputEnabled : false
+        },
+        navigator:{
+          enabled:true,
+          series:eventData.series,
+          xAxis:{
+            labels:{
+              formatter:()->formatRelativeTime(this.value)
+            },
+          }
+        },
         xAxis: {
           plotLines: [{
             value:0,
@@ -145,24 +171,20 @@ app.service 'charts', () ->
           }],
           labels:{
             formatter:()->formatRelativeTime(this.value)
-          },
-          range: undefined
+          }
         },
       },
       title:{
         text:eventData.name
       },
-      rangeSelector : {
-        selected : 1
-      },
-      navigator:{
-        enabled:true
+      navigation:{
+        buttonOptions:{
+          enabled:false
+        }
       },
       credits: {
         enabled: false
       },
-
-
       series:eventData.series,
       useHighStocks:true
     }

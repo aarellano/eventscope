@@ -24,7 +24,7 @@ def convert(input, output):
 		reader = csv.reader(fhandle,delimiter='\t',quoting=csv.QUOTE_NONE)
 		for row in reader:
 			rec_id = row[0]
-			event_type = row[1]
+			event_type = row[1].rstrip()
 			ts = row[2]
 			if(len(row) > 3 and ":" in row[3]):
 				#contains end time

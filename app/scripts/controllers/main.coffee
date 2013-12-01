@@ -101,6 +101,8 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
 
   $scope.updateHistograms = () ->
     if $scope.refEventA and $scope.refEventB
+      # clear main chart
+      $scope.mainChart["config"] = blankMainChartConfig
       binSizeMillis = $scope.binSize*$scope.binSizeUnit.factor
       numBins = Math.round(maxRecordMillis / binSizeMillis)
       # These refEvents are hardcoded to be used as examples.

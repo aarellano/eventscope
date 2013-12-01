@@ -100,7 +100,7 @@ app.service 'preprocess', () ->
     #@param
     #sugguest closest whole time unit to making 20 bins / record,
     #or 20 on either side of the ref event (40 total)
-    binSizeMillis = maxRecordMillis / 20
+    binSizeMillis = maxRecordMillis / 40
     curUnit = binTimeUnits[0]
     if binSizeMillis < curUnit.factor
       [1,curUnit]
@@ -221,6 +221,9 @@ app.service 'preprocess', () ->
         ixLast = hist.length-1
         ixLast-- while ixLast >= 0 and not hist[ixLast].y
         newHist = hist[ixFirst..ixLast]
-        series.push({'name': refEvtType, 'data': newHist})# if newHist.length > 0
-      hists[evtType] = series
+        series.push({'name': refEvtType, 'data': newHist}) if newHist.length > 0
+      if(series.length == 2)
+        hists[evtType] = series
+      else
+        delete hists[evtType]
     hists
