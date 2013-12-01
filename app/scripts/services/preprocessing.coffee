@@ -159,7 +159,7 @@ app.service 'preprocess', () ->
 
     #maximum bin count now doubles, because we could have both
     #ref and non-ref at the end and the beginning of a dataset
-    
+
     numBins *=2
     halfNumBins = numBins / 2
     halfBinSize = binSizeMilis / 2
@@ -196,7 +196,7 @@ app.service 'preprocess', () ->
               binNum = computeBinNumber(entry.ts,occurTime)
               #increment the bin counter
               if binNum >= (hists[nonrefEvt][entry.event].length-1)
-                binNum = hists[nonrefEvt][entry.event].length-1 # TODO HACK 
+                binNum = hists[nonrefEvt][entry.event].length-1 # TODO HACK
               hists[nonrefEvt][entry.event][binNum].y +=1
         else
           #current event is a non-reference event, add it to its nonref event array

@@ -1,5 +1,5 @@
 app.service 'distScore', () ->
-  this.dist = (a, b) -> 
+  this.dist = (a, b) ->
     a.sort( (l1,l2) -> return l1.x - l2.x )
     b.sort( (l1,l2) -> return l1.x - l2.x )
     aIdx = 0
@@ -23,7 +23,7 @@ app.service 'distScore', () ->
         aIdx += 1
         bIdx += 1
     return Math.sqrt(diff)
-	
+
   this.score = (a, b) ->
     return this.dist(a, b)
-    
+

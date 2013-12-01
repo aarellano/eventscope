@@ -26,7 +26,7 @@
               <!-- <td>{{eventRow.roundedDistScore}}</td> -->
               <td>{{eventRow.roundedIntrScore}} </td>
               <td>{{eventRow.eventName}}</td>
-            </tr> 
+            </tr>
           </tbody>
         </table>
       </div>
@@ -54,7 +54,7 @@
           <button class="btn" ng-click="updateHistograms()" type="button">Update</button>
         </div>
         <div ng-repeat="met in metrics">
-          <input type="checkbox" ng-model="metSelection[met.id]" name="group" id="{{met.id}}" ng-change='sortEventRows()'/> {{met.name}} 
+          <input type="checkbox" ng-model="metSelection[met.id]" name="group" id="{{met.id}}" ng-change='sortEventRows()'/> {{met.name}}
         </div>
       </div>
       <!--END CONTROL PANEL AREA-->
