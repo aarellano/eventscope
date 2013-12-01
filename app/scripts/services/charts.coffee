@@ -123,9 +123,9 @@ app.service 'charts', () ->
         if(hours > 0)
           relTimeStr = S("#{hours}:").padLeft(3,'0') + relTimeStr
           if(days > 0)
-            if days > 1 
-              relTimeStr = "#{days} days "+relTimeStr 
-            else if days == 1 
+            if days > 1
+              relTimeStr = "#{days} days "+relTimeStr
+            else if days == 1
               relTimeStr = "1 day "+relTimeStr
       relTimeStr = sign + relTimeStr
       relTimeStr
