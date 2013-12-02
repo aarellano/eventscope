@@ -25,7 +25,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
   $scope.refEventA = null
   $scope.refEventB = null
   $scope.selectedDataset = $scope.datasets[0]
-  $scope.metSelection = {'or': true, 'pr':false, 'pe':false, 'fr':false};
+  $scope.metSelection = {'or': true, 'pr':false, 'pe':false, 'fr':false}
   $scope.seriesVisibility = [true, true]
   ###########################################################
 
@@ -82,21 +82,23 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
   $scope.round = (number) ->
       Math.round(number * 100) / 100.0
 
+  coef0 = 1.0; coef1 = 1.0; coef2 = 1.0; coef3 = 1.0
+
   $scope.sortEventRows = () ->
+    $scope.$apply
     for row in $scope.eventRows
-        coef0 = 1.0; coef1 = 1.0; coef2 = 1.0; coef3 = 1.0
-        row.roundedIntrScore = 0.0
-        if $scope.metSelection['or']
-          row.roundedIntrScore =  coef0*Math.abs(row.coOccurence[0] - row.coOccurence[1])
-        if $scope.metSelection['pr']
-          row.roundedIntrScore += coef1*Math.abs(row.peakOccurence[0] - row.peakOccurence[1])
-        if $scope.metSelection['pe']
-          row.roundedIntrScore += coef2*Math.abs(row.standardDev[0] - row.standardDev[1])
-        if $scope.metSelection['fr']
-          row.roundedIntrScore += coef3*Math.abs(row.frequency[0] - row.frequency[1])
+      row.roundedIntrScore = 0.0
+      if $scope.metSelection['or']
+        row.roundedIntrScore =  coef0 * Math.abs(row.coOccurence[0] - row.coOccurence[1])
+      if $scope.metSelection['pr']
+        row.roundedIntrScore += coef1*Math.abs(row.peakOccurence[0] - row.peakOccurence[1])
+      if $scope.metSelection['pe']
+        row.roundedIntrScore += coef2*Math.abs(row.standardDev[0] - row.standardDev[1])
+      if $scope.metSelection['fr']
+        row.roundedIntrScore += coef3*Math.abs(row.frequency[0] - row.frequency[1])
 
 		# Scale it, to 0 to 1
-        row.roundedIntrScore = $scope.round(row.roundedIntrScore / (coef0 + coef1 + coef2 + coef3))
+      row.roundedIntrScore = $scope.round(row.roundedIntrScore / (coef0 + coef1 + coef2 + coef3))
     $scope.eventRows.sort( (a,b) -> return (Math.abs(b.roundedIntrScore) - Math.abs(a.roundedIntrScore)))
 
   $scope.updateHistograms = () ->
@@ -150,6 +152,20 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
 
   $scope.capitalize = (string) ->
     (string.split(' ').map (word) -> word[0].toUpperCase() + word[1..-1].toLowerCase()).join ' '
+
+  # The following 4 $watch are undesirable, but for some reason the metSelection doesn't get refresehd
+  # when calling the ng-click in the checkbox buttons
+  $scope.$watch 'metSelection.or', () ->
+    $scope.sortEventRows()
+
+  $scope.$watch 'metSelection.pr', () ->
+    $scope.sortEventRows()
+
+  $scope.$watch 'metSelection.pe', () ->
+    $scope.sortEventRows()
+
+  $scope.$watch 'metSelection.fr', () ->
+    $scope.sortEventRows()
 
   # Fetch the default dataset
   $scope.fetchJSON()
