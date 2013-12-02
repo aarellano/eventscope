@@ -27,7 +27,7 @@
           <tbody>
             <tr ng-repeat="eventRow in eventRows" ng-click="updateMainChart({'name':eventRow.eventName, 'series':eventRow.chartConfig.series})">
     		      <td><highchart class="mini-chart" config="eventRow.chartConfig"></highchart></td>
-              <td>{{eventRow.roundedScore}} </td>
+              <td ng-style="scoreBgColor(eventRow.roundedScore,eventRow.winningRef)">{{eventRow.roundedScore}} </td>
               <td>{{eventRow.eventName}}</td>
             </tr>
           </tbody>

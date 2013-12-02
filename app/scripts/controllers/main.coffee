@@ -104,9 +104,15 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
     $scope.seriesVisibility = [true, true]
 
   $scope.scoreBgColor = (score,winRef) ->
-    color = $scope.refEvtColors[winRef]
-    color = one.color(color)
-    
+    if score and winRef
+      colorStr = $scope.refEvtColors[winRef]
+      color = ONECOLOR(colorStr)
+      maxLight = color.lightness()
+      lightenBy = (1.0 - score) * (1.0 - maxLight)
+      newColor = color.lighten(lightenBy)
+      {'background-color': newColor.hex()}
+    else
+      {}
 
   $scope.updateVisibility = (index) ->
     for row in $scope.eventRows
