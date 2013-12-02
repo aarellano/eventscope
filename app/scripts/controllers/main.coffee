@@ -108,9 +108,6 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
       maxLight = color.lightness()
       lightenBy = (1.0 - score) * (1.0 - maxLight)
       newColor = color.lighten(lightenBy)
-      console.log(winRef)
-      console.log(score)
-      console.log(newColor.lightness())
       {'background-color': newColor.hex()}
     else
       {}
