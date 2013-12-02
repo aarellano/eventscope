@@ -4,8 +4,6 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
  $scope.datasets = [
     {'name': 'Example'},
     {'name': 'Basketball'},
-  #  {'name': 'Bulls-2012-Season-D2O'},
-  #  {'name': 'Bulls-2012-Season-O2D'}
   ]
   #bin size units: keep this sorted by factor!
   $scope.binSizeUnits = [
@@ -25,7 +23,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
   $scope.refEventA = null
   $scope.refEventB = null
   $scope.selectedDataset = $scope.datasets[0]
-  $scope.metSelection = {'or': true, 'pr':false, 'pe':false, 'fr':false};
+  $scope.metSelection = {'or': true, 'pr':false, 'pe':false, 'fr':false}
   $scope.seriesVisibility = [true, true]
   $scope.refEvtColors = ['rgb(255,154,0)','rgb(0,100,178)']
   ###########################################################
@@ -116,7 +114,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
 
   $scope.updateVisibility = (index) ->
     for row in $scope.eventRows
-      row.chartConfig.series[index].visible = $scope.seriesVisibility[index]
+      row.chartConfig.series[index].visible = !$scope.seriesVisibility[index]
 
   # Fetch the default dataset
   $scope.fetchJSON()

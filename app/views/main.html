@@ -14,12 +14,11 @@
           <thead>
             <tr>
               <th style="width: 80%">
-                <div>
-                  <span class="label label-warning">{{refEventA}}</span><input type="checkbox" ng-model="seriesVisibility[0]" ng-change='updateVisibility(0)'/>
-                  <span class="label label-info">{{refEventB}}</span><input type="checkbox" ng-model="seriesVisibility[1]" ng-change='updateVisibility(1)'/>
+                <div class="btn-group" bs-buttons-checkbox>
+                  <button type="button" class="btn btn-warning" ng-model="seriesVisibility[0]" ng-click="updateVisibility(0)">{{refEventA}}</button>
+                  <button type="button" class="btn btn-primary" ng-model="seriesVisibility[1]" ng-click="updateVisibility(1)">{{refEventB}}</button>
                 </div>
               </th>
-              <!-- <th style="width: 5%">SC</th> -->
               <th style="width: 5%">Score</th>
               <th style="width: 10%">Event</th>
             </tr>
@@ -47,17 +46,16 @@
           <select class="span3" ng-model="selectedDataset" ng-change="fetchJSON()" ng-options="d.name for d in datasets" data-style="btn" bs-select></select>
         </div>
         <div class="input-append">
-          <!--TODO: Andres, bootstrap's input-group stuff doesn't work well with angular's input types.
-            We probably want the following 3 elements to appear in one line, like here: http://getbootstrap.com/components/#input-groups-basic.
-            I'd like to keep the number spinner, though.
-            Can you think of something to fix that?-->
           <label >Time bin size:</label>
           <input class="span3" ng-model="binSize" type="number">
           <select class="span5" ng-model="binSizeUnit" data-style="btn-info" ng-options="u.name for u in binSizeUnits" bs-select></select>
           <button class="btn" ng-click="updateHistograms()" type="button">Update</button>
         </div>
-        <div ng-repeat="met in metrics">
-          <input type="checkbox" ng-model="metSelection[met.id]" name="group" id="{{met.id}}" ng-change='sortEventRows()'/> {{met.name}}
+        <div class="btn-group" bs-buttons-checkbox>
+          <button type="button" class="btn btn-success" ng-model="metSelection.or">Occurrence Ratio</button>
+          <button type="button" class="btn btn-success" ng-model="metSelection.pr">Peak Ratio</button>
+          <button type="button" class="btn btn-success" ng-model="metSelection.pe">Periodicity</button>
+          <button type="button" class="btn btn-success" ng-model="metSelection.fr">Frequency</button>
         </div>
       </div>
       <!--END CONTROL PANEL AREA-->
