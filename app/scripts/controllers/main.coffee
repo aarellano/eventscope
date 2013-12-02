@@ -27,6 +27,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
   $scope.selectedDataset = $scope.datasets[0]
   $scope.metSelection = {'or': true, 'pr':false, 'pe':false, 'fr':false};
   $scope.seriesVisibility = [true, true]
+  $scope.refEvtColors = ['rgb(255,154,0)','rgb(0,100,178)']
   ###########################################################
 
   blankMainChartConfig = {
@@ -77,7 +78,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
       )
 
   $scope.updateMainChart = (eventData) ->
-    charts.configureMainChart(eventData,$scope.mainChart)
+    charts.configureMainChart(eventData,$scope.mainChart,$scope.refEvtColors)
 
   $scope.updateHistograms = () ->
     if $scope.refEventA and $scope.refEventB
@@ -94,13 +95,18 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
 
       pairScore.computePairScore(timeSeries)
       $scope.eventRows = []
-      charts.configureMinicharts(timeSeries, $scope.eventRows)
+      charts.configureMinicharts(timeSeries, $scope.eventRows, $scope.refEvtColors)
       charts.sortEventRows([1.0,1.0,1.0,1.0],$scope.eventRows,$scope.metSelection)
 
     $scope.refChoicesB = exclType($scope.refEventA)
     $scope.refChoicesA = exclType($scope.refEventB)
 
     $scope.seriesVisibility = [true, true]
+
+  $scope.scoreBgColor = (score,winRef) ->
+    color = $scope.refEvtColors[winRef]
+    color = one.color(color)
+    
 
   $scope.updateVisibility = (index) ->
     for row in $scope.eventRows

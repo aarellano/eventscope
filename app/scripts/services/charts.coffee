@@ -1,5 +1,5 @@
 app.service 'charts', () ->
-  this.configureMinicharts = (seriesSet, eventRows) ->
+  this.configureMinicharts = (seriesSet, eventRows, colors) ->
     eventTypes = Object.keys(seriesSet)
     seriesLoaded = 0
     seriesToLoad = eventTypes.length*2
@@ -48,10 +48,7 @@ app.service 'charts', () ->
             },
             zoomType:"x"
           },
-          colors:[
-            '#FF9A00',
-            '#0064B2'
-          ],
+          colors:colors,
           plotOptions: {
             series: {
                 stacking: ''
@@ -106,26 +103,34 @@ app.service 'charts', () ->
       coef0 = 1.0; coef1 = 1.0; coef2 = 1.0; coef3 = 1.0
       row.roundedScore = 0.0
       divisor = 0.0
+      scoreA = 0.0
+      scoreB = 0.0
       if metrics['or']
-        row.roundedScore =  coef0*Math.abs(row.coOccurence[0] - row.coOccurence[1])
+        scoreA += coef0*row.coOccurence[0]
+        scoreB += coef0*row.coOccurence[1]
         divisor += coef0
       if metrics['pr']
-        row.roundedScore += coef1*Math.abs(row.peakOccurence[0] - row.peakOccurence[1])
+        scoreA += coef1*row.peakOccurence[0]
+        scoreB += coef1*row.peakOccurence[1]
         divisor += coef1
       if metrics['pe']
-        row.roundedScore += coef2*Math.abs(row.standardDev[0] - row.standardDev[1])
+        scoreA += coef2*row.standardDev[0]
+        scoreB += coef2*row.standardDev[1]
         divisor += coef2
       if metrics['fr']
-        row.roundedScore += coef3*Math.abs(row.frequency[0] - row.frequency[1])
+        scoreA += coef2*row.frequency[0]
+        scoreB += coef2*row.frequency[1]
         divisor += coef3
 
+      if divisor == 0.0 then divisor = 1.0 #avoid division by 0
+      row.roundedScore = Math.abs(scoreA - scoreB)
       # Scale it, to 0 to 1
-      if divisor == 0.0 then divisor = 1.0
       row.roundedScore = round(row.roundedScore / divisor)
+      if scoreA > scoreB then row.winningRef = 0 else row.winningRef = 1
     eventRows.sort( (a,b) -> return (b.roundedScore - a.roundedScore))
 
 
-  this.configureMainChart = (eventData,chart) ->
+  this.configureMainChart = (eventData,chart,colors) ->
     formatRelativeTime = (mills) ->
       if mills < 0 then sign = S('-') else sign = S('')
       absMs = Math.abs(mills)
@@ -144,11 +149,11 @@ app.service 'charts', () ->
       seconds = Math.round(remainder / msInSeconds)
       milliseconds = remainder % msInSeconds
       relTimeStr = S("#{seconds}.").padLeft(3,'0') + S(milliseconds).padLeft(3,'0')
-      if(minutes > 0)
+      if(absMs > msInMinutes)
         relTimeStr = S("#{minutes}:").padLeft(3,'0') + relTimeStr
-        if(hours > 0)
+        if(absMs > msInHours)
           relTimeStr = S("#{hours}:").padLeft(3,'0') + relTimeStr
-          if(days > 0)
+          if(absMs > msInDays)
             if days > 1
               relTimeStr = "#{days} days "+relTimeStr
             else if days == 1
@@ -162,10 +167,7 @@ app.service 'charts', () ->
           type: 'areaspline',
           zoomType:"x"
         },
-        colors:[
-          '#FF9A00',
-          '#0064B2'
-        ],
+        colors:colors,
         tooltip:{
           formatter:()->
             tip = formatRelativeTime(this.x)
@@ -185,7 +187,8 @@ app.service 'charts', () ->
           series:eventData.series,
           xAxis:{
             labels:{
-              formatter:()->formatRelativeTime(this.value)
+              formatter:()->
+                formatRelativeTime(this.value)
             },
           }
         },
