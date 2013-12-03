@@ -46,6 +46,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
 
   selectedChart = []
   eventTypes = []
+  eventCounts = {}
 
   exclType = (toExclude) =>
     types = []
@@ -63,7 +64,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
         maxRecordMillis =
           firstTime: moment(95617602000000)#year 5000
           lastTime: 0
-        [eventTypes, maxRecordMillis] = preprocess.firstPass(data, records)
+        [eventTypes, eventCounts, maxRecordMillis] = preprocess.firstPass(data, records)
         [$scope.binSize,$scope.binSizeUnit] = preprocess.suggestTimeBin(maxRecordMillis,$scope.binSizeUnits)
         eventTypes.sort()
         $scope.refChoicesA = eventTypes
@@ -86,7 +87,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
       numBins = Math.round(maxRecordMillis / binSizeMillis)
       # These refEvents are hardcoded to be used as examples.
       refEvents = [$scope.refEventA, $scope.refEventB]
-      timeSeries = preprocess.buildTimeSeries(records, eventTypes, refEvents, binSizeMillis, numBins)
+      timeSeries = preprocess.buildTimeSeries(records, eventTypes, refEvents, binSizeMillis, numBins, eventCounts)
 
       # Drug1 in green, emergecy room in light blue, dark blue is exam
       # Sortable is a list of string event names, sorted by their interesting-ness score

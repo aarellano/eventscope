@@ -59,10 +59,13 @@ app.service 'preprocess', () ->
           return
         parseDate = (dateStr) -> moment(dateStr, formatString)
 
-      eventTypes = {}
+      eventCounts = {}
       for p in json.events
         #add new category if not present
-        eventTypes[p.event] = true if p.event not in eventTypes
+        if p.event of eventCounts
+          eventCounts[p.event] += 1
+        else
+          eventCounts[p.event] =1
         #convert time string to moment
         if p.ts
           newTime = parseDate(p.ts)
@@ -90,11 +93,9 @@ app.service 'preprocess', () ->
         maxRecordMillis = recordRangeMillis if recordRangeMillis > maxRecordMillis
         records.push(recordHash[recordId])
 
-      eventTypesArray = []
-      for key of eventTypes
-        eventTypesArray.push key
+      eventTypesArray = Object.keys(eventCounts)
 
-      [eventTypesArray, maxRecordMillis]
+      [eventTypesArray, eventCounts, maxRecordMillis]
 
   this.suggestTimeBin = (maxRecordMillis, binTimeUnits) ->
     #@param
@@ -116,7 +117,7 @@ app.service 'preprocess', () ->
       #return in biggest units
       [Math.round(binSizeMillis / curUnit.factor), curUnit]
 
-  this.buildTimeSeries = (records, eventTypes, refEvents, binSizeMilis, numBins) ->
+  this.buildTimeSeries = (records, eventTypes, refEvents, binSizeMilis, numBins, eventCounts) ->
     #Creates 2 frequency series for each non-reference event, one relative to each of the
     #reference events.
     #@param records: event records (arrays of events pertaining to the same sequence), where
@@ -163,6 +164,7 @@ app.service 'preprocess', () ->
     numBins *=2
     halfNumBins = numBins / 2
     halfBinSize = binSizeMilis / 2
+
     # Initialize all the distribution values to zero. It could be done in the next loop, but it's very short
     hists = {}
     for eventType in eventTypes
@@ -195,7 +197,7 @@ app.service 'preprocess', () ->
               #calulate every non-ref event's bin in reference to the current (reference) event
               binNum = computeBinNumber(entry.ts,occurTime)
               #increment the bin counter
-              hists[nonrefEvt][entry.event][binNum].y +=1
+              hists[nonrefEvt][entry.event][binNum].y+=1
         else
           #current event is a non-reference event, add it to its nonref event array
           if entry.event not in occursNonref then occursNonref[entry.event] = []
@@ -219,7 +221,12 @@ app.service 'preprocess', () ->
         ixLast = hist.length-1
         ixLast-- while ixLast >= 0 and not hist[ixLast].y
         newHist = hist[ixFirst..ixLast]
-        series.push({'name': refEvtType, 'data': newHist}) if newHist.length > 0
+        if newHist.length > 0
+          #normalize
+          refCount = eventCounts[refEvtType]
+          for point in newHist
+            point.y = point.y/refCount
+          series.push({'name': refEvtType, 'data': newHist})
       if(series.length == 2)
         hists[evtType] = series
       else

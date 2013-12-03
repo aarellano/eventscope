@@ -242,7 +242,7 @@ app.service 'pairScore', () ->
     return items
 
   this.zeroArray = (size) ->
-    a = Array(size)
+    a = Array(Math.round(size))#TODO: does this still work w/ non-integers?
     for i in [0..(size-1)]
       a[i] = 0.0
     return a
