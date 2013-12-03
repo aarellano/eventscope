@@ -152,12 +152,16 @@ app.service 'pairScore', () ->
     for i in [0..nbins-1]
       arr[i] = 0.0
     # build a histogram
+    total = 0.0
     for i in [0..timeSeries.length-1]
       idx = this.indexof(timeSeries[i], nbins, max, min)
       arr[idx] = arr[idx] + 1.0
+      total += arr[idx]
+    for i in [0..arr.length-1]
+      arr[idx] = arr[idx]/total
     # find the number of peaks
     for i in [k..nbins-2-k]
-      score = (this.arrMax(arr.slice(i-k)) + this.arrMax(arr.slice(i+1+k))) / 2.0
+      score = (this.arrMax(arr.slice(i-k,k)) + this.arrMax(arr.slice(k,i+1+k))) / 2.0
       if score > threshold
         peaks.push(i)
     return peaks
