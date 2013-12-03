@@ -31,3 +31,13 @@ footer {
 .table td {
   vertical-align: middle;
 }
+
+hr {
+  margin: 15px 0;
+}
+
+.label.caption {
+  font-weight: normal;
+  opacity: 0.5;
+  padding: 4px 6px;
+}
