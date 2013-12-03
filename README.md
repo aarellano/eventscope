@@ -1,9 +1,9 @@
-MultiFinder
+EventScope
 ====
 
 ## Description
 
-MultiFinder is a tool to explore point event temporal patterns. It is based on the idea behind [Eventflow][1], but we propose a solution where we **split the datasets** into two groups based on some binary attribute and attempt to identify association rules that are either the same or different for each class. It is expected that relations that occur in both sets, after the separation, are uninteresting. Relations that occur in only one group are expected to be more interesting because they can be used to distinguish between groups.
+EventScope is a tool to explore point event temporal patterns. It is based on the idea behind [Eventflow][1], but we propose a solution where we **split the datasets** into two groups based on some binary attribute and attempt to identify association rules that are either the same or different for each class. It is expected that relations that occur in both sets, after the separation, are uninteresting. Relations that occur in only one group are expected to be more interesting because they can be used to distinguish between groups.
 
 There is an incremental [live demo][18] of the app.
 
@@ -28,7 +28,7 @@ Make sure you have [node.js][10] installed on your system. If you are using OS X
 #### 2. Clone the project
 
 ```
-git clone git@github.com:aarellano/multifinder.git
+git clone git@github.com:aarellano/eventscope.git
 ```
 
 #### 3. Install the dependencies
@@ -74,4 +74,4 @@ Grunt automatically makes use of Livereload, so any change that you make to a sc
 [15]: http://getbootstrap.com/css/#grid
 [16]: http://getbootstrap.com/components/
 [17]: http://alignedleft.com/tutorials/d3/
-[18]: http://multifinder.herokuapp.com
+[18]: http://eventscope.herokuapp.com
