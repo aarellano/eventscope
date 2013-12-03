@@ -172,7 +172,7 @@ app.service 'preprocess', () ->
         for refEvent in refEvents
           #create distribution for that event pair
           hists[eventType][refEvent] = []
-          for i in [0..(numBins-1)]
+          for i in [0..numBins]
             #zero out intial values
             hists[eventType][refEvent][i] = {y:0,x:(i - halfNumBins)*binSizeMilis + halfBinSize}
 
@@ -195,8 +195,6 @@ app.service 'preprocess', () ->
               #calulate every non-ref event's bin in reference to the current (reference) event
               binNum = computeBinNumber(entry.ts,occurTime)
               #increment the bin counter
-              if binNum >= (hists[nonrefEvt][entry.event].length-1)
-                binNum = hists[nonrefEvt][entry.event].length-1 # TODO HACK
               hists[nonrefEvt][entry.event][binNum].y +=1
         else
           #current event is a non-reference event, add it to its nonref event array
