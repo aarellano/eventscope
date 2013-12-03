@@ -112,6 +112,18 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
     else
       {}
 
+  $scope.$watch 'metSelection.or', () ->
+    charts.sortEventRows([1.0,1.0,1.0,1.0],$scope.eventRows,$scope.metSelection)
+
+  $scope.$watch 'metSelection.pr', () ->
+    charts.sortEventRows([1.0,1.0,1.0,1.0],$scope.eventRows,$scope.metSelection)
+
+  $scope.$watch 'metSelection.pe', () ->
+    charts.sortEventRows([1.0,1.0,1.0,1.0],$scope.eventRows,$scope.metSelection)
+
+  $scope.$watch 'metSelection.fr', () ->
+    charts.sortEventRows([1.0,1.0,1.0,1.0],$scope.eventRows,$scope.metSelection)
+
   $scope.updateVisibility = (index) ->
     for row in $scope.eventRows
       row.chartConfig.series[index].visible = !$scope.seriesVisibility[index]
