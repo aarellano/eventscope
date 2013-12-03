@@ -180,7 +180,7 @@ app.service 'charts', () ->
         },
 
         rangeSelector : {
-          inputEnabled : false
+          enabled: false
         },
         navigator:{
           enabled:true,
