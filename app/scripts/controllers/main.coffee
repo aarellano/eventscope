@@ -129,6 +129,10 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
     for row in $scope.eventRows
       row.chartConfig.series[index].visible = !$scope.seriesVisibility[index]
 
+  $scope.capitalize = (string) ->
+    if string
+      (string.split(' ').map (word) -> word[0].toUpperCase() + word[1..-1].toLowerCase()).join ' '
+
   # Fetch the default dataset
   $scope.fetchJSON()
 ]
