@@ -23,7 +23,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
   $scope.refEventA = null
   $scope.refEventB = null
   $scope.selectedDataset = $scope.datasets[0]
-  $scope.metSelection = {'or': true, 'pr':false, 'pe':false, 'fr':false}
+  $scope.metSelection = {'or': true, 'pr':false, 'std':false, 'fr':false}
   $scope.seriesVisibility = [true, true]
   $scope.refEvtColors = ['rgb(255,154,0)','rgb(0,100,178)']
   ###########################################################
@@ -38,7 +38,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
     useHighStocks:true
   }
 
-  $scope.metrics = [ { name:'Occurrence Ratio', id:'or' }, { name:'Peak Ratio', id:'pr' }, { name:'Periodicity', id:'pe' }, {name:'Frequency', id:'fr' } ]
+  $scope.metrics = [ { name:'Occurrence Ratio', id:'or' }, { name:'Peak Ratio', id:'pr' }, { name:'Standard Dev.', id:'std' }, {name:'Frequency', id:'fr' } ]
 
   $scope.eventRows = []
   $scope.mainChart = {'name':null, 'config':blankMainChartConfig}
@@ -119,7 +119,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
   $scope.$watch 'metSelection.pr', () ->
     charts.sortEventRows([1.0,1.0,1.0,1.0],$scope.eventRows,$scope.metSelection)
 
-  $scope.$watch 'metSelection.pe', () ->
+  $scope.$watch 'metSelection.std', () ->
     charts.sortEventRows([1.0,1.0,1.0,1.0],$scope.eventRows,$scope.metSelection)
 
   $scope.$watch 'metSelection.fr', () ->
