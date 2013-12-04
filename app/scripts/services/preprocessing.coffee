@@ -179,8 +179,9 @@ app.service 'preprocess', () ->
             hists[eventType][refEvent][i] = {y:0,x:(i - halfNumBins)*binSizeMilis + halfBinSize}
 
     computeBinNumber = (refTime, nonrefTime) ->
-      bin = Math.round(refTime.diff(nonrefTime) / binSizeMilis) + (halfNumBins)
-
+      # bin = Math.round(refTime.diff(nonrefTime) / binSizeMilis) + (halfNumBins)
+      bin = Math.round(nonrefTime.diff(refTime) / binSizeMilis) + (halfNumBins)
+	  
     for record in records
       occursNonref = {}
       occursRef = {}
