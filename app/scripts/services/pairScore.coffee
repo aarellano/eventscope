@@ -113,12 +113,8 @@ app.service 'pairScore', () ->
           after = after + timeSeries[i].y
         else if timeSeries[i].x < 0
           before = before + timeSeries[i].y
-      if( after > before )
-        result = ((2.0 * this.max(before, after))/(before + after)) - 1
-      else if ( before > after )
-        result = -1.0*(((2.0 * this.max(before, after))/(before + after)) - 1)
-      else
-        result = 0
+      result = 2.0 * this.max(before, after)/(before + after) - 1.0
+      
     return result
 
   this.CoOccurence = (timeSeries, ref) ->
@@ -223,12 +219,7 @@ app.service 'pairScore', () ->
         else if peaks[i] < refIdx
           before = before + 1
         # else, do nothing ignore it
-    if( after > before )
-        result = ((2.0 * this.max(before, after))/(before + after)) - 1
-    else if ( before > after )
-        result = -1.0*(((2.0 * this.max(before, after))/(before + after)) - 1)
-    else
-        result = 0
+    result = 2.0 * this.max(before, after)/(before + after) - 1
     return result
 
   this.fft = (ts) ->
