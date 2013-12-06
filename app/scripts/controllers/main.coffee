@@ -23,6 +23,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
   $scope.refEventA = null
   $scope.refEventB = null
   $scope.selectedDataset = $scope.datasets[0]
+  window.sd = $scope.selectedDataset
   $scope.metSelection = {'or': true, 'pr':false, 'std':false, 'fr':false}
   $scope.seriesVisibility = [true, true]
   $scope.refEvtColors = ['rgb(255,154,0)','rgb(0,100,178)']
