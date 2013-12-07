@@ -136,4 +136,21 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
 
   # Fetch the default dataset
   $scope.fetchJSON()
+
+  $scope.tooltips =
+    ocurrences:
+      title: "Before or after"
+      desc: "The occurrence metric finds whether the reference event occurs predominantly before or after the non-reference event rather than being scattered in both directions"
+    peaks:
+      title: "The title"
+      desc: "Long description"
+    std_dev:
+      title: "The title"
+      desc: "Long description"
+    frequency:
+      title: "The title"
+      desc: "Long description"
+    show_hide:
+      desc: "Toggle to hide/show histograms"
+
 ]

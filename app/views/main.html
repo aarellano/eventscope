@@ -15,7 +15,7 @@
             <thead>
               <tr>
                 <th style="width: 80%">
-                  <div class="btn-group" bs-buttons-checkbox>
+                  <div class="btn-group" popover="{{tooltips.show_hide.desc}}" popover-trigger="mouseenter" popover-popup-delay='500' popover-placement="right" bs-buttons-checkbox>
                     <button type="button" class="btn btn-warning" ng-model="seriesVisibility[0]" ng-click="updateVisibility(0)">{{capitalize(refEventA)}}</button>
                     <button type="button" class="btn btn-primary" ng-model="seriesVisibility[1]" ng-click="updateVisibility(1)">{{capitalize(refEventB)}}</button>
                   </div>
@@ -66,10 +66,10 @@
     <div class="span4"><span class="label caption">Metric</span></div>
     <div class="clearfix"></div>
     <div class="btn-group" bs-buttons-checkbox>
-      <button type="button" class="btn btn-success" ng-model="metSelection.or">Occurrences</button>
-      <button type="button" class="btn btn-success" ng-model="metSelection.pr">Peaks</button>
-      <button type="button" class="btn btn-success" ng-model="metSelection.std">Standard Dev.</button>
-      <button type="button" class="btn btn-success" ng-model="metSelection.fr">Frequency</button>
+      <button type="button" class="btn btn-success" ng-model="metSelection.or" popover-title="{{tooltips.ocurrences.title}}" popover="{{tooltips.ocurrences.desc}}" popover-trigger="mouseenter" popover-popup-delay='500'>Occurrences</button>
+      <button type="button" class="btn btn-success" ng-model="metSelection.pr" popover-title="{{tooltips.ocurrences.title}}" popover="{{tooltips.ocurrences.desc}}" popover-trigger="mouseenter" popover-popup-delay='500'>Peaks</button>
+      <button type="button" class="btn btn-success" ng-model="metSelection.std" popover-title="{{tooltips.ocurrences.title}}" popover="{{tooltips.ocurrences.desc}}" popover-trigger="mouseenter" popover-popup-delay='500'>Standard Dev.</button>
+      <button type="button" class="btn btn-success" ng-model="metSelection.fr" popover-title="{{tooltips.ocurrences.title}}" popover="{{tooltips.ocurrences.desc}}" popover-trigger="mouseenter" popover-popup-delay='500'>Frequency</button>
     </div>
     <hr>
       <div class="span4"><span class="label caption">Time bin size</span ></div>
