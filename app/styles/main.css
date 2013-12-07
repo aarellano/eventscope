@@ -30,6 +30,7 @@ footer {
 
 .table td {
   vertical-align: middle;
+  cursor: pointer;
 }
 
 hr {

@@ -27,6 +27,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
   $scope.metSelection = {'or': true, 'pr':false, 'std':false, 'fr':false}
   $scope.seriesVisibility = [true, true]
   $scope.refEvtColors = ['rgb(255,154,0)','rgb(0,100,178)']
+  $scope.selectedRow = null
   ###########################################################
 
   blankMainChartConfig = {
@@ -77,8 +78,14 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
         $scope.updateHistograms()
       )
 
-  $scope.updateMainChart = (eventData) ->
-    charts.configureMainChart(eventData,$scope.mainChart,$scope.refEvtColors)
+  $scope.updateSelectedRow = (eventData) ->
+    $scope.selectedRow = eventData
+    updateMainChart()
+
+  updateMainChart = () ->
+    if $scope.selectedRow is null
+      $scope.selectedRow = {'name':$scope.eventRows[0].eventName, 'series':$scope.eventRows[0].chartConfig.series}
+    charts.configureMainChart($scope.selectedRow,$scope.mainChart,$scope.refEvtColors)
 
   $scope.updateHistograms = () ->
     if $scope.refEventA and $scope.refEventB
@@ -102,6 +109,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
     $scope.refChoicesA = exclType($scope.refEventB)
 
     $scope.seriesVisibility = [true, true]
+    updateMainChart()
 
   $scope.scoreBgColor = (score,winRef) ->
     if score and winRef != undefined
