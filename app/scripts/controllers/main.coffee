@@ -122,6 +122,10 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
     else
       {}
 
+  $scope.checkActiveRow = (eventData) ->
+    if $scope.selectedRow.name == eventData.name
+      "active-row"
+
   $scope.$watch 'metSelection.or', () ->
     charts.sortEventRows([1.0,1.0,1.0,1.0],$scope.eventRows,$scope.metSelection)
 

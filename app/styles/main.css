@@ -33,6 +33,14 @@ footer {
   cursor: pointer;
 }
 
+.active-row {
+  background-color: rgba(73, 175, 205, 0.4);
+}
+
+.table-hover tbody tr.active-row:hover > td {
+  background-color: transparent;
+}
+
 hr {
   margin: 15px 0;
 }
