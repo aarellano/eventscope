@@ -1,5 +1,5 @@
 body {
-  padding-top: 70px;
+  padding-top: 33px;
 }
 
 footer {
@@ -40,4 +40,17 @@ hr {
   font-weight: normal;
   opacity: 0.5;
   padding: 4px 6px;
+}
+
+#inner-control-panel {
+  padding: 6px 19px 0px 19px;
+}
+
+.navbar .brand {
+  font-size: 18px;
+  line-height: 12px;
+}
+
+div .navbar-inner {
+  min-height: 30px;
 }
