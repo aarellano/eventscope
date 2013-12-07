@@ -54,3 +54,15 @@ hr {
 div .navbar-inner {
   min-height: 30px;
 }
+
+.accordion-group {
+  margin: 0;
+}
+
+.accordion-heading .accordion-toggle {
+  padding: 0;
+}
+
+.accordion-inner {
+  padding: 0;
+}

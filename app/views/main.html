@@ -8,91 +8,99 @@
 
 <div class="container-fluid">
   <div class="row-fluid no-space">
-    <div class="span6">
-      <div class="row-fluid">
-        <div class="span12" ng-show="(selectedDataset != '')">
-          <table class="table table-condensed table-hover span12">
-            <thead>
-              <tr>
-                <th style="width: 80%">
-                  <div class="btn-group" popover="{{tooltips.show_hide.desc}}" popover-trigger="mouseenter" popover-popup-delay='500' popover-placement="right" bs-buttons-checkbox>
-                    <button type="button" class="btn btn-warning" ng-model="seriesVisibility[0]" ng-click="updateVisibility(0)">{{capitalize(refEventA)}}</button>
-                    <button type="button" class="btn btn-primary" ng-model="seriesVisibility[1]" ng-click="updateVisibility(1)">{{capitalize(refEventB)}}</button>
-                  </div>
-                </th>
-                <th style="width: 5%">Score</th>
-                <th style="width: 10%">Event</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="eventRow in eventRows" ng-click="updateMainChart({'name':eventRow.eventName, 'series':eventRow.chartConfig.series})">
-      		      <td><highchart class="mini-chart" config="eventRow.chartConfig"></highchart></td>
-                <td ng-style="scoreBgColor(eventRow.roundedScore,eventRow.winningRef)">{{eventRow.roundedScore}} </td>
-                <td>{{capitalize(eventRow.eventName)}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
 
-        <div class="span11" ng-show="(selectedDataset == '')">
-          <div class="alert alert-block">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <h4>Steps to start ranking patterns</h4>
-            </br>
-            <p>The first thing you need to do is select a dataset from the Dataset dropdown in the Control Panel.</p>
-            <p>After you do that, you can pick the <span class="label label-warning">Reference Event A</span> and <span class="label label-info">Reference Event B</span> that you will be using to compare outcomes.</p>
+    <div class="span6 row-fluid"> <!-- RANKING PANEL -->
+      <div class="span12" ng-show="(selectedDataset != '')">
+        <table class="table table-condensed table-hover span12">
+          <thead>
+            <tr>
+              <th style="width: 80%">
+                <div class="btn-group" popover="{{tooltips.show_hide.desc}}" popover-trigger="mouseenter" popover-popup-delay='500' popover-placement="right" bs-buttons-checkbox>
+                  <button type="button" class="btn btn-warning" ng-model="seriesVisibility[0]" ng-click="updateVisibility(0)">{{capitalize(refEventA)}}</button>
+                  <button type="button" class="btn btn-primary" ng-model="seriesVisibility[1]" ng-click="updateVisibility(1)">{{capitalize(refEventB)}}</button>
+                </div>
+              </th>
+              <th style="width: 5%">Score</th>
+              <th style="width: 10%">Event</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="eventRow in eventRows" ng-click="updateMainChart({'name':eventRow.eventName, 'series':eventRow.chartConfig.series})">
+              <td><highchart class="mini-chart" config="eventRow.chartConfig"></highchart></td>
+              <td ng-style="scoreBgColor(eventRow.roundedScore,eventRow.winningRef)">{{eventRow.roundedScore}} </td>
+              <td>{{capitalize(eventRow.eventName)}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="span11" ng-show="(selectedDataset == '')">
+        <div class="alert alert-block">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <h4>Steps to start ranking patterns</h4>
+        </br>
+        <p>The first thing you need to do is select a dataset from the Dataset dropdown in the Control Panel.</p>
+        <p>After you do that, you can pick the <span class="label label-warning">Reference Event A</span> and <span class="label label-info">Reference Event B</span> that you will be using to compare outcomes.</p>
+      </div>
+    </div>
+  </div> <!-- CLOSES RANKING PANEL -->
+
+  <div class="span6" id="right-side"> <!-- RIGHT SIDE -->
+
+    <accordion close-others="oneAtATime">
+      <accordion-group is-open="true">
+        <accordion-heading>
+          <div class="navbar navbar-inner topper">
+            <span class="brand">Control Panel</span>
+          </div>
+        </accordion-heading>
+
+        <div class="well topper" id="inner-control-panel"><!-- CONTROL PANEL -->
+          <div id="selects">
+            <div class="span4"><span class="label label-warning caption">Reference Event A</span></div>
+            <div class="span4"><span class="label label-info caption">Reference Event B</span></div>
+            <div class="span4"><span class="label caption">Dataset</span></div>
+            <div class="clearfix"></div>
+            <select class="span4" ng-model="refEventA" ng-change="updateHistograms()" data-style="btn-warning" ng-options="capitalize(e) for e in refChoicesA" bs-select>"Pick"</select>
+            <select class="span4" ng-model="refEventB" ng-change="updateHistograms()" data-style="btn-primary" ng-options="capitalize(e) for e in refChoicesB" bs-select></select>
+            <select class="span3" ng-model="selectedDataset" ng-change="fetchJSON()" ng-options="d.name for d in datasets" data-style="btn" bs-select></select>
+          </div>
+          <hr>
+          <div class="span4"><span class="label caption">Metric</span></div>
+          <div class="clearfix"></div>
+          <div class="btn-group" bs-buttons-checkbox>
+            <button type="button" class="btn btn-success" ng-model="metSelection.or" popover-title="{{tooltips.ocurrences.title}}" popover="{{tooltips.ocurrences.desc}}" popover-trigger="mouseenter" popover-popup-delay='500'>Occurrences</button>
+            <button type="button" class="btn btn-success" ng-model="metSelection.pr" popover-title="{{tooltips.ocurrences.title}}" popover="{{tooltips.ocurrences.desc}}" popover-trigger="mouseenter" popover-popup-delay='500'>Peaks</button>
+            <button type="button" class="btn btn-success" ng-model="metSelection.std" popover-title="{{tooltips.ocurrences.title}}" popover="{{tooltips.ocurrences.desc}}" popover-trigger="mouseenter" popover-popup-delay='500'>Standard Dev.</button>
+            <button type="button" class="btn btn-success" ng-model="metSelection.fr" popover-title="{{tooltips.ocurrences.title}}" popover="{{tooltips.ocurrences.desc}}" popover-trigger="mouseenter" popover-popup-delay='500'>Frequency</button>
+          </div>
+          <hr>
+          <div class="span4"><span class="label caption">Time bin size</span ></div>
+          <div class="clearfix"></div>
+          <div class="input-append">
+            <input class="span3" ng-model="binSize" type="number">
+            <select class="span5" ng-model="binSizeUnit" data-style="btn-info" ng-options="u.name for u in binSizeUnits" bs-select></select>
+            <button class="btn" ng-click="updateHistograms()" type="button">Update</button>
+          </div>
+        </div><!-- CLOSES CONTROL PANEL -->
+      </accordion-group>
+
+      <accordion-group is-open="true">
+
+        <div class="row-fluid">
+          <div class="span12">
+            <accordion-heading>
+              <div class="navbar navbar-inner topper">
+                <span class="brand">Details Panel</span>
+              </div>
+            </accordion-heading>
+
+            <div class="well">
+              <highchart config="mainChart.config"></highchart>
+            </div>
           </div>
         </div>
-
-      </div>
-    </div>
-
-    <div class="span6" id="right-side">
-      <!--CONTROL PANEL AREA-->
-      <div class="navbar navbar-inner topper">
-        <span class="brand">Control Panel</span>
-      </div>
-      <div class="well topper" id="inner-control-panel">
-        <div id="selects">
-          <div class="span4"><span class="label label-warning caption">Reference Event A</span></div>
-          <div class="span4"><span class="label label-info caption">Reference Event B</span></div>
-          <div class="span4"><span class="label caption">Dataset</span></div>
-          <div class="clearfix"></div>
-          <select class="span4" ng-model="refEventA" ng-change="updateHistograms()" data-style="btn-warning" ng-options="capitalize(e) for e in refChoicesA" bs-select>"Pick"</select>
-          <select class="span4" ng-model="refEventB" ng-change="updateHistograms()" data-style="btn-primary" ng-options="capitalize(e) for e in refChoicesB" bs-select></select>
-          <select class="span3" ng-model="selectedDataset" ng-change="fetchJSON()" ng-options="d.name for d in datasets" data-style="btn" bs-select></select>
-        </div>
-      <hr>
-    <div class="span4"><span class="label caption">Metric</span></div>
-    <div class="clearfix"></div>
-    <div class="btn-group" bs-buttons-checkbox>
-      <button type="button" class="btn btn-success" ng-model="metSelection.or" popover-title="{{tooltips.ocurrences.title}}" popover="{{tooltips.ocurrences.desc}}" popover-trigger="mouseenter" popover-popup-delay='500'>Occurrences</button>
-      <button type="button" class="btn btn-success" ng-model="metSelection.pr" popover-title="{{tooltips.ocurrences.title}}" popover="{{tooltips.ocurrences.desc}}" popover-trigger="mouseenter" popover-popup-delay='500'>Peaks</button>
-      <button type="button" class="btn btn-success" ng-model="metSelection.std" popover-title="{{tooltips.ocurrences.title}}" popover="{{tooltips.ocurrences.desc}}" popover-trigger="mouseenter" popover-popup-delay='500'>Standard Dev.</button>
-      <button type="button" class="btn btn-success" ng-model="metSelection.fr" popover-title="{{tooltips.ocurrences.title}}" popover="{{tooltips.ocurrences.desc}}" popover-trigger="mouseenter" popover-popup-delay='500'>Frequency</button>
-    </div>
-    <hr>
-      <div class="span4"><span class="label caption">Time bin size</span ></div>
-      <div class="clearfix"></div>
-      <div class="input-append">
-        <input class="span3" ng-model="binSize" type="number">
-        <select class="span5" ng-model="binSizeUnit" data-style="btn-info" ng-options="u.name for u in binSizeUnits" bs-select></select>
-        <button class="btn" ng-click="updateHistograms()" type="button">Update</button>
-      </div>
-  </div>
-  <!--END CONTROL PANEL AREA-->
-  <!--MAIN (bottom-right) CHART AREA-->
-  <div class="row-fluid">
-    <div class="span12">
-      <div class="navbar navbar-inner topper">
-        <span class="brand">Selected Event</span>
-      </div>
-      <div class="well">
-        <highchart config="mainChart.config"></highchart>
-      </div>
-    </div>
-  </div>
-  <!--END MAIN CHART AREA-->
-</div>
-</div>
-</div>
+      </accordion-group>
+    </div><!-- CLOSES RIGHT SIDE -->
+  </div> <!-- CLOSES MAIN ROW -->
+</div><!-- CLOSES MAIN CONTAINER -->
