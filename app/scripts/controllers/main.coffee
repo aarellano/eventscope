@@ -14,20 +14,20 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
   ]
   $scope.refChoicesA = null
   $scope.refChoicesB = null
+  $scope.refEvtColors = ['rgb(255,154,0)','rgb(0,100,178)']
   ###########################################################
 
   ## VARIABLES CONTROLLED BY THE USER IN THE CONTROL PANEL ##
   #size of time bins before/after a reference event
-  $scope.binSize = 30
-  $scope.binSizeUnit = $scope.binSizeUnits[1]
-  $scope.refEventA = null
-  $scope.refEventB = null
-  $scope.selectedDataset = $scope.datasets[0]
-  window.sd = $scope.selectedDataset
-  $scope.metSelection = {'or': true, 'pr':false, 'std':false, 'fr':false}
-  $scope.seriesVisibility = [true, true]
-  $scope.refEvtColors = ['rgb(255,154,0)','rgb(0,100,178)']
-  $scope.selectedRow = null
+  $scope.options =
+    refEventA: null
+    refEventB: null
+    binSize: 30
+    binSizeUnit: $scope.binSizeUnits[1]
+    selectedDataset: $scope.datasets[0]
+    metSelection: {'or': true, 'pr':false, 'std':false, 'fr':false}
+    seriesVisibility: [true, true]
+    selectedRow: null
   ###########################################################
 
   blankMainChartConfig = {
@@ -60,41 +60,41 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
   maxRecordMillis = 0
 
   $scope.fetchJSON = () ->
-    $http.get('datasets/'+$scope.selectedDataset.name+'.json').success(
+    $http.get('datasets/'+$scope.options.selectedDataset.name+'.json').success(
       (data) ->
         #reset time limits
         maxRecordMillis =
           firstTime: moment(95617602000000)#year 5000
           lastTime: 0
         [eventTypes, eventCounts, maxRecordMillis] = preprocess.firstPass(data, records)
-        [$scope.binSize,$scope.binSizeUnit] = preprocess.suggestTimeBin(maxRecordMillis,$scope.binSizeUnits)
+        [$scope.options.binSize,$scope.options.binSizeUnit] = preprocess.suggestTimeBin(maxRecordMillis,$scope.binSizeUnits)
         eventTypes.sort()
         $scope.refChoicesA = eventTypes
         $scope.refChoicesB = eventTypes
         # The following three lines are just to have default reference events selected.
         # It makes developing easier, but we may want to remove them for the production version (in that case we need to make refEventA and B = null)
-        $scope.refEventA = eventTypes[0]
-        $scope.refEventB = eventTypes[1]
+        $scope.options.refEventA = eventTypes[0]
+        $scope.options.refEventB = eventTypes[1]
         $scope.updateHistograms()
       )
 
   $scope.updateSelectedRow = (eventData) ->
-    $scope.selectedRow = eventData
+    $scope.options.selectedRow = eventData
     updateMainChart()
 
   updateMainChart = () ->
-    if $scope.selectedRow is null
-      $scope.selectedRow = {'name':$scope.eventRows[0].eventName, 'series':$scope.eventRows[0].chartConfig.series}
-    charts.configureMainChart($scope.selectedRow,$scope.mainChart,$scope.refEvtColors)
+    if $scope.options.selectedRow is null
+      $scope.options.selectedRow = {'name':$scope.eventRows[0].eventName, 'series':$scope.eventRows[0].chartConfig.series}
+    charts.configureMainChart($scope.options.selectedRow,$scope.mainChart,$scope.refEvtColors)
 
   $scope.updateHistograms = () ->
-    if $scope.refEventA and $scope.refEventB
+    if $scope.options.refEventA and $scope.options.refEventB
       # clear main chart
       $scope.mainChart["config"] = blankMainChartConfig
-      binSizeMillis = $scope.binSize*$scope.binSizeUnit.factor
+      binSizeMillis = $scope.options.binSize * $scope.options.binSizeUnit.factor
       numBins = Math.round(maxRecordMillis / binSizeMillis)
       # These refEvents are hardcoded to be used as examples.
-      refEvents = [$scope.refEventA, $scope.refEventB]
+      refEvents = [$scope.options.refEventA, $scope.options.refEventB]
       timeSeries = preprocess.buildTimeSeries(records, eventTypes, refEvents, binSizeMillis, numBins, eventCounts)
 
       # Drug1 in green, emergecy room in light blue, dark blue is exam
@@ -103,12 +103,12 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
       pairScore.computePairScore(timeSeries)
       $scope.eventRows = []
       charts.configureMinicharts(timeSeries, $scope.eventRows, $scope.refEvtColors)
-      charts.sortEventRows([1.0,1.0,1.0,1.0],$scope.eventRows,$scope.metSelection)
+      charts.sortEventRows([1.0,1.0,1.0,1.0],$scope.eventRows,$scope.options.metSelection)
 
-    $scope.refChoicesB = exclType($scope.refEventA)
-    $scope.refChoicesA = exclType($scope.refEventB)
+    $scope.refChoicesB = exclType($scope.options.refEventA)
+    $scope.refChoicesA = exclType($scope.options.refEventB)
 
-    $scope.seriesVisibility = [true, true]
+    $scope.options.seriesVisibility = [true, true]
     updateMainChart()
 
   $scope.scoreBgColor = (score,winRef) ->
@@ -123,24 +123,24 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
       {}
 
   $scope.checkActiveRow = (eventData) ->
-    if $scope.selectedRow.name == eventData.name
+    if $scope.options.selectedRow.name == eventData.name
       "active-row"
 
-  $scope.$watch 'metSelection.or', () ->
-    charts.sortEventRows([1.0,1.0,1.0,1.0],$scope.eventRows,$scope.metSelection)
+  $scope.$watch 'options.metSelection.or', () ->
+    charts.sortEventRows([1.0,1.0,1.0,1.0],$scope.eventRows,$scope.options.metSelection)
 
-  $scope.$watch 'metSelection.pr', () ->
-    charts.sortEventRows([1.0,1.0,1.0,1.0],$scope.eventRows,$scope.metSelection)
+  $scope.$watch 'options.metSelection.pr', () ->
+    charts.sortEventRows([1.0,1.0,1.0,1.0],$scope.eventRows,$scope.options.metSelection)
 
-  $scope.$watch 'metSelection.std', () ->
-    charts.sortEventRows([1.0,1.0,1.0,1.0],$scope.eventRows,$scope.metSelection)
+  $scope.$watch 'options.metSelection.std', () ->
+    charts.sortEventRows([1.0,1.0,1.0,1.0],$scope.eventRows,$scope.options.metSelection)
 
-  $scope.$watch 'metSelection.fr', () ->
-    charts.sortEventRows([1.0,1.0,1.0,1.0],$scope.eventRows,$scope.metSelection)
+  $scope.$watch 'options.metSelection.fr', () ->
+    charts.sortEventRows([1.0,1.0,1.0,1.0],$scope.eventRows,$scope.options.metSelection)
 
   $scope.updateVisibility = (index) ->
     for row in $scope.eventRows
-      row.chartConfig.series[index].visible = !$scope.seriesVisibility[index]
+      row.chartConfig.series[index].visible = !$scope.options.seriesVisibility[index]
 
   $scope.capitalize = (string) ->
     if string
