@@ -1,5 +1,6 @@
 body {
   padding-top: 33px;
+  min-height: 1000px;
 }
 
 footer {
@@ -7,8 +8,8 @@ footer {
   padding-right: 15px;
 }
 
-.cotainer-fluid {
-  padding: 0 15px;
+.container-fluid {
+  padding: 0;
 }
 
 #right-side {
@@ -25,7 +26,7 @@ footer {
 }
 
 .mini-chart {
-  pointer-events:none;
+  pointer-events: none;
 }
 
 .table td {
@@ -74,4 +75,34 @@ div .navbar-inner {
 
 .accordion-inner {
   padding: 0;
+}
+
+#hide-show {
+  margin: 0;
+}
+
+#hide-show .btn {
+  font-size: 12px;
+  padding: 0px 12px;
+  margin-top: 4px;
+}
+
+#filter-input {
+height: 16px;
+font-size: 12px;
+margin-bottom: 0;
+margin-top: 2px;
+}
+
+thead {
+  background-color: rgba(238,238,238,0.3);
+}
+
+div #ranking-panel-header {
+  position: fixed;
+  z-index: 2;
+}
+
+#ranking-table {
+  margin-top: 34px;
 }

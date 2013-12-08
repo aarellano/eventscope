@@ -9,26 +9,32 @@
 <div class="container-fluid">
   <div class="row-fluid no-space">
 
-    <div class="span6 row-fluid"> <!-- RANKING PANEL -->
+    <div id="left-side" class="span6 row-fluid"> <!-- RANKING PANEL -->
       <div class="span12" ng-show="(selectedDataset != '')">
-        <table class="table table-condensed table-hover span12">
+        <div id="ranking-panel-header" class="span6">
+        <div class="navbar navbar-inner topper" style="padding: 0px 10px;">
+          <span class="brand">Ranking Panel</span>
+          <div id="hide-show" class="btn-group" popover="{{tooltips.show_hide.desc}}" popover-trigger="mouseenter" popover-popup-delay='500' popover-placement="right" bs-buttons-checkbox>
+            <button type="button" class="btn btn-warning" ng-model="seriesVisibility[0]" ng-click="updateVisibility(0)">{{capitalize(refEventA)}}</button>
+            <button type="button" class="btn btn-primary" ng-model="seriesVisibility[1]" ng-click="updateVisibility(1)">{{capitalize(refEventB)}}</button>
+          </div>
+          <input id="filter-input" class="pull-right" type="text" placeholder="Filter events by name">
+        </div>
+      </div>
+
+        <table id="ranking-table" class="table table-condensed table-hover span12">
           <thead>
             <tr>
-              <th style="width: 80%">
-                <div class="btn-group" popover="{{tooltips.show_hide.desc}}" popover-trigger="mouseenter" popover-popup-delay='500' popover-placement="right" bs-buttons-checkbox>
-                  <button type="button" class="btn btn-warning" ng-model="seriesVisibility[0]" ng-click="updateVisibility(0)">{{capitalize(refEventA)}}</button>
-                  <button type="button" class="btn btn-primary" ng-model="seriesVisibility[1]" ng-click="updateVisibility(1)">{{capitalize(refEventB)}}</button>
-                </div>
-              </th>
-              <th style="width: 5%">Score</th>
-              <th style="width: 10%">Event</th>
+              <th style="width: 80%; font-weight: 200; color: #777; text-shadow: 0 1px 0 #fff;">Histograms</th>
+              <th style="width: 5%; font-weight: 200; color: #777; text-shadow: 0 1px 0 #fff;">Score</th>
+              <th style="width: 10%; font-weight: 200; color: #777; text-shadow: 0 1px 0 #fff;">Event</th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="eventRow in eventRows" ng-click="updateSelectedRow({'name':eventRow.eventName, 'series':eventRow.chartConfig.series})" ng-class="checkActiveRow({'name':eventRow.eventName, 'series':eventRow.chartConfig.series})">
-                <td><highchart class="mini-chart" config="eventRow.chartConfig"></highchart></td>
-                <td ng-style="scoreBgColor(eventRow.roundedScore,eventRow.winningRef)">{{eventRow.roundedScore}} </td>
-                <td>{{capitalize(eventRow.eventName)}}</td>
+            <tr style="width: 80%" ng-repeat="eventRow in eventRows" ng-click="updateSelectedRow({'name':eventRow.eventName, 'series':eventRow.chartConfig.series})" ng-class="checkActiveRow({'name':eventRow.eventName, 'series':eventRow.chartConfig.series})">
+                <td style="width: 85%"><highchart class="mini-chart" config="eventRow.chartConfig"></highchart></td>
+                <td style="width: 5%" ng-style="scoreBgColor(eventRow.roundedScore,eventRow.winningRef)">{{eventRow.roundedScore}} </td>
+                <td style="width: 10%">{{capitalize(eventRow.eventName)}}</td>
             </tr>
           </tbody>
         </table>
