@@ -152,16 +152,16 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
   $scope.tooltips =
     ocurrences:
       title: "Before or after"
-      desc: "The occurrence metric finds whether the reference event occurs predominantly before or after the non-reference event rather than being scattered in both directions"
+      desc: "The occurrence metric determines whether the reference event are unevenly distributed before and after the non-reference event. If reference events occur before and after the non-reference event in roughly the same number, a low score will be returned."
     peaks:
-      title: "The title"
-      desc: "Long description"
+      title: "Peaks before or after"
+      desc: "Similar to occurences metrics, this metric determines whether most peaks occur either before or after the non-reference event. Peaks are defined as points in the referene event distribution that are substantially greater than near-by points. "
     std_dev:
-      title: "The title"
-      desc: "Long description"
+      title: "Non-Normal Distributions"
+      desc: "Identifies non-reference event distributions that are not normally distributed. "
     frequency:
-      title: "The title"
-      desc: "Long description"
+      title: "Long Period"
+      desc: "Periodic behavior of reference events is determined. The period is the inverse of the frequency. Reference events with long periods score highly. Reference events with low periods have a low score. "
     show_hide:
       desc: "Toggle to hide/show histograms"
 
