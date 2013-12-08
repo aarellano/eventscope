@@ -9,7 +9,7 @@ app.service 'pairScore', () ->
 
       timeSeries[item].coOccurence   = [this.CoOccurence2(a), this.CoOccurence2(b)]
       timeSeries[item].standardDev   = [this.standardDeviation2(a), this.standardDeviation2(b)]
-      timeSeries[item].peakOccurence = [this.peakOccurence2(a, 100, 3, 0.25), this.peakOccurence2(b, 100, 3, 0.25)]
+      timeSeries[item].peakOccurence = [this.peakOccurence2(a, 100, 3, 0.02), this.peakOccurence2(b, 100, 3, 0.02)]
       timeSeries[item].frequency     = [this.fft2(a), this.fft2(b)]
     this.normalize(timeSeries) # Normalize all values between 0 and 1
 
@@ -142,63 +142,25 @@ app.service 'pairScore', () ->
     #  return nBins + 1
     return Math.floor((( elem - min ) / ( max - min ))* (nbins*1.0))
 
-  this.peak_locs = (timeSeries, nbins, k, threshold, max, min) ->
-    arr = Array(nbins)
-    peaks = Array()
-    for i in [0..nbins-1]
-      arr[i] = 0.0
-    # build a histogram
-    total = 0.0
-    for i in [0..timeSeries.length-1]
-      idx = this.indexof(timeSeries[i], nbins, max, min)
-      arr[idx] = arr[idx] + 1.0
-      total += arr[idx]
-    for i in [0..arr.length-1]
-      arr[idx] = arr[idx]/total
-    # find the number of peaks
-    for i in [k..nbins-2-k]
-      score = (this.arrMax(arr.slice(i-k,k)) + this.arrMax(arr.slice(k,i+1+k))) / 2.0
-      if score > threshold
-        peaks.push(i)
-    return peaks
-
   this.peak_locs2 = (timeSeries, nbins, k, threshold, max, min) ->
     arr = Array(nbins)
     peaks = Array()
+    total = 0.0
     for i in [0..(nbins-1)] #possibly here?
       arr[i] = 0.0
     # build a histogram
     for i in [0..timeSeries.length-1]
       idx = this.indexof(timeSeries[i].x, nbins, max, min)
       arr[idx] = arr[idx] + timeSeries[i].y
+      total += timeSeries[i].y
+    for i in [0..arr.length-1]
+      arr[i] = arr[i]/total
     # find the number of peaks
     for i in [k..nbins-2-k]
-      score = (this.arrMax(arr.slice(i-k)) + this.arrMax(arr.slice(i+1+k))) / 2.0
+      score = (this.arrMax(arr.slice(i-k,i)) + this.arrMax(arr.slice(i+1,i+1+k))) / 2.0
       if score > threshold
         peaks.push(i)
     return peaks
-
-  this.peakOccurence = (timeSeries, ref, nbins, k, threshold) ->
-    max = this.arrMax(timeSeries)
-    min = this.arrMin(timeSeries)
-    peaks = this.peak_locs(timeSeries, nbins, k, threshold, max, min)
-    refIdx = this.indexof(ref, nbins, max, min)
-    before = 0
-    after  = 0
-    result = 0.0
-    for i in [0..peaks.length-1]
-        if peaks[i] > refIdx
-          after = after + 1
-        else if peaks[i] < refIdx
-          before = before + 1
-        # else, do nothing ignore it
-    if( after > before )
-        result = ((2.0 * this.max(before, after))/(before + after)) - 1
-    else if ( before > after )
-        result = -1.0*(((2.0 * this.max(before, after))/(before + after)) - 1)
-    else
-        result = 0
-    return result
 
   # nbins in the number of bins in the hist
   # k is the sliding window for peak detection
@@ -208,17 +170,23 @@ app.service 'pairScore', () ->
         return 0.0
     max = this.arrMax2(timeSeries)
     min = this.arrMin2(timeSeries)
+
     peaks = this.peak_locs2(timeSeries, nbins, k, threshold, max, min)
+    if peaks.length == 0
+      return 0.0
+	  
     refIdx = this.indexof(0, nbins, max, min)
-    before = 0
-    after  = 0
+    before = 0.0
+    after  = 0.0
     result = 0.0
+    
     for i in [0..peaks.length-1]
         if peaks[i] > refIdx
           after = after + 1
         else if peaks[i] < refIdx
           before = before + 1
         # else, do nothing ignore it
+
     result = 2.0 * this.max(before, after)/(before + after) - 1
     return result
 
