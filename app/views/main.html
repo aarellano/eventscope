@@ -19,7 +19,7 @@
             <button type="button" class="btn btn-warning" ng-model="options.seriesVisibility[0]" ng-click="updateVisibility(0)">{{capitalize(options.refEventA)}}</button>
             <button type="button" class="btn btn-primary" ng-model="options.seriesVisibility[1]" ng-click="updateVisibility(1)">{{capitalize(options.refEventB)}}</button>
           </div>
-          <input id="filter-input" class="pull-right" type="text" placeholder="Filter events by name">
+          <input ng-model="searchText" id="filter-input" class="pull-right" type="text" placeholder="Filter events by name">
         </div>
       </div>
 
@@ -32,7 +32,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr style="width: 80%" ng-repeat="eventRow in eventRows" ng-click="updateSelectedRow({'name':eventRow.eventName, 'series':eventRow.chartConfig.series})" ng-class="checkActiveRow({'name':eventRow.eventName, 'series':eventRow.chartConfig.series})">
+            <tr style="width: 80%" ng-repeat="eventRow in eventRows | filter:searchText" ng-click="updateSelectedRow({'name':eventRow.eventName, 'series':eventRow.chartConfig.series})" ng-class="checkActiveRow({'name':eventRow.eventName, 'series':eventRow.chartConfig.series})">
                 <td style="width: 85%"><highchart class="mini-chart" config="eventRow.chartConfig"></highchart></td>
                 <td style="width: 5%" ng-style="scoreBgColor(eventRow.roundedScore,eventRow.winningRef)">{{eventRow.roundedScore}} </td>
                 <td style="width: 10%">{{capitalize(eventRow.eventName)}}</td>
