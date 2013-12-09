@@ -76,6 +76,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
         # It makes developing easier, but we may want to remove them for the production version (in that case we need to make refEventA and B = null)
         $scope.options.refEventA = eventTypes[0]
         $scope.options.refEventB = eventTypes[1]
+        $scope.options.selectedRow = null
         $scope.updateHistograms()
         $scope.$emit('stopSpinner')
       )
