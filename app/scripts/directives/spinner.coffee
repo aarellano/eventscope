@@ -1,6 +1,5 @@
 "use strict"
 app.directive "spinner", ($rootScope) ->
-  console.log "ima directive :)"
   template: "<div ng-show=\"loading\" class=\"spinner-shown\">
               <div class=\"wrapper\">
                 <img src=\"/images/wait.png\"/><br>
