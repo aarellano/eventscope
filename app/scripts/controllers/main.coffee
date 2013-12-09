@@ -60,6 +60,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
   maxRecordMillis = 0
 
   $scope.fetchJSON = () ->
+    $scope.$emit('startSpinner')
     $http.get('datasets/'+$scope.options.selectedDataset.name+'.json').success(
       (data) ->
         #reset time limits
@@ -76,6 +77,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
         $scope.options.refEventA = eventTypes[0]
         $scope.options.refEventB = eventTypes[1]
         $scope.updateHistograms()
+        $scope.$emit('stopSpinner')
       )
 
   $scope.updateSelectedRow = (eventData) ->
