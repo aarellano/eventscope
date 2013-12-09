@@ -6,6 +6,7 @@ app.service 'charts', () ->
     logLoad = (e) ->
       seriesLoaded++
       if(seriesLoaded == seriesToLoad)
+        seriesLoaded = 0
         $(window).delay(100).trigger('resize')
 
 

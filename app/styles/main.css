@@ -87,10 +87,10 @@ div .navbar-inner {
 }
 
 #filter-input {
-height: 16px;
-font-size: 12px;
-margin-bottom: 0;
-margin-top: 2px;
+  height: 16px;
+  font-size: 12px;
+  margin-bottom: 0;
+  margin-top: 2px;
 }
 
 thead {
@@ -112,44 +112,44 @@ div #ranking-panel-header {
 
  /* Spinner */
 
- .spinner {
-   position: absolute;
-   top: 0;
-   right: 0;
-   bottom: 0;
-   left: 0;
- }
+.spinner {
+ position: absolute;
+ top: 0;
+ right: 0;
+ bottom: 0;
+ left: 0;
+}
 
- .spinner.spinner-hidden {
-   z-index: -3000 !important;
- }
+.spinner.spinner-hidden {
+ z-index: -3000 !important;
+}
 
- .spinner.spinner-shown {
-   z-index: 3000 !important;
-   background-color:rgba(0,0,0,0.5);
- }
+.spinner.spinner-shown {
+ z-index: 3000 !important;
+ background-color:rgba(0,0,0,0.5);
+}
 
- .spinner .wrapper {
-   position: fixed;
-   top: 40%;
-   left: 0;
-   right: 0;
-   width: 170px;
-   margin: auto;
-   text-align: center;
-   background-color: #FFFFFF;
-   padding: 20px;
-   border: solid 2px #CCCCCC;
-   -moz-border-radius: 10px;
-   -webkit-border-radius: 10px;
-   -khtml-border-radius: 10px;
-   border-radius: 10px;
- }
+.spinner .wrapper {
+ position: fixed;
+ top: 40%;
+ left: 0;
+ right: 0;
+ width: 170px;
+ margin: auto;
+ text-align: center;
+ background-color: #FFFFFF;
+ padding: 20px;
+ border: solid 2px #CCCCCC;
+ -moz-border-radius: 10px;
+ -webkit-border-radius: 10px;
+ -khtml-border-radius: 10px;
+ border-radius: 10px;
+}
 
- .spinner .wrapper .process-label {
+.spinner .wrapper .process-label {
   padding-left: 10px;
   margin-top: 5px;
   font-weight: 200;
   color: #777;
   text-shadow: 0 1px 0 #fff;
- }
+}
