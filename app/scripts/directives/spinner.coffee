@@ -1,5 +1,5 @@
 "use strict"
-app.directive "spinner", ($rootScope) ->
+angular.module("multifinderApp.directives").directive "spinner", ($rootScope) ->
   template: "<div ng-show=\"loading\" class=\"spinner-shown\">
               <div class=\"wrapper\">
                 <img src=\"/images/wait.png\"/><br>
