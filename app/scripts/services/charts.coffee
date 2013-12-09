@@ -61,7 +61,14 @@ app.service 'charts', () ->
               color: '#b94a48',
               dashStyle: 'ShortDot',
               width: 2,
-              zIndex: 3
+              zIndex: 3,
+              label:{
+                text:eventType,
+                rotation:0,
+                style:{
+                  color: "#b94a48"
+                }
+              }
             }],
             labels:{
               enabled: false
@@ -185,7 +192,6 @@ app.service 'charts', () ->
             return tip
 
         },
-
         rangeSelector : {
           enabled: false
         },
@@ -211,6 +217,11 @@ app.service 'charts', () ->
             formatter:()->formatRelativeTime(this.value)
           }
         },
+        yAxis:{
+          title:{
+            text:"Ratio of Occurences"
+          }
+        }
       },
       title:{
         text:eventData.name
