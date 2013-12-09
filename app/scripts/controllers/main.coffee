@@ -87,7 +87,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
 
   updateMainChart = () ->
     if $scope.options.selectedRow is null
-      $scope.options.selectedRow = {'name':$scope.eventRows[0].eventName, 'series':$scope.eventRows[0].chartConfig.series}
+      $scope.options.selectedRow = {'name': $scope.capitalize($scope.eventRows[0].eventName), 'series':$scope.eventRows[0].chartConfig.series}
     charts.configureMainChart($scope.options.selectedRow,$scope.mainChart,$scope.refEvtColors)
 
   $scope.updateHistograms = () ->
