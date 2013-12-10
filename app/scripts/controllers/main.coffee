@@ -178,5 +178,5 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
     co_oc_threshold:
       title: "Minimum Co-occurence Percentage Threshold"
       desc: "This is a way to weed out cases where co-occurences of reference events with the third event are too sparse. 
-      If the percentage of both reference events co-occuring with some non-reference event falls below this threshold, a row for this non-reference event will not be generated."
+      If the percentages of both reference events co-occuring with some non-reference event falls below this threshold, a row for this non-reference event will not be generated."
 ]
