@@ -34,12 +34,14 @@ app.service 'charts', () ->
       seriesArray[0].visible = true
       seriesArray[1].visible = true
 
+      capitalize = (string) -> (string.split(' ').map (word) -> S(word).capitalize()).join ' '
+
       config = {
         #series-specific options
         options: {
           chart: {
             type: 'areaspline',
-            margin: [0, 0, 0, 0],
+            margin: [2, 2, 2, 2],
             spacingTop: 0,
             spacingBottom: 0,
             spacingLeft: 0,
@@ -64,7 +66,7 @@ app.service 'charts', () ->
               width: 2,
               zIndex: 3,
               label:{
-                text:eventType,
+                text:capitalize(eventType),
                 rotation:0,
                 style:{
                   color: "#b94a48"

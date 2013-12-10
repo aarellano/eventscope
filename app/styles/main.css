@@ -104,6 +104,10 @@ thead {
   background-color: rgba(238,238,238,0.3);
 }
 
+th{
+  font-weight: 200; color: #777; text-shadow: 0 1px 0 #fff;
+}
+
 div #ranking-panel-header {
   position: fixed;
   z-index: 2;

@@ -147,7 +147,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
 
   $scope.capitalize = (string) ->
     if string
-      (string.split(' ').map (word) -> word[0].toUpperCase() + word[1..-1].toLowerCase()).join ' '
+      (string.split(' ').map (word) -> S(word).capitalize()).join ' '
 
   # Fetch the default dataset
   $scope.fetchJSON()
@@ -162,10 +162,10 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
       desc: "Similar to occurences metrics, this metric determines whether most peaks occur either before or after the non-reference event.
       Peaks are defined as points in the referene event distribution that are substantially greater than near-by points. "
     std_dev:
-      title: "Non-Normal Distributions"
+      title: "Non-normal distributions"
       desc: "Identifies non-reference event distributions that are not normally distributed. "
     frequency:
-      title: "Long Period"
+      title: "Long period"
       desc: "Periodic behavior of reference events is determined. The period is the inverse of the frequency. Reference events with long periods score highly.
       Reference events with low periods have a low score. "
     show_hide:
