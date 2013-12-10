@@ -118,7 +118,7 @@ app.service 'charts', () ->
         scoreA += coef0*row.coOccurence[0]
         scoreB += coef0*row.coOccurence[1]
         divisor += coef0
-      if metrics['pe']
+      if metrics['pr']
         scoreA += coef1*row.peakOccurence[0]
         scoreB += coef1*row.peakOccurence[1]
         divisor += coef1
