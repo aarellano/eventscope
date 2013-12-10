@@ -8,7 +8,7 @@ app.service 'pairScore', () ->
       b = timeSeries[item][1].data
 
       timeSeries[item].coOccurence   = [this.coOccurence(a), this.coOccurence(b)]
-      timeSeries[item].peakOccurence = [this.peakOccurence(a, 100, 3, 0.25), this.peakOccurence(b, 100, 3, 0.25)]
+      timeSeries[item].peakOccurence = [this.peakOccurence(a, 100, 3, 0.02), this.peakOccurence(b, 100, 3, 0.02)]
       timeSeries[item].standardDev   = [this.standardDeviation(a), this.standardDeviation(b)]
       timeSeries[item].frequency     = [this.fft(a), this.fft(b)]
     this.normalize(timeSeries) # Normalize all values between 0 and 1
@@ -35,6 +35,17 @@ app.service 'pairScore', () ->
       if arr[i].x > m
         m = arr[i].x
     return m
+
+  this.arrArgMax = (arr) ->
+    if(arr.length <= 0)
+       return 0.0
+    argMax = arr[0]
+    maxMax = 0
+    for i in [0..arr.length-1]
+      if arr[i] > maxMax
+        maxMax = arr[i]
+        argMax = i
+    return argMax
 
   this.arrMin = (arr) ->
       if(arr.length <= 0)
@@ -119,15 +130,21 @@ app.service 'pairScore', () ->
   # k is the sliding window for peak detection
   # threshold is the threshold for peak detection
   this.peakOccurence = (timeSeries, nbins, k, threshold) ->
-    if(timeSeries.length <= 1)
+    if(timeSeries.length <= 0)
         return 0.0
+        
     max = this.serieMax(timeSeries)
     min = this.serieMin(timeSeries)
+
     peaks = this.findPeakLocations(timeSeries, nbins, k, threshold, max, min)
+    if peaks.length == 0
+      return 0.0
+
     refIdx = this.indexof(0, nbins, max, min)
     before = 0
     after  = 0
     result = 0.0
+
     for i in [0...peaks.length]
         if peaks[i] > refIdx
           after = after + 1

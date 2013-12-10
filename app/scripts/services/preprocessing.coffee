@@ -224,8 +224,8 @@ app.service 'preprocess', () ->
         #if newHist.length > 0
           #normalize
         refCount = eventCounts[refEvtType]
-          # for point in newHist
-          #   point.y = point.y/refCount
+        for point in newHist
+          point.y = point.y/refCount
         series.push({'name': refEvtType, 'data': newHist})
       if(series[0].data.length > 0  or series[1].data.length > 0)
         hists[evtType] = series
