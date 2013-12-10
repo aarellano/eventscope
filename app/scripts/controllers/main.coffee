@@ -28,7 +28,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
     metSelection: {'or': true, 'pr':false, 'std':false, 'fr':false}
     seriesVisibility: [true, true]
     selectedRow: null
-    filterRatio: 0.2
+    filterRatio: 20.0
 
   ###########################################################
 
