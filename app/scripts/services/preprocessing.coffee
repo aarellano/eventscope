@@ -227,7 +227,7 @@ app.service 'preprocess', () ->
         for point in newHist
           point.y = point.y/refCount
           total += point.y
-        if(total < filterRatio)
+        if(total*100 < filterRatio)
           nSeriesBelowMin += 1
         series.push({'name': refEvtType, 'data': newHist})
       if((series[0].data.length > 0  or series[1].data.length > 0) and nSeriesBelowMin < 2)

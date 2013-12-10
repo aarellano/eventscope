@@ -91,16 +91,21 @@ app.service 'pairScore', () ->
     return Math.sqrt(difference/items)
 
   this.coOccurence = (timeSeries) ->
+    #Calculate co-occurence ratios for
+    #occurences before 0 and occurences after 0
+    #relative to total number of occurences
+    #
     before = 0
     after  = 0
-    result = 0.0
+    result = [0.0, 0.0]
     if(timeSeries.length > 0)
       for i in [0..timeSeries.length-1]
         if timeSeries[i].x > 0
           after = after + timeSeries[i].y
         else if timeSeries[i].x < 0
           before = before + timeSeries[i].y
-      result = 2.0 * this.max(before, after)/(before + after) - 1.0
+      total = before + after
+      result = [before / total, after / total]
     return result
 
   this.indexof = (elem, nbins, max, min) ->
