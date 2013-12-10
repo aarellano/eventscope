@@ -139,6 +139,14 @@ app.service 'charts', () ->
 
       if scoreA > scoreB then row.winningRef = 0 else row.winningRef = 1
     eventRows.sort( (a,b) -> return (b.roundedScore - a.roundedScore))
+    colors = ['#b94a48','#000000']
+    ixRow = 0
+    for row in eventRows
+      color = colors[ixRow % 2]
+      pltLine = row.chartConfig.options.xAxis.plotLines[0] 
+      pltLine.color = color
+      pltLine.label.style.color = color
+      ixRow +=1
 
 
   this.configureMainChart = (eventData,chart,colors) ->
