@@ -188,7 +188,7 @@ app.service 'pairScore', () ->
       x_mag[k] = Math.sqrt(Math.pow(x_real[k], 2) + Math.pow(x_imag[k], 2))
     return 1.0/this.arrMax(x_mag)
 
-  this.scale = (value, max, min) ->
+  this.scale = (value, min, max) ->
     if max == min
       return 0.0
     return (value - min)/(max - min)
@@ -200,12 +200,13 @@ app.service 'pairScore', () ->
     minCo = mi; minSt = mi; minPk = mi; minFr = mi;
     for item in Object.keys(timeSeries)
       maxCo = this.max(maxCo, this.arrMax(timeSeries[item].coOccurence))
-      minCo = this.min(minCo, this.arrMin(timeSeries[item].coOccurence))
       maxSt = this.max(maxSt, this.arrMax(timeSeries[item].standardDev))
-      minSt = this.min(minSt, this.arrMin(timeSeries[item].standardDev))
       maxPk = this.max(maxPk, this.arrMax(timeSeries[item].peakOccurence))
-      minPk = this.min(minPk, this.arrMin(timeSeries[item].peakOccurence))
       maxFr = this.max(maxFr, this.arrMax(timeSeries[item].frequency))
+
+      minCo = this.min(minCo, this.arrMin(timeSeries[item].coOccurence))
+      minSt = this.min(minSt, this.arrMin(timeSeries[item].standardDev))
+      minPk = this.min(minPk, this.arrMin(timeSeries[item].peakOccurence))
       minFr = this.min(minFr, this.arrMin(timeSeries[item].frequency))
 
     for item in Object.keys(timeSeries)
