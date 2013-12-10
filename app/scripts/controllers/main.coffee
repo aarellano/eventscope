@@ -28,6 +28,8 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
     metSelection: {'or': true, 'pr':false, 'std':false, 'fr':false}
     seriesVisibility: [true, true]
     selectedRow: null
+    filterRatio: 0.0
+
   ###########################################################
 
   blankMainChartConfig = {
@@ -98,7 +100,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
       numBins = Math.round(maxRecordMillis / binSizeMillis)
       # These refEvents are hardcoded to be used as examples.
       refEvents = [$scope.options.refEventA, $scope.options.refEventB]
-      timeSeries = preprocess.buildTimeSeries(records, eventTypes, refEvents, binSizeMillis, numBins, eventCounts)
+      timeSeries = preprocess.buildTimeSeries(records, eventTypes, refEvents, binSizeMillis, numBins, eventCounts, $scope.options.filterRatio)
 
       # Drug1 in green, emergecy room in light blue, dark blue is exam
       # Sortable is a list of string event names, sorted by their interesting-ness score

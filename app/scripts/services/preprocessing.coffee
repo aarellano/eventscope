@@ -117,7 +117,7 @@ app.service 'preprocess', () ->
       #return in biggest units
       [Math.round(binSizeMillis / curUnit.factor), curUnit]
 
-  this.buildTimeSeries = (records, eventTypes, refEvents, binSizeMilis, numBins, eventCounts) ->
+  this.buildTimeSeries = (records, eventTypes, refEvents, binSizeMilis, numBins, eventCounts, filterRatio) ->
     #Creates 2 frequency series for each non-reference event, one relative to each of the
     #reference events.
     #@param records: event records (arrays of events pertaining to the same sequence), where
@@ -213,6 +213,7 @@ app.service 'preprocess', () ->
     #make a quick pass eliminating the zeroes
     for evtType of hists
       series = []
+      nSeriesBelowMin = 0
       for refEvtType of hists[evtType]
         hist = hists[evtType][refEvtType]
         ixFirst = 0
@@ -221,13 +222,17 @@ app.service 'preprocess', () ->
         ixLast = hist.length-1
         ixLast-- while ixLast >= 0 and not hist[ixLast].y
         newHist = hist[ixFirst..ixLast]
-        #if newHist.length > 0
-          #normalize
         refCount = eventCounts[refEvtType]
+        total = 0.0
         for point in newHist
           point.y = point.y/refCount
+          total += point.y
+        console.log(total)
+        console.log(filterRatio)
+        if(total < filterRatio)
+          nSeriesBelowMin += 1
         series.push({'name': refEvtType, 'data': newHist})
-      if(series[0].data.length > 0  or series[1].data.length > 0)
+      if((series[0].data.length > 0  or series[1].data.length > 0) and nSeriesBelowMin < 2)
         hists[evtType] = series
       else
         delete hists[evtType]
