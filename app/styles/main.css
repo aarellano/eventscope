@@ -11,6 +11,11 @@ footer {
   padding: 0;
 }
 
+#left-side {
+  float:left;
+  width:50%;
+}
+
 #right-side {
   position: fixed;
   right: 0;
@@ -18,10 +23,6 @@ footer {
 
 .topper {
   margin-bottom: 0;
-}
-
-#right-side {
-  position: fixed;
 }
 
 .mini-chart {
@@ -43,6 +44,12 @@ footer {
 
 hr {
   margin: 15px 0;
+}
+
+div .mini-chart{
+  position:absolute;
+  top:0;
+  width:98%;
 }
 
 .label.caption {
