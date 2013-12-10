@@ -139,7 +139,7 @@ app.service 'charts', () ->
 
       if scoreA > scoreB then row.winningRef = 0 else row.winningRef = 1
     eventRows.sort( (a,b) -> return (b.roundedScore - a.roundedScore))
-    colors = ['#b94a48','#000000']
+    colors = ['#b94a48','#2D2D2D']
     ixRow = 0
     for row in eventRows
       color = colors[ixRow % 2]

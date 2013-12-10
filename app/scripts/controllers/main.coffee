@@ -157,12 +157,12 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
   $scope.tooltips =
     ocurrences:
       title: "Before or after"
-      desc: "The occurrence metric determines whether the reference event are unevenly distributed before and after the non-reference event.
-      If reference events occur before and after the non-reference event in roughly the same number, a low score will be returned."
+      desc: "The occurrence metric determines whether the reference event occurences are dominant either before and after the non-reference event.
+      If roughly equal numbers of reference events occur before and after, a low score will be returned."
     peaks:
       title: "Peaks before or after"
       desc: "Similar to occurences metrics, this metric determines whether most peaks occur either before or after the non-reference event.
-      Peaks are defined as points in the referene event distribution that are substantially greater than near-by points. "
+      Peaks are defined as points in the referene event distribution that are substantially greater than nearby points. "
     std_dev:
       title: "Non-normal distributions"
       desc: "Identifies non-reference event distributions that are not normally distributed. "
@@ -173,9 +173,10 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
     show_hide:
       desc: "Toggle to hide/show histograms"
     time_bin_size:
-      title: "Time Bin Size Title"
-      desc: "Time Bin Size Description"
+      title: "Time Bin Size"
+      desc: "Length of time intervals for which co-occurences are counted up. These are the minimum units along the abscissa."
     co_oc_threshold:
-      title: "Co-Ocurrences Threshold Title"
-      desc: "Co-Ocurrences Threshold Description"
+      title: "Minimum Co-occurence Percentage Threshold"
+      desc: "This is a way to weed out cases where co-occurences of reference events with the third event are too sparse. 
+      If the percentage of both reference events co-occuring with some non-reference event falls below this threshold, a row for this non-reference event will not be generated."
 ]
