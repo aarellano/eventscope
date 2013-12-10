@@ -99,9 +99,9 @@ app.service 'preprocess', () ->
 
   this.suggestTimeBin = (maxRecordMillis, binTimeUnits) ->
     #@param
-    #sugguest closest whole time unit to making 20 bins / record,
-    #or 20 on either side of the ref event (40 total)
-    binSizeMillis = maxRecordMillis / 40
+    #sugguest closest whole time unit to making 40 bins / record,
+    #or 40 on either side of the ref event (80 total)
+    binSizeMillis = maxRecordMillis / 80
     curUnit = binTimeUnits[0]
     if binSizeMillis < curUnit.factor
       [1,curUnit]
@@ -221,13 +221,13 @@ app.service 'preprocess', () ->
         ixLast = hist.length-1
         ixLast-- while ixLast >= 0 and not hist[ixLast].y
         newHist = hist[ixFirst..ixLast]
-        if newHist.length > 0
+        #if newHist.length > 0
           #normalize
-          refCount = eventCounts[refEvtType]
-          for point in newHist
-            point.y = point.y/refCount
-          series.push({'name': refEvtType, 'data': newHist})
-      if(series.length == 2)
+        refCount = eventCounts[refEvtType]
+          # for point in newHist
+          #   point.y = point.y/refCount
+        series.push({'name': refEvtType, 'data': newHist})
+      if(series[0].data.length > 0  or series[1].data.length > 0)
         hists[evtType] = series
       else
         delete hists[evtType]

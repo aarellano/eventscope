@@ -117,7 +117,7 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
   $scope.$watch 'metSelection.or', () ->
     charts.sortEventRows([1.0,1.0,1.0,1.0],$scope.eventRows,$scope.metSelection)
 
-  $scope.$watch 'metSelection.pr', () ->
+  $scope.$watch 'metSelection.pe', () ->
     charts.sortEventRows([1.0,1.0,1.0,1.0],$scope.eventRows,$scope.metSelection)
 
   $scope.$watch 'metSelection.std', () ->

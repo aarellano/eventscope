@@ -7,10 +7,10 @@ app.service 'pairScore', () ->
       a = timeSeries[item][0].data
       b = timeSeries[item][1].data
 
-      timeSeries[item].coOccurence   = [this.CoOccurence2(a), this.CoOccurence2(b)]
-      timeSeries[item].standardDev   = [this.standardDeviation2(a), this.standardDeviation2(b)]
-      timeSeries[item].peakOccurence = [this.peakOccurence2(a, 100, 3, 0.25), this.peakOccurence2(b, 100, 3, 0.25)]
-      timeSeries[item].frequency     = [this.fft2(a), this.fft2(b)]
+      timeSeries[item].coOccurence   = [this.coOccurence(a), this.coOccurence(b)]
+      timeSeries[item].peakOccurence = [this.peakOccurence(a, 100, 3, 0.25), this.peakOccurence(b, 100, 3, 0.25)]
+      timeSeries[item].standardDev   = [this.standardDeviation(a), this.standardDeviation(b)]
+      timeSeries[item].frequency     = [this.fft(a), this.fft(b)]
     this.normalize(timeSeries) # Normalize all values between 0 and 1
 
   this.max = (a, b) ->
@@ -18,7 +18,16 @@ app.service 'pairScore', () ->
       return a
     return b
 
-  this.arrMax2 = (arr) ->
+  this.arrMax = (arr) ->
+      if(arr.length <= 0)
+         return 0.0
+      m = arr[0]
+      for i in [0..(arr.length-1)]
+        if arr[i] > m
+          m = arr[i]
+      return m
+
+  this.serieMax = (arr) ->
     if(arr.length <= 0)
        return 0.0
     m = arr[0].x
@@ -27,27 +36,16 @@ app.service 'pairScore', () ->
         m = arr[i].x
     return m
 
-  this.arrMax = (arr) ->
-    if(arr.length <= 0)
-       return 0.0
-    m = arr[0]
-    for i in [0..arr.length-1]
-      if arr[i] > m
-        m = arr[i]
-    return m
+  this.arrMin = (arr) ->
+      if(arr.length <= 0)
+         return 0.0
+      m = arr[0]
+      for i in [0..(arr.length-1)]
+        if arr[i] < m
+          m = arr[i]
+      return m
 
-  this.arrArgMax = (arr) ->
-    if(arr.length <= 0)
-       return 0.0
-    argMax = arr[0]
-    maxMax = 0
-    for i in [0..arr.length-1]
-      if arr[i] > maxMax
-        maxMax = arr[i]
-        argMax = i
-    return argMax
-
-  this.arrMin2 = (arr) ->
+  this.serieMin = (arr) ->
     if(arr.length <= 0)
        return 0.0
     m = arr[0].x
@@ -61,22 +59,7 @@ app.service 'pairScore', () ->
       return a
     return b
 
-  this.arrMin = (arr) ->
-    if(arr.length <= 0)
-       return 0.0
-    m = arr[0]
-    for i in [0..arr.length-1]
-     if arr[i] < m
-        m = arr[i]
-    return m
-
   this.mean = (arr) ->
-    sum = 0.0
-    for i in [0..arr.length-1]
-      sum += arr[i]
-    return sum/arr.length
-
-  this.mean2 = (arr) ->
     sum = 0.0
     items = 0.0
     for i in [0..arr.length-1]
@@ -85,10 +68,10 @@ app.service 'pairScore', () ->
       items += arr[i].y
     return sum/items
 
-  this.standardDeviation2 = (a) ->
-    if(a.length <= 0)
+  this.standardDeviation = (a) ->
+    if(a.length == 0)
        return 0.0
-    mean = this.mean2(a)
+    mean = this.mean(a)
     items = 0.0
     difference = 0.0
     for i in [0..a.length-1]
@@ -96,14 +79,7 @@ app.service 'pairScore', () ->
       items += a[i].y
     return Math.sqrt(difference/items)
 
-  this.standardDeviation = (timeSeries) ->
-   #this.mean(timeSeries)
-    difference = 0.0
-    for i in [0..timeSeries.length-1]
-      difference = difference + Math.pow(mean - timeSeries[i], 2)
-    return Math.sqrt(difference/timeSeries.length)
-
-  this.CoOccurence2 = (timeSeries) ->
+  this.coOccurence = (timeSeries) ->
     before = 0
     after  = 0
     result = 0.0
@@ -114,25 +90,6 @@ app.service 'pairScore', () ->
         else if timeSeries[i].x < 0
           before = before + timeSeries[i].y
       result = 2.0 * this.max(before, after)/(before + after) - 1.0
-      
-    return result
-
-  this.CoOccurence = (timeSeries, ref) ->
-    before = 0
-    after  = 0
-    result = 0.0
-    for i in [0..timeSeries.length-1]
-        if timeSeries[i] > ref
-          after = after + 1
-        else if timeSeries[i] < ref
-          before = before + 1
-        # else, do nothing ignore it
-    if( after > before )
-        result = ((2.0 * this.max(before, after))/(before + after)) - 1
-    else if ( before > after )
-        result = -1.0*(((2.0 * this.max(before, after))/(before + after)) - 1)
-    else
-        result = 0
     return result
 
   this.indexof = (elem, nbins, max, min) ->
@@ -142,78 +99,36 @@ app.service 'pairScore', () ->
     #  return nBins + 1
     return Math.floor((( elem - min ) / ( max - min ))* (nbins*1.0))
 
-  this.peak_locs = (timeSeries, nbins, k, threshold, max, min) ->
+  this.findPeakLocations = (timeSeries, nbins, k, threshold, max, min) ->
     arr = Array(nbins)
     peaks = Array()
-    for i in [0..nbins-1]
+    for i in [0...nbins] #possibly here?
       arr[i] = 0.0
     # build a histogram
-    total = 0.0
-    for i in [0..timeSeries.length-1]
-      idx = this.indexof(timeSeries[i], nbins, max, min)
-      arr[idx] = arr[idx] + 1.0
-      total += arr[idx]
-    for i in [0..arr.length-1]
-      arr[idx] = arr[idx]/total
-    # find the number of peaks
-    for i in [k..nbins-2-k]
-      score = (this.arrMax(arr.slice(i-k,k)) + this.arrMax(arr.slice(k,i+1+k))) / 2.0
-      if score > threshold
-        peaks.push(i)
-    return peaks
-
-  this.peak_locs2 = (timeSeries, nbins, k, threshold, max, min) ->
-    arr = Array(nbins)
-    peaks = Array()
-    for i in [0..(nbins-1)] #possibly here?
-      arr[i] = 0.0
-    # build a histogram
-    for i in [0..timeSeries.length-1]
+    for i in [0...timeSeries.length]
       idx = this.indexof(timeSeries[i].x, nbins, max, min)
       arr[idx] = arr[idx] + timeSeries[i].y
     # find the number of peaks
     for i in [k..nbins-2-k]
-      score = (this.arrMax(arr.slice(i-k)) + this.arrMax(arr.slice(i+1+k))) / 2.0
+      score = (this.arrMax(arr[(i-k)..]) + this.arrMax(arr[i+1+k..])) / 2.0
       if score > threshold
         peaks.push(i)
     return peaks
 
-  this.peakOccurence = (timeSeries, ref, nbins, k, threshold) ->
-    max = this.arrMax(timeSeries)
-    min = this.arrMin(timeSeries)
-    peaks = this.peak_locs(timeSeries, nbins, k, threshold, max, min)
-    refIdx = this.indexof(ref, nbins, max, min)
-    before = 0
-    after  = 0
-    result = 0.0
-    for i in [0..peaks.length-1]
-        if peaks[i] > refIdx
-          after = after + 1
-        else if peaks[i] < refIdx
-          before = before + 1
-        # else, do nothing ignore it
-    if( after > before )
-        result = ((2.0 * this.max(before, after))/(before + after)) - 1
-    else if ( before > after )
-        result = -1.0*(((2.0 * this.max(before, after))/(before + after)) - 1)
-    else
-        result = 0
-    return result
-
   # nbins in the number of bins in the hist
   # k is the sliding window for peak detection
   # threshold is the threshold for peak detection
-  this.peakOccurence2 = (timeSeries, nbins, k, threshold) ->
-    if(timeSeries.length <= 0)
+  this.peakOccurence = (timeSeries, nbins, k, threshold) ->
+    if(timeSeries.length <= 1)
         return 0.0
-    max = this.arrMax2(timeSeries)
-    min = this.arrMin2(timeSeries)
-    peaks = this.peak_locs2(timeSeries, nbins, k, threshold, max, min)
+    max = this.serieMax(timeSeries)
+    min = this.serieMin(timeSeries)
+    peaks = this.findPeakLocations(timeSeries, nbins, k, threshold, max, min)
     refIdx = this.indexof(0, nbins, max, min)
     before = 0
     after  = 0
     result = 0.0
-    for i in [0..peaks.length-1]
+    for i in [0...peaks.length]
         if peaks[i] > refIdx
           after = after + 1
         else if peaks[i] < refIdx
@@ -222,11 +137,7 @@ app.service 'pairScore', () ->
     result = 2.0 * this.max(before, after)/(before + after) - 1
     return result
 
-  this.fft = (ts) ->
-    console.log("WARNING : FFT FUNCTION NOT YET IMPLEMENTED")
-    return 1.0
-
-  this.nItems2 = (a) ->
+  this.nItems = (a) ->
     items = 0.0
     for elem in a
       items += elem.y
@@ -238,11 +149,12 @@ app.service 'pairScore', () ->
       a[i] = 0.0
     return a
 
-  this.fft2 = (a) ->
+  this.fft = (a) ->
     if(a.length <= 0)
         return 0.0
 
-    nItems = this.nItems2(a)
+    nItems = this.nItems(a)
+
     x_real = this.zeroArray(nItems)
     x_imag = this.zeroArray(nItems)
     x_mag  = this.zeroArray(nItems)
@@ -293,5 +205,3 @@ app.service 'pairScore', () ->
       nA = this.nEvents(a)
       for i in [0..a.length-1]
         a[i].y = parseInt((a[i].y*100)/nA,10)
-
-

@@ -19,7 +19,7 @@ app.service 'charts', () ->
 
       data1 = seriesArray[0].data
       data2 = seriesArray[1].data
-      if data2.length == 0 and data2.lenth > 0
+      if data2.length == 0 and data1.length > 0
         min = data1[0].x
         max = data1[data1.length-1].x
       else if data1.length == 0 and data2.length > 0
@@ -29,6 +29,7 @@ app.service 'charts', () ->
         min = Math.min(data2[0].x,data1[0].x)
         max = Math.max(data2[data2.length-1].x,data1[data1.length-1].x)
       halfRange = Math.max(-min,max)
+
       seriesArray[0].visible = true
       seriesArray[1].visible = true
 
@@ -109,23 +110,23 @@ app.service 'charts', () ->
         scoreA += coef0*row.coOccurence[0]
         scoreB += coef0*row.coOccurence[1]
         divisor += coef0
-      if metrics['pr']
+      if metrics['pe']
         scoreA += coef1*row.peakOccurence[0]
         scoreB += coef1*row.peakOccurence[1]
         divisor += coef1
-      if metrics['pe']
+      if metrics['std']
         scoreA += coef2*row.standardDev[0]
         scoreB += coef2*row.standardDev[1]
         divisor += coef2
       if metrics['fr']
-        scoreA += coef2*row.frequency[0]
-        scoreB += coef2*row.frequency[1]
+        scoreA += coef3*row.frequency[0]
+        scoreB += coef3*row.frequency[1]
         divisor += coef3
-
       if divisor == 0.0 then divisor = 1.0 #avoid division by 0
       row.roundedScore = Math.abs(scoreA - scoreB)
       # Scale it, to 0 to 1
       row.roundedScore = round(row.roundedScore / divisor)
+
       if scoreA > scoreB then row.winningRef = 0 else row.winningRef = 1
     eventRows.sort( (a,b) -> return (b.roundedScore - a.roundedScore))
 
