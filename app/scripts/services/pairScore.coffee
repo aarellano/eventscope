@@ -113,6 +113,7 @@ app.service 'pairScore', () ->
   this.findPeakLocations = (timeSeries, nbins, k, threshold, max, min) ->
     arr = Array(nbins)
     peaks = Array()
+    total = 0.0
     for i in [0...nbins] #possibly here?
       arr[i] = 0.0
     # build a histogram
