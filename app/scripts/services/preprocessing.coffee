@@ -227,8 +227,6 @@ app.service 'preprocess', () ->
         for point in newHist
           point.y = point.y/refCount
           total += point.y
-        console.log(total)
-        console.log(filterRatio)
         if(total < filterRatio)
           nSeriesBelowMin += 1
         series.push({'name': refEvtType, 'data': newHist})
