@@ -6,6 +6,7 @@ app.service 'charts', () ->
     logLoad = (e) ->
       seriesLoaded++
       if(seriesLoaded == seriesToLoad)
+        seriesLoaded = 0
         $(window).delay(100).trigger('resize')
 
 
@@ -61,7 +62,14 @@ app.service 'charts', () ->
               color: '#b94a48',
               dashStyle: 'ShortDot',
               width: 2,
-              zIndex: 3
+              zIndex: 3,
+              label:{
+                text:eventType,
+                rotation:0,
+                style:{
+                  color: "#b94a48"
+                }
+              }
             }],
             labels:{
               enabled: false
@@ -132,6 +140,9 @@ app.service 'charts', () ->
 
 
   this.configureMainChart = (eventData,chart,colors) ->
+    formatPercentage = (flatVal) ->
+      S(Math.round(flatVal * 10000) / 100) + "%"
+
     formatRelativeTime = (mills) ->
       if mills < 0 then sign = S('-') else sign = S('')
       absMs = Math.abs(mills)
@@ -149,7 +160,10 @@ app.service 'charts', () ->
       remainder %= msInMinutes
       seconds = Math.round(remainder / msInSeconds)
       milliseconds = remainder % msInSeconds
-      relTimeStr = S("#{seconds}.").padLeft(3,'0') + S(milliseconds).padLeft(3,'0')
+
+      relTimeStr = S(seconds).padLeft(2,'0')
+      if(milliseconds > 0)
+        relTimeStr += "." + S(milliseconds).padLeft(3,'0')
       if(absMs > msInMinutes)
         relTimeStr = S("#{minutes}:").padLeft(3,'0') + relTimeStr
         if(absMs > msInHours)
@@ -173,13 +187,12 @@ app.service 'charts', () ->
           formatter:()->
             tip = formatRelativeTime(this.x)
             if(this.points[0])
-              tip +="<br/>#{this.points[0].series.name}:#{this.points[0].y}"
+              tip +="<br/>#{this.points[0].series.name}:#{formatPercentage(this.points[0].y)}"
             if(this.points[1])
-              tip +="<br/>#{this.points[1].series.name}:#{this.points[1].y}"
+              tip +="<br/>#{this.points[1].series.name}:#{formatPercentage(this.points[1].y)}"
             return tip
 
         },
-
         rangeSelector : {
           enabled: false
         },
@@ -205,6 +218,11 @@ app.service 'charts', () ->
             formatter:()->formatRelativeTime(this.value)
           }
         },
+        yAxis:{
+          title:{
+            text:"Ratio of Occurences"
+          }
+        }
       },
       title:{
         text:eventData.name

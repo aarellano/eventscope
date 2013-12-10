@@ -1,5 +1,5 @@
 body {
-  padding-top: 70px;
+  padding-top: 33px;
 }
 
 footer {
@@ -7,8 +7,8 @@ footer {
   padding-right: 15px;
 }
 
-.cotainer-fluid {
-  padding: 0 15px;
+.container-fluid {
+  padding: 0;
 }
 
 #right-side {
@@ -25,11 +25,20 @@ footer {
 }
 
 .mini-chart {
-  pointer-events:none;
+  pointer-events: none;
 }
 
 .table td {
   vertical-align: middle;
+  cursor: pointer;
+}
+
+.active-row {
+  background-color: rgba(73, 175, 205, 0.4);
+}
+
+.table-hover tbody tr.active-row:hover > td {
+  background-color: transparent;
 }
 
 hr {
@@ -40,4 +49,107 @@ hr {
   font-weight: normal;
   opacity: 0.5;
   padding: 4px 6px;
+}
+
+#inner-control-panel {
+  padding: 6px 19px 0px 19px;
+}
+
+.navbar .brand {
+  font-size: 18px;
+  line-height: 12px;
+}
+
+div .navbar-inner {
+  min-height: 30px;
+}
+
+.accordion-group {
+  margin: 0;
+}
+
+.accordion-heading .accordion-toggle {
+  padding: 0;
+}
+
+.accordion-inner {
+  padding: 0;
+}
+
+#hide-show {
+  margin: 0;
+}
+
+#hide-show .btn {
+  font-size: 12px;
+  padding: 0px 12px;
+  margin-top: 4px;
+}
+
+#filter-input {
+  height: 16px;
+  font-size: 12px;
+  margin-bottom: 0;
+  margin-top: 2px;
+}
+
+thead {
+  background-color: rgba(238,238,238,0.3);
+}
+
+div #ranking-panel-header {
+  position: fixed;
+  z-index: 2;
+}
+
+#ranking-table {
+  margin-top: 34px;
+}
+
+.spinner-shown {
+  background-color: red;
+}
+
+ /* Spinner */
+
+.spinner {
+ position: absolute;
+ top: 0;
+ right: 0;
+ bottom: 0;
+ left: 0;
+}
+
+.spinner.spinner-hidden {
+ z-index: -3000 !important;
+}
+
+.spinner.spinner-shown {
+ z-index: 3000 !important;
+ background-color:rgba(0,0,0,0.5);
+}
+
+.spinner .wrapper {
+ position: fixed;
+ top: 40%;
+ left: 0;
+ right: 0;
+ width: 170px;
+ margin: auto;
+ text-align: center;
+ background-color: #FFFFFF;
+ padding: 20px;
+ border: solid 2px #CCCCCC;
+ -moz-border-radius: 10px;
+ -webkit-border-radius: 10px;
+ -khtml-border-radius: 10px;
+ border-radius: 10px;
+}
+
+.spinner .wrapper .process-label {
+  padding-left: 10px;
+  margin-top: 5px;
+  font-weight: 200;
+  color: #777;
+  text-shadow: 0 1px 0 #fff;
 }

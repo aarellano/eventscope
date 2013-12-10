@@ -119,6 +119,9 @@ app.service 'pairScore', () ->
     for i in [0...timeSeries.length]
       idx = this.indexof(timeSeries[i].x, nbins, max, min)
       arr[idx] = arr[idx] + timeSeries[i].y
+      total += timeSeries[i].y
+    for i in [0...arr.length]
+      arr[i] = arr[i]/total
     # find the number of peaks
     for i in [k..nbins-2-k]
       score = (this.arrMax(arr[(i-k)..]) + this.arrMax(arr[i+1+k..])) / 2.0
@@ -141,8 +144,8 @@ app.service 'pairScore', () ->
       return 0.0
 
     refIdx = this.indexof(0, nbins, max, min)
-    before = 0
-    after  = 0
+    before = 0.0
+    after  = 0.0
     result = 0.0
 
     for i in [0...peaks.length]
@@ -151,6 +154,7 @@ app.service 'pairScore', () ->
         else if peaks[i] < refIdx
           before = before + 1
         # else, do nothing ignore it
+
     result = 2.0 * this.max(before, after)/(before + after) - 1
     return result
 
