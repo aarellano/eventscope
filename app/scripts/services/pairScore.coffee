@@ -97,7 +97,7 @@ app.service 'pairScore', () ->
     #
     before = 0
     after  = 0
-    result = [0.0, 0.0]
+    result = 0.0
     if(timeSeries.length > 0)
       for i in [0..timeSeries.length-1]
         if timeSeries[i].x > 0
@@ -105,7 +105,7 @@ app.service 'pairScore', () ->
         else if timeSeries[i].x < 0
           before = before + timeSeries[i].y
       total = before + after
-      result = [before / total, after / total]
+      result = 2.0 * Math.max(before,after) / total - 1.0
     return result
 
   this.indexof = (elem, nbins, max, min) ->
