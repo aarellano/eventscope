@@ -172,5 +172,10 @@ app.controller 'MainCtrl', ['$scope', '$http', 'preprocess', 'charts', 'pairScor
       Reference events with low periods have a low score. "
     show_hide:
       desc: "Toggle to hide/show histograms"
-
+    time_bin_size:
+      title: "Time Bin Size Title"
+      desc: "Time Bin Size Description"
+    co_oc_threshold:
+      title: "Co-Ocurrences Threshold Title"
+      desc: "Co-Ocurrences Threshold Description"
 ]
