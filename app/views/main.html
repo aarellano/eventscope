@@ -33,7 +33,7 @@
           </thead>
           <tbody>
             <tr style="height: 100px" ng-repeat="eventRow in eventRows | filter:searchText" ng-click="updateSelectedRow({'name':eventRow.eventName, 'series':eventRow.chartConfig.series})" ng-class="checkActiveRow({'name':eventRow.eventName, 'series':eventRow.chartConfig.series})">
-                <td style="width: 95%"><div style="position: relative"><highchart class="mini-chart" config="eventRow.chartConfig"></highchart></div></td>
+                <td style="width: 95%"><div style="margin-top: -50px; position: relative"><highchart class="mini-chart" config="eventRow.chartConfig"></highchart></div></td>
                 <td style="width: 5%" ng-style="scoreBgColor(eventRow.roundedScore,eventRow.winningRef)">{{eventRow.roundedScore}} </td>
                 <!--This is now redundant because we have labels marking those events on each chart-->
                 <!--<td style="width: 10%">{{capitalize(eventRow.eventName)}}</td>-->

@@ -25,10 +25,6 @@ footer {
   margin-bottom: 0;
 }
 
-.mini-chart {
-  pointer-events: none;
-}
-
 .table td {
   vertical-align: middle;
   cursor: pointer;
@@ -46,7 +42,8 @@ hr {
   margin: 15px 0;
 }
 
-div .mini-chart{
+.mini-chart{
+  pointer-events: none;
   position:absolute;
   top:0;
   width:98%;
